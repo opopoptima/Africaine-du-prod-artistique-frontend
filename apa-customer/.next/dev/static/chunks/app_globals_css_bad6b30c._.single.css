@@ -53,8 +53,7 @@
     --default-transition-timing-function: cubic-bezier(.4, 0, .2, 1);
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
-    --color-primary-700: #3b0066;
-    --color-accent-100: #f39c12;
+    --color-primary-500: indigo;
   }
 }
 
@@ -395,8 +394,8 @@
     background-color: var(--primary);
   }
 
-  .bg-primary-700 {
-    background-color: var(--color-primary-700);
+  .bg-primary-500 {
+    background-color: var(--color-primary-500);
   }
 
   .bg-secondary {
@@ -435,10 +434,6 @@
 
   .whitespace-nowrap {
     white-space: nowrap;
-  }
-
-  .text-accent-100 {
-    color: var(--color-accent-100);
   }
 
   .text-primary {
