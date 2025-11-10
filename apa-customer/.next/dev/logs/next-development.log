@@ -1,0 +1,132 @@
+[00:00:03.317] Server  LOG      ✓ Ready in 2.1s
+[00:00:12.658] Server  LOG      ○ Compiling /_not-found/page ...
+[00:00:15.560] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:23.535] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:57.808] Server  ERROR    ⨯ ./app/components/ui/button.jsx:4:1
+Module not found: Can't resolve '@/lib/utils'
+  2 | import { cva } from "class-variance-authority";
+  3 |
+> 4 | import { cn } from "@/lib/utils";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | const buttonVariants = cva(
+  7 |   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+
+Import map: aliased to relative './lib/utils' inside of [project]/
+
+
+Import trace:
+  Server Component:
+    ./app/components/ui/button.jsx
+    ./app/home/page.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:57.812] Server  ERROR    ⨯ ./app/components/ui/button.jsx:4:1
+Module not found: Can't resolve '@/lib/utils'
+  2 | import { cva } from "class-variance-authority";
+  3 |
+> 4 | import { cn } from "@/lib/utils";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | const buttonVariants = cva(
+  7 |   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+
+Import map: aliased to relative './lib/utils' inside of [project]/
+
+
+Import trace:
+  Server Component:
+    ./app/components/ui/button.jsx
+    ./app/home/page.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:57.817] Server  ERROR    ⨯ ./app/components/ui/button.jsx:4:1
+Module not found: Can't resolve '@/lib/utils'
+  2 | import { cva } from "class-variance-authority";
+  3 |
+> 4 | import { cn } from "@/lib/utils";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | const buttonVariants = cva(
+  7 |   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+
+Import map: aliased to relative './lib/utils' inside of [project]/
+
+
+Import trace:
+  Server Component:
+    ./app/components/ui/button.jsx
+    ./app/home/page.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:57.823] Server  ERROR    ⨯ ./app/components/ui/button.jsx:4:1
+Module not found: Can't resolve '@/lib/utils'
+  2 | import { cva } from "class-variance-authority";
+  3 |
+> 4 | import { cn } from "@/lib/utils";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | const buttonVariants = cva(
+  7 |   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+
+Import map: aliased to relative './lib/utils' inside of [project]/
+
+
+Import trace:
+  Server Component:
+    ./app/components/ui/button.jsx
+    ./app/home/page.js
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:58.884] Browser ERROR   ./app/components/ui/button.jsx:4:1
+Module not found: Can't resolve '@/lib/utils'
+  2 | import { cva } from "class-variance-authority";
+  3 |
+> 4 | import { cn } from "@/lib/utils";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | const buttonVariants = cva(
+  7 |   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+
+Import map: aliased to relative './lib/utils' inside of [project]/
+
+Import trace:
+  Server Component:
+    ./app/components/ui/button.jsx
+    ./app/home/page.js
+
+https://nextjs.org/docs/messages/module-not-found
+[00:01:03.727] Server  LOG      ✓ Compiled in 104ms
+[00:01:08.405] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:37.766] Browser ERROR   In HTML, %s cannot be a child of <%s>.%s
+This will cause a hydration error.%s <p> html  
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:"...", ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/home" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.js">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+>                       <html lang="en" className="poppins_7a8699e0-module__pNyGOW__variable">
+>                         <p>
+                          ...
+                  ...
+

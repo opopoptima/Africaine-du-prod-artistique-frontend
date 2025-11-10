@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 18, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/HP/Desktop/apa-shop/app/page.js"],"sourcesContent":["export default function Home() {\n  return (\n    <div className=\"bg-primary-500 p-4 text-accent-100 \">\n      <button>Click me</button>\n    </div>\n  )\n}"],"names":[],"mappings":";;;;;;AAAe,SAAS;IACtB,qBACE,8OAAC;QAAI,WAAU;kBACb,cAAA,8OAAC;sBAAO;;;;;;;;;;;AAGd","debugId":null}}]
+}
