@@ -1,21 +1,134 @@
-[00:00:01.368] Server  LOG      ✓ Ready in 870ms
-[00:00:06.723] Server  WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+[00:00:03.289] Server  LOG      ✓ Ready in 2.1s
+[00:00:06.369] Server  LOG      ○ Compiling /home ...
+[00:00:10.585] Server  WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:06.730] Server  WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
+[00:00:10.605] Server  WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:06.731] Server  WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+[00:00:10.608] Server  WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:07.092] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:07.297] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+[00:00:11.423] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:11.782] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:07.297] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
+[00:00:11.782] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:07.297] Browser WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+[00:00:11.782] Browser WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:07.297] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:07.297] Browser WARN    Image with src "/images/heroSection/image.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:07.297] Browser WARN    Image with src "/images/learningBanner/vector-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:00:07.297] Browser WARN    Image with src "/images/learningBanner/vector-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:00:07.297] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:00:07.297] Browser WARN    Image with src "/images/apa-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:00:07.297] Browser WARN    Image with src "/images/vector-footer-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:00:12.778] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:12.778] Browser WARN    Image with src "/images/learningBanner/vector-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:01:53.109] Browser WARN    Image with src "/images/heroSection/image.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:01:53.109] Browser WARN    Image with src "/images/learningBanner/vector-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:01:53.109] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:01:53.109] Browser WARN    Image with src "/images/apa-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:02:02.099] Server  WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:02:02.107] Server  WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:02:02.112] Server  WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:02:02.779] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:02.933] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:02:02.933] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:02:02.933] Browser WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:02:03.269] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:02:03.269] Browser WARN    Image with src "/images/heroSection/image.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:02:03.269] Browser WARN    Image with src "/images/learningBanner/vector-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:02:03.269] Browser WARN    Image with src "/images/learningBanner/vector-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:02:03.269] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:02:03.269] Browser WARN    Image with src "/images/apa-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:04:37.104] Browser WARN    Image with src "/images/vector-footer-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:08:19.921] Server  WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:08:19.938] Server  WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:08:19.941] Server  WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:08:20.584] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:08:20.826] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:08:20.826] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:08:20.826] Browser WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:08:21.150] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:08:21.150] Browser WARN    Image with src "/images/heroSection/image.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:08:21.150] Browser WARN    Image with src "/images/learningBanner/vector-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:08:21.150] Browser WARN    Image with src "/images/learningBanner/vector-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:08:21.150] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:08:21.150] Browser WARN    Image with src "/images/apa-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:08:41.132] Browser WARN    Image with src "/images/vector-footer-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:11:45.482] Server  WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:11:45.498] Server  WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:11:45.502] Server  WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:11:46.261] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:11:46.577] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:11:46.577] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:11:46.578] Browser WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:11:46.578] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:11:46.578] Browser WARN    Image with src "/images/heroSection/image.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:11:46.578] Browser WARN    Image with src "/images/learningBanner/vector-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:11:46.578] Browser WARN    Image with src "/images/learningBanner/vector-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:12:46.958] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:14:40.381] Browser WARN    Image with src "/images/apa-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:14:40.381] Browser WARN    Image with src "/images/vector-footer-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:15:17.892] Server  WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:15:17.909] Server  WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:15:17.913] Server  WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:15:18.712] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:15:19.015] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:15:19.015] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:15:19.015] Browser WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:15:19.330] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:15:19.330] Browser WARN    Image with src "/images/learningBanner/vector-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:15:19.330] Browser WARN    Image with src "/images/learningBanner/vector-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:15:19.330] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:15:19.330] Browser WARN    Image with src "/images/apa-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:15:19.330] Browser WARN    Image with src "/images/vector-footer-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:15:21.076] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:15:21.260] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:15:21.260] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:15:21.260] Browser WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:15:21.556] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:15:21.556] Browser WARN    Image with src "/images/learningBanner/vector-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:15:21.556] Browser WARN    Image with src "/images/learningBanner/vector-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:15:21.556] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:15:21.556] Browser WARN    Image with src "/images/apa-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:15:21.556] Browser WARN    Image with src "/images/vector-footer-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:15:43.274] Browser WARN    Image with src "/images/heroSection/image.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:27:31.994] Server  WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:27:32.013] Server  WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:27:32.017] Server  WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:27:33.088] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:27:33.294] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:27:33.294] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:27:33.294] Browser WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:27:33.787] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:27:33.787] Browser WARN    Image with src "/images/heroSection/image.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:27:33.787] Browser WARN    Image with src "/images/learningBanner/vector-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:27:33.787] Browser WARN    Image with src "/images/learningBanner/vector-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:30:42.165] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:30:42.165] Browser WARN    Image with src "/images/apa-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:30:42.165] Browser WARN    Image with src "/images/vector-footer-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.

@@ -11,8 +11,8 @@ export default function Footer() {
       <Image
         src="/images/vector-footer-top.png"
         alt="Logo L’Africaine de Prod Artistique"
-        width={100}
-        height={100}
+        width={120}
+        height={120}
         quality={75}
         className="absolute -top-2 right-20"
       />
