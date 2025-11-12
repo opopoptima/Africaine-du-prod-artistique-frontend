@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Button } from "@/app/components/ui/button";
 
 export default function CategoryExplorer() {
   const initialCategories = [
@@ -66,13 +67,14 @@ export default function CategoryExplorer() {
       </div>
 
       {!showMore && visibleCategories.length < initialCategories.length && (
-        <div className="flex justify-center mt-4">
-          <button
+      <div className="text-center mt-8 sm:mt-12">
+          <Button 
+            size="lg"
             onClick={() => setShowMore(true)}
-            className="w-32 sm:w-36 md:w-40 lg:w-44 text-white bg-purple-500 hover:bg-purple-600 font-semibold py-1.5 sm:py-2 rounded-full transition-colors"
-          >
+            className="bg-primary-500 hover:bg-secondary-100 hover:text-primary-500 hover:border-primary-500 hover:border-2 text-secondary-100 px-8 sm:px-12 py-4 sm:py-6 text-lg sm:text-xl rounded-full shadow-lg transition-all hover:shadow-xl hover:scale-105"
+        >
             Voir plus
-          </button>
+          </Button>
         </div>
       )}
     </div>

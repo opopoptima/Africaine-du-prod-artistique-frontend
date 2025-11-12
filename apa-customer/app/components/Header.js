@@ -25,7 +25,7 @@ export default function Header() {
   const activeItem = menu.find(item => isLinkActive(item.href)) || menu[0];
 
   return (
-    <header className="w-full bg-white shadow-md relative">
+    <header className="w-full bg-white shadow-md z-50 relative">
       <div className="flex items-center justify-between h-16 w-full px-[3%]">
 
 
@@ -70,16 +70,16 @@ export default function Header() {
           {/* Hamburger */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="text-gray-700 focus:outline-none text-2xl   "
+            className="text-primary-900 focus:outline-none text-2xl   "
           >
-            {isOpen ? "☰" : "☰"}
+            {isOpen ? "✕" : "☰"}
           </button>
         </div>
       </div>
 
       {/* Menu Mobile complet à droite */}
       {isOpen && (
-        <nav className="md:hidden absolute top-4 right-12 bg-white shadow-md flex flex-col space-y-2 p-4 rounded">
+        <nav className="md:hidden absolute top-4 right-12 bg-white flex flex-col space-y-2 p-4 rounded">
 
           {/* Exclut l'élément actif déjà affiché */}
           {menu.map((item) => (
