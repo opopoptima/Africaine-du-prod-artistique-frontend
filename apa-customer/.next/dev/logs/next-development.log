@@ -1,3 +1,13 @@
-[00:00:01.244] Server  LOG      ✓ Ready in 810ms
-[00:00:07.400] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:08.785] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:02.317] Server  LOG      ✓ Ready in 1310ms
+[00:00:05.339] Server  LOG      ○ Compiling /home ...
+[00:01:03.196] Server  LOG      ✓ Compiled in 234ms
+[00:01:17.038] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/patisserie.jpg" "received" null
+[00:01:17.041] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/epicerie.jpg" "received" null
+[00:01:17.056] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/cadeaux.jpg" "received" null
+[00:03:10.901] Server  LOG      ✓ Compiled in 102ms
+[00:03:26.876] Browser WARN    Image with src "/categories/valeurs.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:05:23.334] Server  LOG      ✓ Compiled in 62ms
+[00:07:02.393] Server  LOG      ✓ Compiled in 55ms
+[00:09:00.647] Server  LOG      ✓ Compiled in 118ms
+[00:13:28.802] Server  LOG      ✓ Compiled in 53ms
+[00:13:52.713] Server  LOG      ✓ Compiled in 65ms

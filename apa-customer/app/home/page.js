@@ -1,8 +1,12 @@
 import { Button } from "@/app/components/ui/button"
+import Header from "@/app/components/Header"
+import CategoryExplorer from "@/app/home/CategoryExplorer"
 export default function Home() {
   return (
-    <div className="bg-primary-500 p-4 text-accent-100">
-      <Button>Click me</Button>
+    <div >
+      <Header />
+      <CategoryExplorer />
+     
     </div>
   )
 }
