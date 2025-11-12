@@ -2,7 +2,10 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
-
+html, body {
+  margin: 0;
+  padding: 0;
+}
 @theme {
   --color-primary-500: #4B0082;
   --color-primary-300: #9B59B6;

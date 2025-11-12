@@ -1,37 +1,20 @@
 import { Button } from "../components/ui/button";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 
 export default function LearningBanner() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-[#6f4083] via-[#7b4a94] to-[#8b5aa5] py-16 px-6 md:px-12 lg:px-20">
-      {/* Decorative Elements */}
-      <div className="absolute top-0 left-0 w-64 h-64 bg-primary-300/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-primary-100/10 rounded-full blur-3xl translate-x-1/3 translate-y-1/3" />
-      
-      {/* Decorative wavy line - top left */}
-      <svg 
-        className="absolute top-8 left-8 w-16 h-16 text-secondary-100/30 animate-bounce-slow"
-        viewBox="0 0 100 100"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="3"
-        strokeLinecap="round"
-      >
-        <path d="M10,50 Q30,30 50,50 T90,50" />
-      </svg>
+    <section className="relative overflow-hidden bg-primary-300 py-20 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32">
 
-      {/* Decorative wavy line - bottom right */}
-      <svg 
-        className="absolute bottom-12 right-32 w-32 h-24 text-secondary-100/20 hidden md:block"
-        viewBox="0 0 150 100"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="3"
-        strokeLinecap="round"
-      >
-        <path d="M10,50 Q40,20 70,50 T130,50" />
-      </svg>
+      {/* Decorative Elements */}
+      <Image
+              src="/images/learningBanner/vector-top.png"
+              alt="vector decoration"
+              width={80}
+              height={80}
+              quality={75}
+              className="absolute top-2 "
+            />
 
       <div className="relative max-w-7xl mx-auto">
         <div className="grid md:grid-cols-2 gap-8 items-center">
@@ -82,7 +65,7 @@ export default function LearningBanner() {
               <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-full px-2">
                   <Button 
                     size="sm"
-                    className="w-full bg-[#D7A552] text-white hover:bg-secondary-100 hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl group text-xs md:text-sm"
+                    className="w-full bg-primary-100 text-white hover:bg-secondary-100 hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl hover:text-primary-100 group text-xs md:text-sm"
                   >
                     Explorer la boutique
                     <ArrowRight className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" />
@@ -104,8 +87,20 @@ export default function LearningBanner() {
               </div>
             </div>
           </div>
+         
+
         </div>
       </div>
+      <Image
+  src="/images/learningBanner/vector-bottom.png"
+  alt="vector decoration"
+  width={120}
+  height={120}
+  quality={75}
+  className="absolute bottom-2 left-1/2 transform -translate-x-1/2"
+  priority
+/>
+
     </section>
   );
 }
