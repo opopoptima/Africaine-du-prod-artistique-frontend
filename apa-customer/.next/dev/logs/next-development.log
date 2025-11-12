@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [00:00:02.317] Server  LOG      ✓ Ready in 1310ms
 [00:00:05.339] Server  LOG      ○ Compiling /home ...
 [00:01:03.196] Server  LOG      ✓ Compiled in 234ms
@@ -11,3 +12,42 @@
 [00:09:00.647] Server  LOG      ✓ Compiled in 118ms
 [00:13:28.802] Server  LOG      ✓ Compiled in 53ms
 [00:13:52.713] Server  LOG      ✓ Compiled in 65ms
+=======
+[00:00:03.491] Server  LOG      ✓ Ready in 2.4s
+[00:00:06.563] Server  LOG      ○ Compiling /_not-found/page ...
+[00:00:10.719] Server  WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:00:10.749] Server  WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:00:10.752] Server  WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:00:19.630] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:20.687] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:00:20.687] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:00:20.688] Browser WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:00:20.688] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:20.688] Browser WARN    Image with src "/images/heroSection/image.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:25.226] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:26.908] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:27.372] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:00:27.372] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:00:27.372] Browser WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:00:27.372] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:27.372] Browser WARN    Image with src "/images/heroSection/image.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:28.380] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:00:28.381] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:00:28.381] Browser WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[00:00:29.377] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:29.377] Browser WARN    Image with src "/images/heroSection/image.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:03:02.474] Server  LOG      ✓ Compiled in 629ms
+[00:06:45.093] Server  LOG      ✓ Compiled in 81ms
+>>>>>>> 319f4bf8241ec2f14a61c4292098c29bbaf488ee
