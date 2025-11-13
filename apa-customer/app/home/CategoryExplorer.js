@@ -71,7 +71,7 @@ export default function CategoryExplorer() {
           <Button 
             size="lg"
             onClick={() => setShowMore(true)}
-            className="bg-primary-500 hover:bg-secondary-100 hover:text-primary-500 hover:border-primary-500 hover:border-2 text-secondary-100 px-8 sm:px-12 py-4 sm:py-6 text-lg sm:text-xl rounded-full shadow-lg transition-all hover:shadow-xl hover:scale-105"
+          className="bg-primary-100 hover:bg-secondary-100 hover:text-primary-100 hover:border-primary-100 hover:border-2 text-secondary-100 px-8 sm:px-12 py-4 sm:py-6 text-lg sm:text-xl rounded-full shadow-lg transition-all hover:shadow-xl hover:scale-105"
         >
             Voir plus
           </Button>
