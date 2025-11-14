@@ -1,46 +1,622 @@
-[00:00:01.191] Server  LOG      ✓ Ready in 755ms
-[00:00:12.006] Server  WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+[00:00:03.243] Server  LOG      ✓ Ready in 2.1s
+[00:00:06.293] Server  LOG      ○ Compiling /home ...
+[00:00:09.096] Server  WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:12.016] Server  WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
+[00:00:09.100] Server  WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:12.018] Server  WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+[00:00:09.101] Server  WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:12.725] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:12.995] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+[00:00:37.968] Server  LOG      ○ Compiling /_not-found/page ...
+[00:00:38.440] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/app.png" "received" null
+[00:00:38.451] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/creativite.png" "received" null
+[00:00:38.465] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/Categories/Lecture.jpeg" "received" null
+[00:00:38.680] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/Decouverte.png" "received" null
+[00:00:38.700] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/valeurs.png" "received" null
+[00:00:39.179] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:39.485] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:12.995] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
+[00:00:39.485] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:12.995] Browser WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+[00:00:39.485] Browser WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:12.995] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:12.995] Browser WARN    Image with src "/images/heroSection/image.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:12.995] Browser WARN    Image with src "/images/learningBanner/vector-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:00:12.995] Browser WARN    Image with src "/images/learningBanner/vector-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:00:13.430] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/Categories/Lecture.jpeg" "received" null
-[00:00:13.431] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/Decouverte.png" "received" null
-[00:00:13.432] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/app.png" "received" null
-[00:00:13.436] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/creativite.png" "received" null
-[00:00:13.437] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/valeurs.png" "received" null
-[00:00:13.506] Server  ERROR   Error: The requested resource isn't a valid image.
-[00:00:13.519] Server  ERROR   Error: The requested resource isn't a valid image.
-[00:00:13.536] Server  ERROR   Error: The requested resource isn't a valid image.
-[00:00:13.546] Server  ERROR   Error: The requested resource isn't a valid image.
-[00:00:13.556] Server  ERROR   Error: The requested resource isn't a valid image.
-[00:00:13.884] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:00:13.884] Browser WARN    Image with src "/images/apa-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:00:14.101] Browser WARN    Image with src "/images/vector-footer-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:01:08.846] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:09.012] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+[00:00:39.485] Browser WARN    Image with src "/images/apa-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:00:39.485] Browser WARN    Image with src "/images/heroSection/image.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:00:39.485] Browser WARN    Image with src "/images/learningBanner/vector-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:00:39.485] Browser WARN    Image with src "/images/learningBanner/vector-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:00:39.485] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:00:39.485] Browser WARN    Image with src "/images/vector-footer-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:00:39.910] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:12:55.035] Browser WARN    Image with src "/images/apa-logo.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:17:21.130] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/creativite.png" "received" null
+[00:17:21.141] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/Decouverte.png" "received" null
+[00:17:21.144] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/valeurs.png" "received" null
+[00:19:48.220] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/creativite.png" "received" null
+[00:19:48.228] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/Decouverte.png" "received" null
+[00:19:48.232] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/valeurs.png" "received" null
+[03:06:59.850] Server  WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:01:09.012] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
+[03:07:02.592] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/app.png" "received" null
+[03:07:02.671] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/Categories/Lecture.jpeg" "received" null
+[03:07:02.686] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/creativite.png" "received" null
+[03:07:02.863] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/Decouverte.png" "received" null
+[03:07:04.339] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/valeurs.png" "received" null
+[03:07:07.959] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[03:07:09.113] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:01:09.012] Browser WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+[03:07:09.113] Browser WARN    Image with src "/images/apa-logo.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[03:07:09.113] Browser WARN    Image with src "/images/learningBanner/vector-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[03:07:09.113] Browser WARN    Image with src "/images/learningBanner/vector-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[03:09:18.218] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[03:09:18.218] Browser WARN    Image with src "/images/apa-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[03:09:18.218] Browser WARN    Image with src "/images/vector-footer-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[03:09:30.597] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[03:09:30.760] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[03:09:30.760] Browser WARN    Image with src "/images/apa-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[03:09:30.760] Browser WARN    Image with src "/images/vector-footer-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[03:10:15.103] Server  LOG      ✓ Compiled in 471ms
+[03:10:21.932] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[03:10:22.172] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[03:10:22.172] Browser WARN    Image with src "/images/apa-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[03:10:22.172] Browser WARN    Image with src "/images/vector-footer-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[03:10:28.122] Server  LOG      ○ Compiling /a-propos ...
+[03:10:30.433] Server  ERROR    ⨯ Error: The default export is not a React Component in "/a-propos/page"
+[03:10:30.990] Server  ERROR    ⨯ Error: The default export is not a React Component in "/a-propos/page"
+[03:10:37.093] Browser ERROR   uncaughtError: Error: The default export is not a React Component in "/a-propos/page"
+[03:12:23.027] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/a-propos/page.js:9:3
+Parsing ecmascript source code failed
+   7 |   );
+   8 | }
+>  9 | ```
+     |   ^
+> 10 | 
+     | ^
+> 11 | 
+     | ^
+
+Unterminated template
+[03:12:34.029] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/a-propos/page.js:9:3
+Parsing ecmascript source code failed
+   7 |   );
+   8 | }
+>  9 | ```
+     |   ^
+> 10 | 
+     | ^
+> 11 | 
+     | ^
+
+Unterminated template
+[03:12:37.023] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/a-propos/page.js:9:3
+Parsing ecmascript source code failed
+   7 |   );
+   8 | }
+>  9 | ```
+     |   ^
+> 10 | 
+     | ^
+> 11 | 
+     | ^
+
+Unterminated template
+[03:12:55.028] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/a-propos/page.js:12:3
+Parsing ecmascript source code failed
+  10 |   );
+  11 | }
+> 12 | ```
+     |   ^
+> 13 | 
+     | ^
+> 14 | 
+     | ^
+
+Unterminated template
+[03:13:42.038] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/a-propos/page.js:12:3
+Parsing ecmascript source code failed
+  10 |   );
+  11 | }
+> 12 | ```
+     |   ^
+> 13 | 
+     | ^
+> 14 | 
+     | ^
+
+Unterminated template
+[03:15:00.221] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/a-propos/page.js:12:3
+Parsing ecmascript source code failed
+  10 |   );
+  11 | }
+> 12 | ```
+     |   ^
+> 13 | 
+     | ^
+> 14 | 
+     | ^
+
+Unterminated template
+[03:15:33.836] Server  LOG      ✓ Compiled in 276ms
+[03:15:38.830] Server  WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
 Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:01:09.012] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:01:09.012] Browser WARN    Image with src "/images/heroSection/image.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:01:09.012] Browser WARN    Image with src "/images/learningBanner/vector-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:01:09.012] Browser WARN    Image with src "/images/learningBanner/vector-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:01:10.584] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:01:10.584] Browser WARN    Image with src "/images/apa-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:01:26.897] Browser WARN    Image with src "/images/vector-footer-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:02:23.197] Server  LOG      ✓ Compiled in 53ms
+[03:15:39.900] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[03:15:40.188] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[03:15:40.188] Browser WARN    Image with src "/images/apa-logo.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[03:15:40.188] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[03:15:40.188] Browser WARN    Image with src "/images/apa-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[03:15:40.188] Browser WARN    Image with src "/images/vector-footer-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[03:16:33.225] Server  LOG      ✓ Compiled in 228ms
+[03:19:03.006] Server  LOG      ✓ Compiled in 926ms
+[03:23:36.476] Server  LOG      ✓ Compiled in 2.1s
+[03:24:35.387] Server  LOG      ✓ Compiled in 498ms
+[03:25:29.027] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/a-propos/page.js:9:5
+Parsing ecmascript source code failed
+   7 | <HeroGeneral title="À propos" />
+   8 | <MissionSection
+>  9 |     </div>
+     |     ^
+  10 |   );
+  11 | }
+  12 |
+
+Expression expected
+[03:25:29.027] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/a-propos/page.js:9:6
+Parsing ecmascript source code failed
+   7 | <HeroGeneral title="À propos" />
+   8 | <MissionSection
+>  9 |     </div>
+     |      ^^^^^
+  10 |   );
+  11 | }
+  12 |
+
+Unterminated regexp literal
+[03:25:39.912] Server  LOG      ✓ Compiled in 178ms
+[03:25:43.809] Browser WARN    Image with src "/images/MissionSection/Vision.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[03:25:43.809] Browser WARN    Image with src "/images/MissionSection/Mission.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[03:25:43.809] Browser WARN    Image with src "/images/MissionSection/Vector.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[03:28:13.819] Server  LOG      ✓ Compiled in 599ms
+[03:39:12.903] Server  LOG      ✓ Compiled in 2.1s
+[03:39:57.929] Server  LOG      ✓ Compiled in 277ms
+[03:40:08.410] Server  LOG      ✓ Compiled in 140ms
+[03:40:19.845] Server  LOG      ✓ Compiled in 153ms
+[03:40:28.807] Server  LOG      ✓ Compiled in 149ms
+[03:46:26.804] Server  LOG      ✓ Compiled in 853ms
+[03:46:38.244] Server  LOG      ✓ Compiled in 191ms
+[03:47:20.957] Server  LOG      ✓ Compiled in 469ms
+[03:47:35.966] Server  LOG      ✓ Compiled in 178ms
+[03:49:38.646] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/images/MissionSection/valeurs.png" "received" null
+[03:51:14.727] Server  LOG      ✓ Compiled in 80ms
+[03:51:38.006] Server  LOG      ✓ Compiled in 76ms
+[03:51:43.625] Server  LOG      ✓ Compiled in 292ms
+[03:52:26.031] Server  LOG      ✓ Compiled in 139ms
+[03:52:30.551] Server  LOG      ✓ Compiled in 64ms
+[03:53:00.807] Server  LOG      ✓ Compiled in 75ms
+[03:59:29.639] Server  LOG      ✓ Compiled in 374ms
+[03:59:32.244] Server  ERROR    ⨯ ReferenceError: EngagementSection is not defined
+[03:59:33.062] Browser ERROR   uncaughtError: ReferenceError: EngagementSection is not defined
+[03:59:37.413] Server  LOG      ✓ Compiled in 456ms
+[03:59:38.769] Server  WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[03:59:40.119] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[03:59:40.937] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/images/engagement/creation.png" "received" null
+[03:59:40.940] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/images/engagement/inspiration.png" "received" null
+[03:59:40.948] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/images/engagement/impact.png" "received" null
+[03:59:41.967] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[03:59:41.967] Browser WARN    Image with src "/images/apa-logo.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[03:59:41.967] Browser WARN    Image with src "/images/MissionSection/Vector.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[03:59:41.967] Browser WARN    Image with src "/images/MissionSection/Vision.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[03:59:41.967] Browser WARN    Image with src "/images/MissionSection/Mission.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[03:59:41.967] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[03:59:41.967] Browser WARN    Image with src "/images/apa-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[03:59:41.967] Browser WARN    Image with src "/images/vector-footer-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[04:00:57.097] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:00:57.195] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[04:00:57.364] Browser WARN    Image with src "/images/apa-logo.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:00:57.364] Browser WARN    Image with src "/images/MissionSection/Vector.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:00:57.364] Browser WARN    Image with src "/images/MissionSection/Vision.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:00:57.365] Browser WARN    Image with src "/images/MissionSection/Mission.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:00:57.365] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[04:00:57.365] Browser WARN    Image with src "/images/apa-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[04:00:57.365] Browser WARN    Image with src "/images/vector-footer-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[04:00:57.365] Browser WARN    Image with src "/images/engagement/inspiration.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:00:57.365] Browser WARN    Image with src "/images/engagement/impact.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:00:57.365] Browser WARN    Image with src "/images/engagement/creation.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:01:55.023] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/a-propos/page.js:12:21
+Parsing ecmascript source code failed
+  10 | <MissionSection />
+  11 | < PartnersSection
+> 12 | <EngagementSection />                
+     |                     ^
+  13 |     </div>
+  14 |   );
+  15 | }
+
+Expression expected
+[04:02:07.487] Server  LOG      ✓ Compiled in 191ms
+[04:12:17.483] Server  LOG      ✓ Compiled in 738ms
+[04:12:52.952] Server  LOG      ✓ Compiled in 391ms
+[04:13:01.225] Browser WARN    Image with src "/images/equipe/steven1.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:13:01.303] Browser WARN    Image with src "/images/equipe/edith.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:13:01.303] Browser WARN    Image with src "/images/equipe/steven2.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:13:01.303] Browser WARN    Image with src "/images/equipe/peter.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:14:48.290] Server  LOG      ✓ Compiled in 693ms
+[04:21:20.074] Server  LOG      ✓ Compiled in 1235ms
+[04:21:24.199] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter={function onMouseEnter} onMouseLeave=... children=...>
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:21:25.365] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter=... onMouseLeave={function onMouseLeave} children=...>
+                                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:21:25.882] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter={function onMouseEnter} onMouseLeave=... children=...>
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:21:29.168] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter=... onMouseLeave={function onMouseLeave} children=...>
+                                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:21:38.296] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter={function onMouseEnter} onMouseLeave=... children=...>
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:21:43.464] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter=... onMouseLeave={function onMouseLeave} children=...>
+                                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:21:44.428] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter={function onMouseEnter} onMouseLeave=... children=...>
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:21:45.189] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter=... onMouseLeave={function onMouseLeave} children=...>
+                                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:21:46.533] Browser ERROR   uncaughtError: Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter={function onMouseEnter} onMouseLeave=... children=...>
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:23:22.902] Server  LOG      ✓ Compiled in 1779ms
+[04:23:25.786] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter={function onMouseEnter} onMouseLeave=... children=...>
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:23:26.251] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter=... onMouseLeave={function onMouseLeave} children=...>
+                                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:23:26.554] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter={function onMouseEnter} onMouseLeave=... children=...>
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:23:27.648] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter=... onMouseLeave={function onMouseLeave} children=...>
+                                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:23:28.425] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter={function onMouseEnter} onMouseLeave=... children=...>
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:23:29.588] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter=... onMouseLeave={function onMouseLeave} children=...>
+                                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:23:29.909] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter={function onMouseEnter} onMouseLeave=... children=...>
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:23:30.204] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter=... onMouseLeave={function onMouseLeave} children=...>
+                                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:23:30.911] Server  WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[04:23:31.751] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:23:32.058] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[04:23:32.058] Browser ERROR   uncaughtError: Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter={function onMouseEnter} onMouseLeave=... children=...>
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:23:58.035] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/a-propos/page.js:3:1
+Export default doesn't exist in target module
+  1 | import EngagementSection from "../components/a-propos/EngagementSection";
+  2 | import MissionSection from "../components/a-propos/MissionSection";
+> 3 | import TeamSection from "../components/a-propos/TeamSection";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  4 | import HeroGeneral from "../components/HeroGeneral";
+  5 | import PartnersSection from "../home/PartnersSection";
+  6 |
+
+The export default was not found in module [project]/Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos/TeamSection.js [app-rsc] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+[04:24:02.801] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter={function onMouseEnter} onMouseLeave=... children=...>
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:24:04.092] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter=... onMouseLeave={function onMouseLeave} children=...>
+                                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:24:04.459] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter={function onMouseEnter} onMouseLeave=... children=...>
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:24:04.978] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter=... onMouseLeave={function onMouseLeave} children=...>
+                                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:24:06.148] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter={function onMouseEnter} onMouseLeave=... children=...>
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:24:06.429] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter=... onMouseLeave={function onMouseLeave} children=...>
+                                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:24:07.229] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter={function onMouseEnter} onMouseLeave=... children=...>
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:24:08.866] Server  ERROR    ⨯ Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter=... onMouseLeave={function onMouseLeave} children=...>
+                                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:24:10.326] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:24:11.028] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[04:24:11.028] Browser ERROR   uncaughtError: Error: Event handlers cannot be passed to Client Component props.
+  <button className=... style={{...}} onMouseEnter={function onMouseEnter} onMouseLeave=... children=...>
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^
+If you need interactivity, consider converting part of this to a Client Component.
+[04:25:25.760] Server  LOG      ✓ Compiled in 600ms
+[04:25:28.437] Server  WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[04:25:29.423] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:25:29.634] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[04:25:29.634] Browser WARN    Image with src "/images/apa-logo.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:25:29.634] Browser WARN    Image with src "/images/MissionSection/Vector.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:25:29.634] Browser WARN    Image with src "/images/MissionSection/Vision.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:25:29.634] Browser WARN    Image with src "/images/MissionSection/Mission.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:25:31.049] Browser WARN    Image with src "/images/engagement/inspiration.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:25:31.049] Browser WARN    Image with src "/images/engagement/impact.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:25:31.049] Browser WARN    Image with src "/images/engagement/creation.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:25:31.864] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[04:25:32.062] Browser WARN    Image with src "/images/apa-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[04:26:28.474] Browser WARN    Image with src "/images/vector-footer-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[04:27:07.870] Server  LOG      ✓ Compiled in 72ms
+[04:27:21.484] Server  LOG      ✓ Compiled in 234ms
+[04:27:41.500] Server  LOG      ✓ Compiled in 851ms
+[04:31:03.422] Server  LOG      ✓ Compiled in 290ms
+[04:34:36.879] Server  LOG      ✓ Compiled in 203ms
+[04:36:50.689] Server  LOG      ✓ Compiled in 72ms
+[04:38:32.077] Server  LOG      ✓ Compiled in 185ms
+[04:43:43.675] Server  LOG      ✓ Compiled in 314ms
+[04:46:06.355] Server  LOG      ✓ Compiled in 393ms
+[04:46:07.036] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos
+Invalid import
+'client-only' cannot be imported from a Server Component module. It should only be used from a Client Component.
+The error was caused by using 'styled-jsx'. It only works in a Client Component but none of its parents are marked with "use client", so they're Server Components by default.
+[04:47:06.029] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos
+Invalid import
+'client-only' cannot be imported from a Server Component module. It should only be used from a Client Component.
+The error was caused by using 'styled-jsx'. It only works in a Client Component but none of its parents are marked with "use client", so they're Server Components by default.
+[04:47:23.903] Server  LOG      ✓ Compiled in 170ms
+[04:47:26.298] Server  LOG      ✓ Compiled in 100ms
+[04:47:27.061] Server  WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[04:47:28.182] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[04:47:28.393] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[04:47:28.517] Browser WARN    Image with src "/images/apa-logo.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:47:28.517] Browser WARN    Image with src "/images/engagement/inspiration.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:47:28.517] Browser WARN    Image with src "/images/engagement/creation.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:47:28.517] Browser WARN    Image with src "/images/engagement/impact.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:47:28.517] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[04:47:28.517] Browser WARN    Image with src "/images/apa-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[04:47:28.517] Browser WARN    Image with src "/images/vector-footer-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[04:47:29.509] Browser WARN    Image with src "/images/MissionSection/Vector.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:47:29.509] Browser WARN    Image with src "/images/MissionSection/Vision.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:47:29.509] Browser WARN    Image with src "/images/MissionSection/Mission.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[04:57:52.529] Server  LOG      ✓ Compiled in 2.7s
+[04:57:53.026] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos
+Invalid import
+'client-only' cannot be imported from a Server Component module. It should only be used from a Client Component.
+The error was caused by using 'styled-jsx'. It only works in a Client Component but none of its parents are marked with "use client", so they're Server Components by default.
+[04:58:06.024] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos
+Invalid import
+'client-only' cannot be imported from a Server Component module. It should only be used from a Client Component.
+The error was caused by using 'styled-jsx'. It only works in a Client Component but none of its parents are marked with "use client", so they're Server Components by default.
+[04:59:16.685] Server  LOG      ✓ Compiled in 409ms
+[04:59:17.033] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos/TeamSection.js:3:1
+Parsing ecmascript source code failed
+  1 | import { Card } from "@/components/ui/card";
+  2 |
+> 3 | interface TeamMember {
+    | ^^^^^^^^^
+  4 |   name: string;
+  5 |   role: string;
+  6 |   image: string;
+
+Expression expected
+
+Import trace:
+  Server Component:
+    ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos/TeamSection.js
+    ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/a-propos/page.js
+[04:59:17.033] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos
+Invalid import
+'client-only' cannot be imported from a Server Component module. It should only be used from a Client Component.
+The error was caused by using 'styled-jsx'. It only works in a Client Component but none of its parents are marked with "use client", so they're Server Components by default.
+[05:01:30.352] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos/TeamSection.js:3:1
+Parsing ecmascript source code failed
+  1 | import { Card } from "@/components/ui/card";
+  2 |
+> 3 | interface TeamMember {
+    | ^^^^^^^^^
+  4 |   name: string;
+  5 |   role: string;
+  6 |   image: string;
+
+Expression expected
+
+Import trace:
+  Server Component:
+    ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos/TeamSection.js
+    ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/a-propos/page.js
+[05:01:30.352] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos
+Invalid import
+'client-only' cannot be imported from a Server Component module. It should only be used from a Client Component.
+The error was caused by using 'styled-jsx'. It only works in a Client Component but none of its parents are marked with "use client", so they're Server Components by default.
+[05:02:51.048] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos/TeamSection.js:3:1
+Parsing ecmascript source code failed
+  1 | import { Card } from "@/components/ui/card";
+  2 |
+> 3 | interface TeamMember {
+    | ^^^^^^^^^
+  4 |   name: string;
+  5 |   role: string;
+  6 |   image: string;
+
+Expression expected
+
+Import trace:
+  Server Component:
+    ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos/TeamSection.js
+    ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/a-propos/page.js
+[05:02:51.049] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos
+Invalid import
+'client-only' cannot be imported from a Server Component module. It should only be used from a Client Component.
+The error was caused by using 'styled-jsx'. It only works in a Client Component but none of its parents are marked with "use client", so they're Server Components by default.
+[05:02:53.028] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos/TeamSection.js:3:1
+Parsing ecmascript source code failed
+  1 | import { Card } from "@/components/ui/card";
+  2 |
+> 3 | interface TeamMember {
+    | ^^^^^^^^^
+  4 |   name: string;
+  5 |   role: string;
+  6 |   image: string;
+
+Expression expected
+
+Import trace:
+  Server Component:
+    ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos/TeamSection.js
+    ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/a-propos/page.js
+[05:02:53.029] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos
+Invalid import
+'client-only' cannot be imported from a Server Component module. It should only be used from a Client Component.
+The error was caused by using 'styled-jsx'. It only works in a Client Component but none of its parents are marked with "use client", so they're Server Components by default.
+[05:03:14.178] Server  LOG      ✓ Compiled in 384ms
+[05:03:15.026] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos
+Invalid import
+'client-only' cannot be imported from a Server Component module. It should only be used from a Client Component.
+The error was caused by using 'styled-jsx'. It only works in a Client Component but none of its parents are marked with "use client", so they're Server Components by default.
+[05:03:20.185] Server  ERROR    ⨯ ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos
+Invalid import
+'client-only' cannot be imported from a Server Component module. It should only be used from a Client Component.
+The error was caused by using 'styled-jsx'. It only works in a Client Component but none of its parents are marked with "use client", so they're Server Components by default.
+
+
+
+[05:03:21.047] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos
+Invalid import
+'client-only' cannot be imported from a Server Component module. It should only be used from a Client Component.
+The error was caused by using 'styled-jsx'. It only works in a Client Component but none of its parents are marked with "use client", so they're Server Components by default.
+[05:03:21.047] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos
+Invalid import
+'client-only' cannot be imported from a Server Component module. It should only be used from a Client Component.
+The error was caused by using 'styled-jsx'. It only works in a Client Component but none of its parents are marked with "use client", so they're Server Components by default.
+[05:03:21.669] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos
+Invalid import
+'client-only' cannot be imported from a Server Component module. It should only be used from a Client Component.
+The error was caused by using 'styled-jsx'. It only works in a Client Component but none of its parents are marked with "use client", so they're Server Components by default.
+[05:03:22.408] Browser ERROR   uncaughtError: Error: ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos
+Invalid import
+'client-only' cannot be imported from a Server Component module. It should only be used from a Client Component.
+The error was caused by using 'styled-jsx'. It only works in a Client Component but none of its parents are marked with "use client", so they're Server Components by default.
+
+
+
+[05:03:22.621] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos
+Invalid import
+'client-only' cannot be imported from a Server Component module. It should only be used from a Client Component.
+The error was caused by using 'styled-jsx'. It only works in a Client Component but none of its parents are marked with "use client", so they're Server Components by default.
+[05:03:22.621] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos
+Invalid import
+'client-only' cannot be imported from a Server Component module. It should only be used from a Client Component.
+The error was caused by using 'styled-jsx'. It only works in a Client Component but none of its parents are marked with "use client", so they're Server Components by default.
+[05:03:58.030] Browser ERROR   ./Desktop/aa/Africaine-du-prod-artistique-frontend/apa-customer/app/components/a-propos
+Invalid import
+'client-only' cannot be imported from a Server Component module. It should only be used from a Client Component.
+The error was caused by using 'styled-jsx'. It only works in a Client Component but none of its parents are marked with "use client", so they're Server Components by default.
+[05:04:17.116] Server  LOG      ✓ Compiled in 108ms
+[05:04:18.852] Server  WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[05:04:20.185] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:04:20.356] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[05:04:20.541] Browser WARN    Image with src "/images/apa-logo.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[05:04:20.541] Browser WARN    Image with src "/images/MissionSection/Vector.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[05:04:20.541] Browser WARN    Image with src "/images/MissionSection/Vision.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[05:04:20.541] Browser WARN    Image with src "/images/MissionSection/Mission.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[05:04:20.541] Browser WARN    Image with src "/images/engagement/inspiration.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[05:04:20.541] Browser WARN    Image with src "/images/engagement/creation.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[05:04:20.541] Browser WARN    Image with src "/images/engagement/impact.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[05:04:20.541] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[05:04:20.541] Browser WARN    Image with src "/images/apa-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[05:04:20.541] Browser WARN    Image with src "/images/vector-footer-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[05:07:55.905] Server  LOG      ✓ Compiled in 725ms
+[05:08:52.889] Server  LOG      ✓ Compiled in 442ms
+[05:08:57.915] Server  LOG      ✓ Compiled in 72ms
+[05:09:20.797] Server  LOG      ✓ Compiled in 56ms
+[05:09:27.858] Server  LOG      ✓ Compiled in 69ms
+[05:09:44.850] Server  LOG      ✓ Compiled in 90ms
+[05:09:59.951] Server  LOG      ✓ Compiled in 44ms
+[05:10:10.364] Server  LOG      ✓ Compiled in 196ms
+[05:10:15.299] Server  LOG      ✓ Compiled in 80ms
+[05:10:20.131] Server  LOG      ✓ Compiled in 148ms
+[05:10:24.979] Server  LOG      ✓ Compiled in 67ms
+[05:12:53.742] Server  LOG      ✓ Compiled in 66ms
+[05:15:56.957] Server  LOG      ✓ Compiled in 163ms
+[05:17:29.074] Server  LOG      ✓ Compiled in 120ms
+[05:19:34.730] Server  LOG      ✓ Compiled in 164ms
+[05:19:47.561] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:20:19.578] Server  LOG      ✓ Compiled in 54ms
+[05:20:51.486] Server  LOG      ✓ Compiled in 65ms
+[05:20:58.307] Server  LOG      ✓ Compiled in 75ms
+[05:21:06.424] Server  LOG      ✓ Compiled in 62ms
+[05:24:21.669] Server  LOG      ✓ Compiled in 56ms
+[05:24:22.036] Browser ERROR   uncaughtError: ReferenceError: FileText is not defined
+[05:24:29.233] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[05:24:29.266] Server  LOG      ✓ Compiled in 52ms
+[05:24:30.529] Server  WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[05:24:31.333] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:24:32.029] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+[05:24:32.029] Browser WARN    Image with src "/images/apa-logo.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[05:24:32.029] Browser WARN    Image with src "/images/MissionSection/Vector.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[05:24:32.029] Browser WARN    Image with src "/images/MissionSection/Vision.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[05:24:32.029] Browser WARN    Image with src "/images/MissionSection/Mission.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[05:24:32.029] Browser WARN    Image with src "/images/engagement/inspiration.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[05:24:32.029] Browser WARN    Image with src "/images/engagement/creation.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[05:24:32.029] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[05:24:32.029] Browser WARN    Image with src "/images/apa-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[05:24:32.029] Browser WARN    Image with src "/images/engagement/impact.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[05:24:32.029] Browser WARN    Image with src "/images/vector-footer-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[05:25:10.984] Server  LOG      ✓ Compiled in 85ms
+[05:25:48.037] Server  LOG      ✓ Compiled in 75ms
+[05:27:00.650] Server  LOG      ✓ Compiled in 179ms
+[05:27:09.220] Server  LOG      ✓ Compiled in 77ms
+[05:34:23.057] Server  LOG      ✓ Compiled in 282ms
+[05:34:34.182] Server  LOG      ✓ Compiled in 151ms
+[05:34:44.098] Server  LOG      ✓ Compiled in 93ms
+[05:35:50.139] Server  LOG      ✓ Compiled in 134ms
+[05:36:00.840] Server  LOG      ✓ Compiled in 248ms

@@ -1,23 +1,48 @@
 globalThis.__BUILD_MANIFEST = {
   "pages": {
-    "/_app": []
+    "/_app": [
+      "static/chunks/8aaad_next_dist_compiled_1923f75d._.js",
+      "static/chunks/8aaad_next_dist_shared_lib_08254522._.js",
+      "static/chunks/8aaad_next_dist_client_e1170695._.js",
+      "static/chunks/8aaad_next_dist_e79cf4b3._.js",
+      "static/chunks/8aaad_next_app_f497e2c0.js",
+      "static/chunks/[next]_entry_page-loader_ts_cf579df3._.js",
+      "static/chunks/8aaad_react-dom_c1cabc32._.js",
+      "static/chunks/8aaad_701bee07._.js",
+      "static/chunks/[root-of-the-server]__ccb3a384._.js",
+      "static/chunks/3d860_aa_Africaine-du-prod-artistique-frontend_apa-customer_pages__app_2da965e7._.js",
+      "static/chunks/88e7d_aa_Africaine-du-prod-artistique-frontend_apa-customer_pages__app_c5e4020e._.js"
+    ],
+    "/_error": [
+      "static/chunks/8aaad_next_dist_compiled_1923f75d._.js",
+      "static/chunks/8aaad_next_dist_shared_lib_381eebf5._.js",
+      "static/chunks/8aaad_next_dist_client_e1170695._.js",
+      "static/chunks/8aaad_next_dist_d08fd9d0._.js",
+      "static/chunks/8aaad_next_error_90e17ddc.js",
+      "static/chunks/[next]_entry_page-loader_ts_d8bebc42._.js",
+      "static/chunks/8aaad_react-dom_c1cabc32._.js",
+      "static/chunks/8aaad_701bee07._.js",
+      "static/chunks/[root-of-the-server]__34fe601f._.js",
+      "static/chunks/3d860_aa_Africaine-du-prod-artistique-frontend_apa-customer_pages__error_2da965e7._.js",
+      "static/chunks/88e7d_aa_Africaine-du-prod-artistique-frontend_apa-customer_pages__error_b0f190ae._.js"
+    ]
   },
   "devFiles": [],
   "polyfillFiles": [
-    "static/chunks/7a235_next_dist_build_polyfills_polyfill-nomodule.js"
+    "static/chunks/8aaad_next_dist_build_polyfills_polyfill-nomodule.js"
   ],
   "lowPriorityFiles": [],
   "rootMainFiles": [
-    "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_d6a42477._.js",
-    "static/chunks/7a235_next_dist_compiled_react-dom_8e08eb7d._.js",
-    "static/chunks/7a235_next_dist_compiled_react-server-dom-turbopack_75a57975._.js",
-    "static/chunks/7a235_next_dist_compiled_next-devtools_index_3d3a9a37.js",
-    "static/chunks/7a235_next_dist_compiled_fc8e755e._.js",
-    "static/chunks/7a235_next_dist_client_a16dbe1d._.js",
-    "static/chunks/7a235_next_dist_281d103e._.js",
-    "static/chunks/7a235_@swc_helpers_cjs_959fcb0d._.js",
-    "static/chunks/apa-customer_a0ff3932._.js",
-    "static/chunks/turbopack-apa-customer_8769d59f._.js"
+    "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_4651c283._.js",
+    "static/chunks/8aaad_next_dist_compiled_react-dom_4756a697._.js",
+    "static/chunks/8aaad_next_dist_compiled_react-server-dom-turbopack_ac177cf4._.js",
+    "static/chunks/8aaad_next_dist_compiled_next-devtools_index_d86d5964.js",
+    "static/chunks/8aaad_next_dist_compiled_bb333616._.js",
+    "static/chunks/8aaad_next_dist_client_54414925._.js",
+    "static/chunks/8aaad_next_dist_ec1f1cbd._.js",
+    "static/chunks/8aaad_@swc_helpers_cjs_3b8b9a93._.js",
+    "static/chunks/Desktop_aa_Africaine-du-prod-artistique-frontend_apa-customer_a0ff3932._.js",
+    "static/chunks/turbopack-Desktop_aa_Africaine-du-prod-artistique-frontend_apa-customer_a63a615a._.js"
   ]
 };
 globalThis.__BUILD_MANIFEST.lowPriorityFiles = [
