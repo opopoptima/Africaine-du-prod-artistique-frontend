@@ -1,46 +1,88 @@
-[00:00:01.191] Server  LOG      ✓ Ready in 755ms
-[00:00:12.006] Server  WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:12.016] Server  WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:12.018] Server  WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:12.725] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:12.995] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:12.995] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:12.995] Browser WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:00:12.995] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:12.995] Browser WARN    Image with src "/images/heroSection/image.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:00:12.995] Browser WARN    Image with src "/images/learningBanner/vector-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:00:12.995] Browser WARN    Image with src "/images/learningBanner/vector-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:00:13.430] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/Categories/Lecture.jpeg" "received" null
-[00:00:13.431] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/Decouverte.png" "received" null
-[00:00:13.432] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/app.png" "received" null
-[00:00:13.436] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/creativite.png" "received" null
-[00:00:13.437] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/categories/valeurs.png" "received" null
-[00:00:13.506] Server  ERROR   Error: The requested resource isn't a valid image.
-[00:00:13.519] Server  ERROR   Error: The requested resource isn't a valid image.
-[00:00:13.536] Server  ERROR   Error: The requested resource isn't a valid image.
-[00:00:13.546] Server  ERROR   Error: The requested resource isn't a valid image.
-[00:00:13.556] Server  ERROR   Error: The requested resource isn't a valid image.
-[00:00:13.884] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:00:13.884] Browser WARN    Image with src "/images/apa-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:00:14.101] Browser WARN    Image with src "/images/vector-footer-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:01:08.846] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:09.012] Browser WARN    Image with src "/images/heroSection/heroSectionImageBackground.jpg" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:01:09.012] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" is using quality "95" which is not configured in images.qualities [75]. Please update your config to [75, 95].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:01:09.012] Browser WARN    Image with src "/images/heroSection/image.png" is using quality "90" which is not configured in images.qualities [75]. Please update your config to [75, 90].
-Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
-[00:01:09.012] Browser WARN    Image with src "/images/heroSection/heroSectionImage.jpg" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:01:09.012] Browser WARN    Image with src "/images/heroSection/image.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
-[00:01:09.012] Browser WARN    Image with src "/images/learningBanner/vector-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:01:09.012] Browser WARN    Image with src "/images/learningBanner/vector-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:01:10.584] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:01:10.584] Browser WARN    Image with src "/images/apa-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:01:26.897] Browser WARN    Image with src "/images/vector-footer-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:02:23.197] Server  LOG      ✓ Compiled in 53ms
+[00:00:01.108] Server  LOG      ✓ Ready in 696ms
+[00:00:03.302] Server  ERROR    ⨯ ./apa-customer/app/contact/page.js:2:1
+Module not found: Can't resolve '@/app/components/Map'
+  1 | import Contact from "./Contact";
+> 2 | import Map from "@/app/components/Map";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  3 |
+  4 | export default function ContactPage() {
+  5 |   return (
+
+Import map: aliased to relative './app/components/Map' inside of [project]/apa-customer
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:04.094] Browser ERROR   uncaughtError: Error: ./apa-customer/app/contact/page.js:2:1
+Module not found: Can't resolve '@/app/components/Map'
+  1 | import Contact from "./Contact";
+> 2 | import Map from "@/app/components/Map";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  3 |
+  4 | export default function ContactPage() {
+  5 |   return (
+
+Import map: aliased to relative './app/components/Map' inside of [project]/apa-customer
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:04.713] Browser ERROR   ./apa-customer/app/contact/page.js:2:1
+Module not found: Can't resolve '@/app/components/Map'
+  1 | import Contact from "./Contact";
+> 2 | import Map from "@/app/components/Map";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  3 |
+  4 | export default function ContactPage() {
+  5 |   return (
+
+Import map: aliased to relative './app/components/Map' inside of [project]/apa-customer
+
+https://nextjs.org/docs/messages/module-not-found
+[00:00:04.713] Browser ERROR   ./apa-customer/app/contact/page.js:2:1
+Module not found: Can't resolve '@/app/components/Map'
+  1 | import Contact from "./Contact";
+> 2 | import Map from "@/app/components/Map";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  3 |
+  4 | export default function ContactPage() {
+  5 |   return (
+
+Import map: aliased to relative './app/components/Map' inside of [project]/apa-customer
+
+https://nextjs.org/docs/messages/module-not-found
+[00:00:51.558] Server  LOG      ✓ Compiled in 34ms
+[00:00:56.559] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:00:56.559] Browser WARN    Image with src "/images/apa-logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:00:56.559] Browser WARN    Image with src "/images/vector-footer-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:06:25.817] Server  LOG      ✓ Compiled in 79ms
+[00:07:51.243] Browser ERROR   ./apa-customer/app/contact/page.js:30:10
+Parsing ecmascript source code failed
+  28 | }
+  29 | export default function ContactPage() {
+> 30 |   return (
+     |          ^
+> 31 |     
+     | ^^^^
+> 32 |   );
+     | ^^^^
+  33 | }
+  34 |
+
+Parenthesized expression cannot be empty
+[00:08:03.963] Browser ERROR   ./apa-customer/app/contact/page.js:29:10
+Parsing ecmascript source code failed
+  27 | }
+  28 | export default function ContactPage() {
+> 29 |   return (
+     |          ^
+> 30 |     
+     | ^^^^
+> 31 |   );
+     | ^^^^
+  32 | }
+  33 |
+
+Parenthesized expression cannot be empty
