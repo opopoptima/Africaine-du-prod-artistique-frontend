@@ -1,31 +1,6 @@
 globalThis.__BUILD_MANIFEST = {
   "pages": {
-    "/_app": [
-      "static/chunks/4198c_next_dist_compiled_b9db3ed3._.js",
-      "static/chunks/4198c_next_dist_shared_lib_f656e4b7._.js",
-      "static/chunks/4198c_next_dist_client_82019a65._.js",
-      "static/chunks/4198c_next_dist_304b8d05._.js",
-      "static/chunks/4198c_next_app_705b014d.js",
-      "static/chunks/[next]_entry_page-loader_ts_7b5b494a._.js",
-      "static/chunks/4198c_react-dom_fdf2289a._.js",
-      "static/chunks/4198c_2dfc4328._.js",
-      "static/chunks/[root-of-the-server]__73b3151c._.js",
-      "static/chunks/639c1_Africaine-du-prod-artistique-frontend_apa-customer_pages__app_2da965e7._.js",
-      "static/chunks/b6fad_Africaine-du-prod-artistique-frontend_apa-customer_pages__app_7a0a7aa3._.js"
-    ],
-    "/_error": [
-      "static/chunks/4198c_next_dist_compiled_b9db3ed3._.js",
-      "static/chunks/4198c_next_dist_shared_lib_9068aa80._.js",
-      "static/chunks/4198c_next_dist_client_82019a65._.js",
-      "static/chunks/4198c_next_dist_74fc711d._.js",
-      "static/chunks/4198c_next_error_7276f5b5.js",
-      "static/chunks/[next]_entry_page-loader_ts_030a9a31._.js",
-      "static/chunks/4198c_react-dom_fdf2289a._.js",
-      "static/chunks/4198c_2dfc4328._.js",
-      "static/chunks/[root-of-the-server]__7ff66207._.js",
-      "static/chunks/639c1_Africaine-du-prod-artistique-frontend_apa-customer_pages__error_2da965e7._.js",
-      "static/chunks/b6fad_Africaine-du-prod-artistique-frontend_apa-customer_pages__error_9f7ee64f._.js"
-    ]
+    "/_app": []
   },
   "devFiles": [],
   "polyfillFiles": [

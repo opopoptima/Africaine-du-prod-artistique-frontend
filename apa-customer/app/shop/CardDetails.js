@@ -31,10 +31,10 @@ export default function CardDetail({
 }) {
   return (
     <section className="w-full bg-white rounded-3xl overflow-hidden">
-      <div className="grid lg:grid-cols-[340px_1fr] gap-12 lg:gap-16 p-5 md:p-8 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-6 lg:gap-12 xl:gap-16 p-4 md:p-5 lg:p-8 items-center">
         {/* Cover - centered and larger, taking 70% of card height */}
         <div className="flex items-center justify-center">
-          <div className="relative w-full max-w-[350px] aspect-3/4 overflow-hidden rounded-lg group cursor-pointer">
+          <div className="relative w-full max-w-[280px] lg:max-w-[350px] aspect-3/4 overflow-hidden rounded-lg group cursor-pointer">
             <Image
               src={imageSrc}
               alt={title}
@@ -58,93 +58,93 @@ export default function CardDetail({
         </div>
 
         {/* Details */}
-        <div className="space-y-4">
-          <div className="space-y-2">
+        <div className="space-y-3 lg:space-y-4">
+          <div className="space-y-1.5 lg:space-y-2">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-secondary-500">
               {author}
             </p>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-primary-500">
+            <h2 className="text-xl md:text-2xl lg:text-3xl font-extrabold text-primary-500">
               {title}
             </h2>
-            <div className="flex items-baseline gap-3">
+            <div className="flex items-baseline gap-2 lg:gap-3">
               {originalPrice && (
-                <span className="text-secondary-700 line-through text-base">
+                <span className="text-secondary-700 line-through text-sm lg:text-base">
                   ${originalPrice}
                 </span>
               )}
-              <span className="text-2xl md:text-3xl font-black text-primary-100">
+              <span className="text-xl md:text-2xl lg:text-3xl font-black text-primary-100">
                 ${price}
               </span>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <h3 className="text-lg font-semibold text-primary-300">
+          <div className="space-y-1.5 lg:space-y-2">
+            <h3 className="text-base lg:text-lg font-semibold text-primary-300">
               Présentation et Résumé
             </h3>
-            <p className="text-sm text-secondary-700 leading-relaxed">
+            <p className="text-xs md:text-sm text-secondary-700 leading-relaxed">
               {description}
             </p>
 
             {/* Audio player */}
-            <div className="inline-flex items-center gap-3 px-4 py-2.5 bg-gray-100 rounded-lg">
-              <button className="size-8 rounded-full bg-primary-300 text-white flex items-center justify-center hover:bg-primary-500 transition-colors">
-                <IoPlay className="size-4" />
+            <div className="inline-flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2 lg:py-2.5 bg-gray-100 rounded-lg">
+              <button className="size-7 lg:size-8 rounded-full bg-primary-300 text-white flex items-center justify-center hover:bg-primary-500 transition-colors">
+                <IoPlay className="size-3 lg:size-4" />
               </button>
-              <div className="flex items-center gap-2 text-secondary-700 text-sm rounded-full">
+              <div className="flex items-center gap-1.5 lg:gap-2 text-secondary-700 text-xs lg:text-sm rounded-full">
                 <div className="flex gap-0.5">
-                  {[...Array(30)].map((_, i) => (
-                    <div key={i} className="w-0.5 h-3 bg-secondary-700 rounded-full" />
+                  {[...Array(20)].map((_, i) => (
+                    <div key={i} className="w-0.5 h-2.5 lg:h-3 bg-secondary-700 rounded-full" />
                   ))}
                 </div>
-                <span className="font-medium">{audioDuration}</span>
-                <button className="ml-1">
-                  <IoVolumeHigh className="size-4 text-secondary-700" />
+                <span className="font-medium text-xs lg:text-sm">{audioDuration}</span>
+                <button className="ml-0.5 lg:ml-1">
+                  <IoVolumeHigh className="size-3.5 lg:size-4 text-secondary-700" />
                 </button>
               </div>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <h3 className="text-lg font-semibold text-primary-300">
+          <div className="space-y-1.5 lg:space-y-2">
+            <h3 className="text-base lg:text-lg font-semibold text-primary-300">
               Objectifs pédagogiques
             </h3>
-            <p className="text-sm text-secondary-700 leading-relaxed">
+            <p className="text-xs md:text-sm text-secondary-700 leading-relaxed">
               {objectives}
             </p>
           </div>
 
           {/* Specs Table - Horizontal layout matching reference */}
-          <div className="rounded-xl border border-primary-300/50 overflow-hidden">
-            <table className="w-full">
+          <div className="rounded-lg lg:rounded-xl border border-primary-300/50 overflow-x-auto">
+            <table className="w-full min-w-[500px]">
               <thead>
                 <tr className="bg-white">
-                  <th className="px-4 py-3 text-center font-bold text-primary-500 text-sm border-r border-primary-300/30">
+                  <th className="px-2 md:px-3 lg:px-4 py-2 lg:py-3 text-center font-bold text-primary-500 text-xs lg:text-sm border-r border-primary-300/30">
                     ISBN
                   </th>
-                  <th className="px-4 py-3 text-center font-bold text-primary-500 text-sm border-r border-primary-300/30">
+                  <th className="px-2 md:px-3 lg:px-4 py-2 lg:py-3 text-center font-bold text-primary-500 text-xs lg:text-sm border-r border-primary-300/30">
                     Niveau scolaire
                   </th>
-                  <th className="px-4 py-3 text-center font-bold text-primary-500 text-sm border-r border-primary-300/30">
+                  <th className="px-2 md:px-3 lg:px-4 py-2 lg:py-3 text-center font-bold text-primary-500 text-xs lg:text-sm border-r border-primary-300/30">
                     Dimensions
                   </th>
-                  <th className="px-4 py-3 text-center font-bold text-primary-500 text-sm">
+                  <th className="px-2 md:px-3 lg:px-4 py-2 lg:py-3 text-center font-bold text-primary-500 text-xs lg:text-sm">
                     Pages
                   </th>
                 </tr>
               </thead>
               <tbody>
                 <tr style={{ backgroundColor: '#9B59B633' }}>
-                  <td className="px-4 py-3 text-center text-secondary-900 font-medium text-sm border-r border-primary-300/30">
+                  <td className="px-2 md:px-3 lg:px-4 py-2 lg:py-3 text-center text-secondary-900 font-medium text-xs lg:text-sm border-r border-primary-300/30">
                     {specs[0].book1}
                   </td>
-                  <td className="px-4 py-3 text-center text-secondary-900 font-medium text-sm border-r border-primary-300/30">
+                  <td className="px-2 md:px-3 lg:px-4 py-2 lg:py-3 text-center text-secondary-900 font-medium text-xs lg:text-sm border-r border-primary-300/30">
                     {specs[1].book1}
                   </td>
-                  <td className="px-4 py-3 text-center text-secondary-900 font-medium text-sm border-r border-primary-300/30">
+                  <td className="px-2 md:px-3 lg:px-4 py-2 lg:py-3 text-center text-secondary-900 font-medium text-xs lg:text-sm border-r border-primary-300/30">
                     {specs[2].book1}
                   </td>
-                  <td className="px-4 py-3 text-center text-secondary-900 font-medium text-sm">
+                  <td className="px-2 md:px-3 lg:px-4 py-2 lg:py-3 text-center text-secondary-900 font-medium text-xs lg:text-sm">
                     {specs[3].book1}
                   </td>
                 </tr>

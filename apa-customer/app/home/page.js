@@ -28,8 +28,8 @@ export default function Home() {
       </section>
 
       {/* Test Section - CardDetails */}
-      <div className="flex justify-center px-6 py-12">
-        <div className="w-full max-w-[70%]">
+      <div className="flex justify-center py-12 px-0">
+        <div className="w-full max-w-[95%] sm:max-w-[70%]">
           <CardDetails />
         </div>
       </div>
