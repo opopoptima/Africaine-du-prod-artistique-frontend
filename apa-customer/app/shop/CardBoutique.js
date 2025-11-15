@@ -14,9 +14,9 @@ export default function CardBoutique({
     <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 w-full max-w-2xl mx-auto">
       <div className="flex flex-col sm:flex-row gap-4 p-5">
         {/* Image Section - Left side */}
-        <div className="relative w-full sm:w-44 h-56 sm:h-64 rounded-xl overflow-visible ">
-          {/* enlarged, rotated image that can overflow the card */}
-          <div className="absolute left-0 top-0 w-[110%] h-[110%] md:w-[110%] md:h-[110%] -translate-x-4 md:-translate-x-8 -translate-y-2 md:-translate-y-4 -rotate-3 md:-rotate-6 overflow-hidden rounded-xl shadow-lg">
+        <div className="relative h-80 w-full sm:w-44 h-56 sm:h-64 rounded-xl overflow-hidden sm:overflow-visible">
+          {/* enlarged, rotated image that can overflow the card on larger screens */}
+          <div className="absolute left-0 top-0 w-full h-full sm:w-[110%] sm:h-[110%] md:w-[110%] md:h-[110%] sm:-translate-x-4 md:-translate-x-8 sm:-translate-y-2 md:-translate-y-4 sm:-rotate-3 md:-rotate-6 overflow-hidden rounded-xl shadow-lg">
             <Image
               src={imageSrc}
               alt={title}
