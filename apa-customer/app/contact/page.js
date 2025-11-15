@@ -1,9 +1,11 @@
 import Contact from "./Contact";
 import Map from "./Carte";
 import ContactInfos from "./contactInfo";
+import HeroGeneral from "../components/HeroGeneral";
 
 export default function ContactPage() {
   return (<div>
+      <HeroGeneral title="Contactez-Nous" />
       <Contact />
       <div className="max-w-6xl mx-auto px-4 py-16">
 

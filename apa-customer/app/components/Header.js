@@ -9,7 +9,7 @@ export default function Header() {
   // Menu principal
   const menu = [
     { name: "Accueil", href: "/home" },
-    { name: "À propos", href: "/apropos" },
+    { name: "À propos", href: "/a-propos" },
     { name: "Boutique", href: "/boutique" },
     { name: "Actualité", href: "/actualite" },
     { name: "Contact", href: "/contact" },
