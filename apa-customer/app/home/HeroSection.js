@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function HeroSection() {
   return (
-<section className="relative min-h-[600px] sm:min-h-[600px] md:min-h-[600px] lg:h-[700px] overflow-hidden pt-2 sm:px-8 md:px-16 lg:px-24 xl:px-32">
+<section className="relative min-h-[600px] sm:min-h-[600px] md:min-h-[600px] lg:h-[700px] overflow-hidden pt-2 sm:px-8 md:px-16 lg:px-24 xl:px-32 pg-white">
 
       {/* Background Image with Opacity */}
       <div className="absolute inset-0 z-0">

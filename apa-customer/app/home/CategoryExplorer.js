@@ -6,14 +6,14 @@ import { Button } from "@/app/components/ui/button";
 
 export default function CategoryExplorer() {
   const initialCategories = [
-    { id: 1, name: "Lecture & Histoires", image: "/Categories/Lecture.jpeg", href: "/Categories/Lecture" },
-    { id: 2, name: "Apprentissage & Éducation", image: "/categories/app.png", href: "/categories/app" },
-    { id: 3, name: "Créativité & Coloriage", image: "/categories/creativite.png", href: "/categories/creativite" },
-    { id: 4, name: "Découverte du monde", image: "/categories/Decouverte.png", href: "/categories/Decouverte" },
-    { id: 5, name: "Valeurs & Développement personnel", image: "/categories/valeurs.png", href: "/categories/valeurs" },
-    { id: 6, name: "Pâtisserie", image: "/categories/patisserie.jpg", href: "/categories/patisserie" },
-    { id: 7, name: "Épicerie", image: "/categories/epicerie.jpg", href: "/categories/epicerie" },
-    { id: 8, name: "Boîtes cadeaux", image: "/categories/cadeaux.jpg", href: "/categories/cadeaux" },
+    { id: 1, name: "Lecture & Histoires", image: "/images/Categories/Lecture.jpeg", href: "/Categories/Lecture" },
+    { id: 2, name: "Apprentissage & Éducation", image: "/images/Categories/app.png", href: "/categories/app" },
+    { id: 3, name: "Créativité & Coloriage", image: "/images/Categories/creativite.png", href: "/categories/creativite" },
+    { id: 4, name: "Découverte du monde", image: "/images/Categories/Decouverte.png", href: "/categories/Decouverte" },
+    { id: 5, name: "Valeurs & Développement personnel", image: "/images/Categories/valeurs.png", href: "/categories/valeurs" },
+    { id: 6, name: "Pâtisserie", image: "/images/Categories/patisserie.jpg", href: "/categories/patisserie" },
+    { id: 7, name: "Épicerie", image: "/images/Categories/epicerie.jpg", href: "/categories/epicerie" },
+    { id: 8, name: "Boîtes cadeaux", image: "/images/Categories/cadeaux.jpg", href: "/categories/cadeaux" },
   ];
 
   const [displayCount, setDisplayCount] = useState(5);

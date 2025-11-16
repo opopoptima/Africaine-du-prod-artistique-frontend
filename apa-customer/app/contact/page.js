@@ -7,9 +7,8 @@ export default function ContactPage() {
   return (<div>
       <HeroGeneral title="Contactez-Nous" />
       <Contact />
-      <div className="max-w-6xl mx-auto px-4 py-16">
+      <div className="max-w-5xl mx-4 md:mx-auto py-16 flex flex-col md:flex-row items-start gap-12">
 
-      <div className="flex flex-col md:flex-row items-start gap-12">
 
         {/* MAP */}
         <div className="md:w-2/3 w-full">
@@ -19,7 +18,6 @@ export default function ContactPage() {
         {/* INFO */}
         <div className="md:w-1/3 w-full mt-10">
           <ContactInfos />
-        </div>
 
       </div>
 

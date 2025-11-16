@@ -51,7 +51,7 @@ const partners = [
 
 const PartnersSection = () => {
   return (
-    <section className="py-12 px-4 sm:py-16 sm:px-6 lg:py-20 lg:px-8 bg-gray-50">
+    <section className="py-12 px-4 sm:py-16 sm:px-6 lg:py-20 lg:px-8 bg-white">
       <div className="max-w-7xl mx-auto">
         {/* Section Title */}
         <div className="text-center mb-12 sm:mb-16 space-y-3 sm:space-y-4">

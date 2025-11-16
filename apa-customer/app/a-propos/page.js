@@ -1,17 +1,19 @@
-import EngagementSection from "../components/a-propos/EngagementSection";
-import MissionSection from "../components/a-propos/MissionSection";
-import TeamSection from "../components/a-propos/TeamSection";
+import EngagementSection from "./EngagementSection";
+import MissionSection from "./MissionSection";
+import TeamSection from "./TeamSection";
 import HeroGeneral from "../components/HeroGeneral";
 import PartnersSection from "../home/PartnersSection";
+import ContactSection from "../components/ContactSection";
 
 export default function APropos() {
   return (
     <div className="min-h-screen">
-<HeroGeneral title="À propos" />
-<MissionSection />
-<TeamSection />
-< PartnersSection />
-<EngagementSection />                
+      <HeroGeneral title="À propos" />
+      <MissionSection />
+      <TeamSection />
+      < PartnersSection />
+      <EngagementSection /> 
+      <ContactSection/>               
     </div>
   );
 }
