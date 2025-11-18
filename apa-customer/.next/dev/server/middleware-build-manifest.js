@@ -4,20 +4,20 @@ globalThis.__BUILD_MANIFEST = {
   },
   "devFiles": [],
   "polyfillFiles": [
-    "static/chunks/4198c_next_dist_build_polyfills_polyfill-nomodule.js"
+    "static/chunks/7a235_next_dist_build_polyfills_polyfill-nomodule.js"
   ],
   "lowPriorityFiles": [],
   "rootMainFiles": [
-    "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_f73ebee9._.js",
-    "static/chunks/4198c_next_dist_compiled_react-dom_b73c922d._.js",
-    "static/chunks/4198c_next_dist_compiled_react-server-dom-turbopack_0d81afd8._.js",
-    "static/chunks/4198c_next_dist_compiled_next-devtools_index_060d5386.js",
-    "static/chunks/4198c_next_dist_compiled_d5791893._.js",
-    "static/chunks/4198c_next_dist_client_d1fdf2bb._.js",
-    "static/chunks/4198c_next_dist_0e4fccfe._.js",
-    "static/chunks/4198c_@swc_helpers_cjs_7be74489._.js",
-    "static/chunks/c2a91_e-du-prod-artistique_Africaine-du-prod-artistique-frontend_apa-customer_a0ff3932._.js",
-    "static/chunks/a1738_e-du-prod-artistique_Africaine-du-prod-artistique-frontend_apa-customer_9d1d1a82._.js"
+    "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_d6a42477._.js",
+    "static/chunks/7a235_next_dist_compiled_react-dom_8e08eb7d._.js",
+    "static/chunks/7a235_next_dist_compiled_react-server-dom-turbopack_75a57975._.js",
+    "static/chunks/7a235_next_dist_compiled_next-devtools_index_3d3a9a37.js",
+    "static/chunks/7a235_next_dist_compiled_fc8e755e._.js",
+    "static/chunks/7a235_next_dist_client_a16dbe1d._.js",
+    "static/chunks/7a235_next_dist_281d103e._.js",
+    "static/chunks/7a235_@swc_helpers_cjs_959fcb0d._.js",
+    "static/chunks/apa-customer_a0ff3932._.js",
+    "static/chunks/turbopack-apa-customer_8769d59f._.js"
   ]
 };
 globalThis.__BUILD_MANIFEST.lowPriorityFiles = [
