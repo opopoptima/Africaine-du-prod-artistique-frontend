@@ -1,7 +1,5 @@
 import Image from "next/image";
 import { IoPlay, IoVolumeHigh, IoEyeOutline } from "react-icons/io5";
-import { IoCartOutline } from "react-icons/io5";
-import { Button } from "../components/ui/button";
 
 const defaultSpecs = [
   { label: "ISBN", book1: "979-3-1264-5678-9", book2: "978-1-2345-6789-0" },
