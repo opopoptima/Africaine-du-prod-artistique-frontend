@@ -1,41 +1,54 @@
 import Link from "next/link";
-import { Button } from "../../components/ui/button"; // chemin vers ton bouton existant
-import { ArrowRight } from "lucide-react";
-
+import { ArrowRight, Calendar } from "lucide-react";
 
 export default function ActualiteCard({ actu }) {
- return (
+  return (
+    <Link href={`/actualite/${actu._id}`} className="group block">
+      <article
+        className="
+          bg-white shadow-xl hover:shadow-2xl 
+          transition-all duration-500 hover:-translate-y-3 
+          border-2 border-gray-300
+          aspect-square flex flex-col
+        "
+        style={{ borderRadius: 0 }}
+      >
+        {/* IMAGE : on utilise flex + grow pour qu’elle prenne le maximum possible */}
+        <div className="relative flex-1 min-h-0 bg-gray-50">
+          <img
+            src={ "/images/actualites/actualite1.png"}
+            alt={actu.title}
+            className="w-full h-full object-cover"
+            style={{ borderRadius: 0 }}
+          />
+          <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        </div>
 
-  <div
-  className="block overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 
-             bg-white max-w-sm w-full mx-auto mt-5"
->
+        {/* TEXTE + DATE + BOUTON : hauteur fixe raisonnable */}
+        <div className="p-5 flex flex-col justify-between gap-4">
+          <div>
+            <h3 className="font-bold text-primary-500 text-base leading-tight line-clamp-2">
+              {actu.title}
+            </h3>
+            <p className="text-gray-600 text-xs mt-2 line-clamp-2">
+              {actu.description}
+            </p>
+          </div>
 
-    <img
-      src={actu.image}
-      alt={actu.titre}
-      className="w-full h-64 object-cover"
-    />
-    <div className="p-4">
-      <h3 className="text-xl text-primary-500 font-bold mb-2">{actu.titre}</h3>
-      <div className="flex ">
-        <div>
-        <p className="text-gray-600 text-sm mt-2">{actu.description}</p>
-        <p className="text-primary-100 text-sm mt-2">{actu.date}</p>
-       
-      </div>
-       <Link
-  href={`/actualite/${actu.id}`} className=" position-relative mt-22">
-      <Button className="rounded-full px-1 py-2 bg-primary-300 text-white pt-0   ">
-        <ArrowRight size={16} />
-      </Button>
+          {/* Toujours visible, même sur très petit écran */}
+          <div className="flex items-center justify-between">
+            <span className="flex items-center gap-2 text-primary-100 text-xs font-medium">
+              <Calendar size={14} />
+              <span className="truncate">{actu.eventDate}</span>
+            </span>
+
+            {/* Cercle parfait */}
+            <div className="w-11 h-11 bg-primary-300 rounded-full flex items-center justify-center group-hover:bg-primary-500 hover:scale-110 transition-all duration-300 shadow-lg flex-shrink-0">
+              <ArrowRight size={20} strokeWidth={3} className="text-white" />
+            </div>
+          </div>
+        </div>
+      </article>
     </Link>
-
-      </div>
-      
-      
-    </div>
-  </div>
-  
- );
+  );
 }

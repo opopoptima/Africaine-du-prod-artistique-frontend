@@ -1,38 +1,59 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import  HeroSectionAct  from "./HeroSection";
+import { useEffect, useState } from "react";
+import HeroSectionAct from "./HeroSection";
 import AproposActu from "./Apropos-actu";
 import AutresActu from "./Autresactu";
 import GalleryCarousel from "./gallerie";
+import {NewsService} from "../../services/newsService";
 
-const actualites = [
-  { id: 1, titre: "Evenement A", 
-    description1: "Un atelier créatif pour éveiller l'imagination des enfants autour de la lecture. Les participants découvriront nos nouvelles collections à travers des activités ludiques et interactives qui stimulent la créativité et le plaisir de lire.", 
-    description2:"Cet atelier est conçu pour initier les enfants au monde merveilleux de la lecture à travers une approche créative et participative. Les enfants exploreront différents genres littéraires, créeront leurs propres histoires illustrées, et participeront à des jeux de rôle basés sur nos contes africains. Chaque participant repartira avec un livre cadeau et un certificat de participation.", 
-    image: "/images/actualites/actualite1.png", 
-    date: "2024-06-15" },
-  { id: 2, titre: "Evenement B", description: "…", image: "/images/actualites/actualite1.png", date: "2024-06-15" },
-  { id: 3, titre: "Evenement C", description: "…", image: "/images/actualites/actualite1.png", date: "2024-06-15" },
-  { id: 4, titre: "Evenement A", description: "…", image: "/images/actualites/actualite1.png", date: "2024-06-15" },
-  { id: 5, titre: "Evenement B", description: "…", image: "/images/actualites/actualite1.png", date: "2024-06-15" },
-  { id: 6, titre: "Evenement C", description: "…", image: "/images/actualites/actualite1.png", date: "2024-06-15" },
-];
+export default function NewsDetail() {
+  const { id } = useParams(); // récupère l'id depuis l'URL dynamique
+  const [news, setNews] = useState(null);
+  const [otherNews, setOtherNews] = useState([]); // pour les deux autres news
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-export default function Page() {
-  const { id } = useParams();
-  const actu = actualites.find(a => a.id === Number(id));
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Récupérer la news principale
+        const response = await NewsService.getById(id);
+        setNews(response.data);
 
-  
+        // Récupérer toutes les news
+        const allResponse = await NewsService.getAll();
+        const others = allResponse.data
+          .filter((item) => item._id !== id) // exclure la news courante
+          .slice(0, 2); // prendre 2 autres actualités
+        setOtherNews(others);
+      } catch (err) {
+        setError(err.message);
+        console.error("Erreur:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+  if (!news) return <p>News not found</p>;
 
   return (
     <div>
-  <HeroSectionAct actu={actu} />
-  <AproposActu actu={actu} />
-  <GalleryCarousel />
-  <AutresActu actu1={actualites[0]} actu2={actualites[1]} />
-  
+      {/* Section principale */}
+      <HeroSectionAct news={news} />
+      <AproposActu news={news} />
+      <GalleryCarousel  />
 
+      {/* Deux autres news */}
+      {otherNews.length >= 2 && (
+        <AutresActu actu1={otherNews[0]} actu2={otherNews[1]} />
+      )}
     </div>
-);
+  );
 }

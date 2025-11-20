@@ -1,4 +1,4 @@
-export default function AproposActu({ actu }) {
+export default function AproposActu({ news }) {
   return (
     <section className="px-4 py-8 md:px-16 max-w-6xl mx-auto flex flex-col items-center text-center gap-6">
       
@@ -11,10 +11,10 @@ export default function AproposActu({ actu }) {
 
       {/* Paragraphes */}
       <p className="text-primary-500 text-lg md:text-xl leading-relaxed max-w-3xl">
-        {actu.description1}
+        {news.description}
       </p>
       <p className="text-gray-700 text-md md:text-lg leading-relaxed max-w-3xl">
-        {actu.description2}
+        {news.content}
       </p>
       
     </section>

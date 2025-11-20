@@ -1,30 +1,54 @@
 "use client";
+
+import { useEffect, useState } from "react";
 import HeroGeneral from "../components/HeroGeneral";
 import ContactSection from "../components/ContactSection";
 import AlaUne from "./A-la-une";
 import TousActualites from "./tous-actualites";
-
-const actualites = [
-  {
-    id: 1,
-    titre: "Lancement de notre nouvelle collection parascolaire",
-    description: "Découvrez notre toute nouvelle collection de livres parascolaires conçus pour accompagner les élèves du primaire dans leur apprentissage. Des contenus riches, colorés et adaptés au programme sénégalais",
-    image: "/images/actualites/actualite1.png",
-    date: "2024-06-15"
-  },
-]
+import {NewsService} from "../services/newsService";
 
 export default function Actualite() {
-  const actuALaUne = actualites[0];
-  
+  const [actuALaUne, setActuALaUne] = useState(null); // première actualité
+  const [autresActualites, setAutresActualites] = useState([]); // toutes les autres
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchActualites = async () => {
+      try {
+        const response = await NewsService.getAll(); // récupère toutes les actualités
+        const allNews = response.data;
+
+        if (allNews.length > 0) {
+          setActuALaUne(allNews[0]); // première actualité
+          setAutresActualites(allNews.slice(1)); // toutes les autres
+        }
+      } catch (err) {
+        setError(err.message);
+        console.error("Erreur :", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchActualites();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+  if (!actuALaUne) return <p>Aucune actualité disponible</p>;
 
   return (
     <div className="min-h-screen">
       <HeroGeneral title="Nos actualités" />
-      <AlaUne actu={actuALaUne} />
-      <TousActualites />
       
-      <ContactSection/>               
+      {/* Première actualité */}
+      <AlaUne actu={actuALaUne} />
+
+      {/* Toutes les autres actualités */}
+      <TousActualites actualites={autresActualites} />
+
+      <ContactSection />               
     </div>
   );
 }
