@@ -6408,3 +6408,32 @@ Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
 [02:45:51.821] Browser WARN    Image with src "/images/vector-footer-top.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
 [02:45:51.821] Browser WARN    Image with src "/images/vector-footer-bottom.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
 [02:45:59.580] Server  WARN    Error: Route "/boutique/[id]" used `params.id`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[02:53:49.748] Server  ERROR    ⨯ ./apa-customer/app/boutique/page.js:2:1
+Module not found: Can't resolve './CardDetails'
+  1 | import CardBoutique from "./CardBoutique";
+> 2 | import CardDetail from "./CardDetails";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  3 |
+  4 | export default function Home() {
+  5 |     return (
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:53:49.749] Server  ERROR    ⨯ ./apa-customer/app/boutique/page.js:2:1
+Module not found: Can't resolve './CardDetails'
+  1 | import CardBoutique from "./CardBoutique";
+> 2 | import CardDetail from "./CardDetails";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  3 |
+  4 | export default function Home() {
+  5 |     return (
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[02:53:50.222] Server  LOG      ✓ Compiled in 190ms
