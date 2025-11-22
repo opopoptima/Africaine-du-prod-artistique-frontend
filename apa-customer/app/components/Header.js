@@ -32,7 +32,7 @@ export default function Header() {
     
     {/* Logo */}
     <div className="flex-shrink-0">
-      <img className="h-16 w-16" src="images/apa-logo.png" alt="Logo" />
+      <img className="h-16 w-16" src="/images/apa-logo.png" alt="Logo" />
     </div>
 
         {/* Menu Desktop */}

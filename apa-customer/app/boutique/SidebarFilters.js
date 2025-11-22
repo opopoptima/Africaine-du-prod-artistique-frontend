@@ -5,22 +5,22 @@ import { FaFilter, FaTimes } from "react-icons/fa";
 const FILTERS = {
   type: ["Parascolaire", "Coloriage", "Coédition"],
   language: ["Français", "Anglais", "Arabe"],
-  level: ["Petite section", "Moyenne section", "Grande section"]
+  level: ["Petite section", "Moyenne section", "Grande section"],
 };
 
 export default function SidebarFilters({ onApply, onReset }) {
   const [selectedType, setSelectedType] = useState("all");
   const [selectedLanguage, setSelectedLanguage] = useState("all");
   const [selectedLevel, setSelectedLevel] = useState("all");
-  const [isOpen, setIsOpen] = useState(false); // toggle for mobile
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleApply = () => {
     onApply({
       type: selectedType,
       language: selectedLanguage,
-      level: selectedLevel
+      level: selectedLevel,
     });
-    setIsOpen(false); // close on mobile after apply
+    setIsOpen(false);
   };
 
   const handleReset = () => {
@@ -28,19 +28,26 @@ export default function SidebarFilters({ onApply, onReset }) {
     setSelectedLanguage("all");
     setSelectedLevel("all");
     onReset();
-    setIsOpen(false); // close on mobile after reset
+    setIsOpen(false);
   };
 
   const renderFilters = () => (
-    <div className="w-64 flex-shrink-0 p-4 md:p-6 border rounded-xl bg-white space-y-6 shadow-lg shadow-gray-400 h-[calc(100vh-2rem)] overflow-y-auto m-2 ">
-      <h2 className="font-bold text-lg mb-2 flex items-center justify-between md:justify-start">
-        <FaFilter className="text-primary-500 mr-2" /> Filtre
+    <div
+      className="w-72 h-full p-5 bg-white shadow-xl rounded-xl
+                 space-y-6 overflow-y-auto relative z-[5000]"
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <h2 className="font-bold text-lg flex items-center gap-2">
+          <FaFilter className="text-primary-500" />
+          Filtre
+        </h2>
         <button className="md:hidden" onClick={() => setIsOpen(false)}>
-          <FaTimes />
+          <FaTimes className="text-gray-600 text-xl" />
         </button>
-      </h2>
+      </div>
 
-      {/* Categories */}
+      {/* Groups */}
       <FilterGroup
         title="Categories"
         options={FILTERS.type}
@@ -50,17 +57,15 @@ export default function SidebarFilters({ onApply, onReset }) {
         name="type"
       />
 
-      {/* Languages */}
       <FilterGroup
         title="Langue du livre"
         options={FILTERS.language}
         selected={selectedLanguage}
         setSelected={setSelectedLanguage}
-        allLabel="Tous les langues"
+        allLabel="Toutes les langues"
         name="language"
       />
 
-      {/* Levels */}
       <FilterGroup
         title="Niveau"
         options={FILTERS.level}
@@ -71,15 +76,18 @@ export default function SidebarFilters({ onApply, onReset }) {
       />
 
       {/* Buttons */}
-      <div className="flex flex-col space-y-2 mt-4">
+      <div className="flex flex-col gap-3 mt-8">
         <button
-          className="w-full bg-primary-300 border-2 text-secondary-100 border-primary-300 hover:bg-primary-500 hover:border-primary-500 py-2 px-4 rounded-full"
+          className="w-full bg-primary-500 text-white py-2 rounded-full
+                     hover:bg-primary-600 transition"
           onClick={handleApply}
         >
           Affiner la recherche
         </button>
+
         <button
-          className="w-full bg-secondary-100 border-2 text-primary-300 border-primary-300 hover:bg-primary-300 hover:text-secondary-100 hover:border-primary-300 py-2 px-4 rounded-full"
+          className="w-full border border-primary-500 text-primary-500 py-2 
+                     rounded-full hover:bg-primary-50 transition"
           onClick={handleReset}
         >
           Annuler les filtres
@@ -90,54 +98,71 @@ export default function SidebarFilters({ onApply, onReset }) {
 
   return (
     <>
-      {/* Toggle button for small screens */}
+      {/* Floating button */}
       <button
-        className="md:hidden fixed bottom-4 right-4 bg-primary-500 text-white p-3 rounded-full shadow-lg z-50"
+        className="md:hidden fixed bottom-5 right-5 z-[5001] bg-primary-500 text-white 
+                   p-4 rounded-full shadow-lg hover:bg-primary-600 transition"
         onClick={() => setIsOpen(true)}
       >
         <FaFilter />
       </button>
 
-      {/* Sidebar / mobile drawer */}
-      {isOpen ? (
-        <div className="fixed inset-0 bg-black/30 z-40 md:hidden flex justify-end">
+      {/* Mobile drawer */}
+      <div
+        className={`md:hidden fixed inset-0 z-[5000] transition-all
+                    ${isOpen ? "pointer-events-auto" : "pointer-events-none"}`}
+      >
+        {/* Overlay */}
+        <div
+          className={`absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity
+                      ${isOpen ? "opacity-100" : "opacity-0"}`}
+          onClick={() => setIsOpen(false)}
+        />
+
+        <div
+          className={`absolute right-0 top-0 h-[calc(100%-4rem)] 
+                      transition-transform duration-300
+                      ${isOpen ? "translate-x-0" : "translate-x-full"}`}
+        >
           {renderFilters()}
         </div>
-      ) : (
-        <div className="hidden md:block">{renderFilters()}</div>
-      )}
+      </div>
+
+      {/* Desktop sidebar */}
+      <div className="hidden md:block sticky top-4">
+        {renderFilters()}
+      </div>
     </>
   );
 }
 
-// Reusable filter group component
 function FilterGroup({ title, options, selected, setSelected, allLabel, name }) {
   return (
-    <div>
-      <h3 className="font-semibold">{title}</h3>
-      <div className="mt-2 space-y-1">
-        <label className="flex items-center space-x-2">
+    <div className="space-y-2">
+      <h3 className="font-semibold text-gray-700">{title}</h3>
+
+      <div className="flex flex-col gap-1">
+        <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="radio"
             name={name}
-            value="all"
             checked={selected === "all"}
             onChange={() => setSelected("all")}
-            className="appearance-none w-5 h-5 border-2 border-gray-300 rounded-full checked:bg-primary-500 checked:border-primary-500 focus:outline-none"
+            className="accent-primary-500"
           />
-          <span>{allLabel}</span>
+          {allLabel}
         </label>
-        {options.map((option) => (
-          <label key={option} className="flex items-center space-x-2">
+
+        {options.map((o) => (
+          <label key={o} className="flex items-center gap-2 cursor-pointer">
             <input
               type="radio"
               name={name}
-              value={option}
-              checked={selected === option}
-              onChange={() => setSelected(option)}
-              className="appearance-none w-5 h-5 border-2 border-gray-300 rounded-full checked:bg-primary-500 checked:border-primary-500 focus:outline-none"
+              checked={selected === o}
+              onChange={() => setSelected(o)}
+              className="accent-primary-500"
             />
-            <span>{option}</span>
+            {o}
           </label>
         ))}
       </div>
