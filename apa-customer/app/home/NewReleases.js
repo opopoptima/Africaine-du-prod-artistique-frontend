@@ -10,6 +10,8 @@ const books = [
   { id: 3, image: "/images/NewReleases/BOOK3.png", title: "My Dearest Darkest", author: "By Gianna Berge", price: "$120.00", isBestseller: true },
   { id: 4, image: "/images/NewReleases/BOOK4.png", title: "House of Sky and Breath", author: "By Gilberto Mills", price: "$80.00", originalPrice: "$90.00" },
   { id: 5, image: "/images/NewReleases/BOOK4.png", title: "House of Sky and Breath", author: "By Gilberto Mills", price: "$80.00", originalPrice: "$90.00" },
+  { id: 6, image: "/images/NewReleases/BOOK4.png", title: "House of Sky and Breath", author: "By Gilberto Mills", price: "$80.00", originalPrice: "$90.00" },
+
 ];
 
 const BookCard = ({ image, title, author, price, originalPrice, isBestseller }) => (

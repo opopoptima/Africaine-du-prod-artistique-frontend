@@ -50,7 +50,7 @@ export default function CardBoutique({
               size="sm"
               variant="outline"
               className="flex-1 border-2 rounded-full border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-white text-sm md:text-base"
-              onClick={handleVoirPlus} // <-- Navigue vers /boutique/[id]
+              onClick={handleVoirPlus}
             >
               <IoEyeOutline className="w-4 h-4 mr-1" />
               Voir plus

@@ -1,6 +1,8 @@
 import { Button } from "../components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+
 
 export default function HeroSection() {
   return (
@@ -39,6 +41,8 @@ export default function HeroSection() {
             </p>
 
             {/* CTA Buttons */}
+            <Link href="/boutique">
+
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Button 
                 size="lg"
@@ -48,6 +52,7 @@ export default function HeroSection() {
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>
+            </Link>
           </div>
 
           {/* Right Content - Hero Image */}

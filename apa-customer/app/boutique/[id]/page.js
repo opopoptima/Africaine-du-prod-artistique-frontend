@@ -66,7 +66,7 @@ export default function BookPage({ params }) {
         
         <div className="space-y-10 my-8">
           <h2 className="text-lg sm:text-xl md:text-4xl font-bold text-primary-500 leading-snug justify-center text-center">
-                Produits similaires</h2>
+                Articles similaires</h2>
             {/** Affiche les cartes en 2 par 2 **/}
             {Array.from({ length: Math.ceil(products.length / 2) }).map((_, rowIndex) => (
               <div className="flex gap-6" key={rowIndex}>
@@ -85,6 +85,29 @@ export default function BookPage({ params }) {
             ))}
 
           </div>
+
+            <div className="space-y-10 my-8">
+          <h2 className="text-lg sm:text-xl md:text-4xl font-bold text-primary-500 leading-snug justify-center text-center">
+                Disponible dans une autre langue</h2>
+            {/** Affiche les cartes en 2 par 2 **/}
+            {Array.from({ length: Math.ceil(products.length / 2) }).map((_, rowIndex) => (
+              <div className="flex gap-6" key={rowIndex}>
+                {products
+                  .slice(rowIndex * 2, rowIndex * 2 + 2)
+                  .map((product) => (
+                    <CardBoutique
+                      key={product.id}
+                      id={product.id} 
+                      title={product.title}
+                      description={product.description}
+                      imageSrc={product.imageSrc}
+                    />
+                  ))}
+              </div>
+            ))}
+
+          </div>
+          
 
 
 

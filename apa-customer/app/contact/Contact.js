@@ -51,19 +51,22 @@ export default function ContactForm() {
             <Controller
               name="lastName"
               control={control}
-              render={({ field }) => <Input placeholder="Nom" {...field} />}
+              render={({ field }) => <Input 
+              placeholder="Nom" {...field} className="bg-gray-100" />}
             />
           </div>
 
           <Controller
             name="email"
             control={control}
-            render={({ field }) => <Input type="email" placeholder="Email" {...field} />}
+            render={({ field }) => <Input type="email" placeholder="Email" {...field} className="bg-gray-100"
+/>}
           />
           <Controller
             name="phone"
             control={control}
-            render={({ field }) => <Input type="tel" placeholder="Numéro de téléphone" {...field} />}
+            render={({ field }) => <Input type="tel" placeholder="Numéro de téléphone" {...field} className="bg-gray-100"
+/>}
           />
           <Controller
             name="message"
@@ -73,7 +76,7 @@ export default function ContactForm() {
                 placeholder="Message"
                 rows={4}
                 {...field}
-                className="w-full h-full resize-none"
+                className="w-full h-full resize-none bg-gray-100"
               />
             )}
           />
