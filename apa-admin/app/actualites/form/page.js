@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Input } from "@/app/actualites/components/input";
-import { Label } from "@/app/actualites/components/label";
-import { Textarea } from "@/app/actualites/components/textarea";
+import { Input } from "@/app/components/input";
+import { Label } from "@/app/components/label";
+import { Textarea } from "@/app/components/textarea";
 import { Bell, Settings, User, Upload } from "lucide-react";
 
 export default function ActualiteFormPage() {

@@ -1,5 +1,3 @@
-import * as React from "react"
-
 function Badge({ className, variant = "default", ...props }) {
   const variantClasses = {
     default: "bg-primary text-primary-foreground hover:bg-primary/80",

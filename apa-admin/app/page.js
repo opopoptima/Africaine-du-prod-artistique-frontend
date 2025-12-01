@@ -1,9 +1,11 @@
-"use client";
 
-import ActualitesPage from "./actualites/page";
+import ActualitesPage from './actualites/page';
 
-export default function HomePage() {
+export default function Page() {
   return (
-    <ActualitesPage/>
+    <div className="container mx-auto mt-8">
+      {/*<DashboardArticles />*/}
+      <ActualitesPage />
+    </div>
   );
 }
