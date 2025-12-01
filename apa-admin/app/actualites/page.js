@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/app/components/button";
-import { Input } from "@/app/components/input";
+import { Button } from "@/app/actualites/components/button";
+import { Input } from "@/app/actualites/components/input";
 import {
   Table,
   TableBody,
@@ -11,15 +11,15 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/app/components/table";
+} from "@/app/actualites/components/table";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/app/components/select";
-import { Badge } from "@/app/components/badge";
+} from "@/app/actualites/components/select";
+import { Badge } from "@/app/actualites/components/badge";
 import { Search, Plus, Edit2, Trash2, Bell, Settings, User } from "lucide-react";
 import { FiTag, FiAward, FiCalendar } from "react-icons/fi";
 
@@ -114,7 +114,7 @@ export default function ActualitesPage() {
   };
 
   const handleAddNew = () => {
-    router.push("/dashboard/actualites/form");
+    router.push("/actualites/form");
   };
 
   return (

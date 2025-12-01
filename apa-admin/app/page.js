@@ -1,6 +1,6 @@
 "use client";
 
-import ActualitesPage from "./dashboard/actualites/page";
+import ActualitesPage from "./actualites/page";
 
 export default function HomePage() {
   return (
