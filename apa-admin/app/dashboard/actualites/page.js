@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/app/components/ui/button";
-import { Input } from "@/app/components/ui/input";
+import { Button } from "@/app/components/button";
+import { Input } from "@/app/components/input";
 import {
   Table,
   TableBody,
@@ -11,15 +11,15 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/app/components/ui/table";
+} from "@/app/components/table";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/app/components/ui/select";
-import { Badge } from "@/app/components/ui/badge";
+} from "@/app/components/select";
+import { Badge } from "@/app/components/badge";
 import { Search, Plus, Edit2, Trash2, Bell, Settings, User } from "lucide-react";
 import { FiTag, FiAward, FiCalendar } from "react-icons/fi";
 

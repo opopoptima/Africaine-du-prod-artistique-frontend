@@ -2,17 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Button } from "@/app/components/ui/button";
-import { Input } from "@/app/components/ui/input";
-import { Label } from "@/app/components/ui/label";
-import { Textarea } from "@/app/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/app/components/ui/select";
+import { Input } from "@/app/components/input";
+import { Label } from "@/app/components/label";
+import { Textarea } from "@/app/components/textarea";
 import { Bell, Settings, User, Upload } from "lucide-react";
 
 export default function ActualiteFormPage() {
