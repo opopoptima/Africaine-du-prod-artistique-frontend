@@ -135,16 +135,16 @@ export default function ActualitesPage() {
             <a href="/dashboard" className="text-white/80 hover:text-white transition-colors">
               Dashboard
             </a>
-            <a href="/dashboard/articles" className="text-white/80 hover:text-white transition-colors">
+            <a href="/articles" className="text-white/80 hover:text-white transition-colors">
               Articles
             </a>
-            <a href="/dashboard/commandes" className="text-white/80 hover:text-white transition-colors">
+            <a href="/commandes" className="text-white/80 hover:text-white transition-colors">
               Commandes
             </a>
-            <a href="/dashboard/actualites" className="text-white font-semibold bg-white/20 px-6 py-2 rounded-full">
+            <a href="/actualites" className="text-white font-semibold bg-white/20 px-6 py-2 rounded-full">
               Actualités
             </a>
-            <a href="/dashboard/filtres" className="text-white/80 hover:text-white transition-colors">
+            <a href="/filtres" className="text-white/80 hover:text-white transition-colors">
               Filtres
             </a>
           </nav>

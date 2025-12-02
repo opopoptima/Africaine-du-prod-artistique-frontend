@@ -6,7 +6,7 @@ import RevenueGauge from "./components/RevenueGauge";
 import VisitorChart from "./components/VisitorChart";
 import SatisfactionChart from "./components/SatisfactionChart";
 import FeaturedCard from "./components/FeaturedCard";
-import { Input } from "../components/ui/input";
+import { Input } from "../components/input";
 import { Search } from "lucide-react";
 
 export default function DashboardPage() {
