@@ -1,5 +1,6 @@
 import { Poppins } from 'next/font/google';
-import "./globals.css";
+import './globals.css';
+import Navbar from './components/Navbar';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -7,10 +8,16 @@ const poppins = Poppins({
   variable: '--font-poppins',
 });
 
+export const metadata = {
+  title: 'Your App Title',
+  description: 'Your App Description',
+};
+
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={poppins.variable}>
-      <body>
+    <html lang="en">
+      <body className={`${poppins.variable} font-sans`}>
+        <Navbar />
         {children}
       </body>
     </html>

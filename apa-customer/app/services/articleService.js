@@ -1,5 +1,4 @@
-import adminApiClient from "../lib/adminApiClient";
-
+import apiClient from "../lib/apiClient";
 import { BookModel } from "../models/BookModel";
 
 export const ArticleService = {
@@ -19,9 +18,9 @@ export const ArticleService = {
   sort = "createdAt:desc",
   filters = {},
 } = {}) => {
-  const params = { page, limit, q, sort, ...filters, t: Date.now() }; 
+  const params = { page, limit, q, sort, ...filters, t: Date.now() }; // cache-busting
 
-  const response = await adminApiClient.get("/articles", {
+  const response = await apiClient.get("/articles", {
     params,
   });
 
@@ -37,14 +36,14 @@ export const ArticleService = {
   };
 },
 
+
   /** ----------------------------------------
    * GET ARTICLE BY ID
    * GET /articles/:id
    * Returns: { article, relatedByCollection, relatedByLanguageOrType }
    ---------------------------------------- */
   getById: async (id) => {
-    const response = await adminApiClient.get(`/articles/${id}`);
-
+    const response = await apiClient.get(`/articles/${id}`);
     // API returns: { success: true, data: { article, relatedByCollection, relatedByLanguageOrType } }
     const articleData = response.data?.article || response.data;
     const relatedByCollection = Array.isArray(response.data?.relatedByCollection) 
@@ -53,9 +52,8 @@ export const ArticleService = {
     const relatedByLanguageOrType = Array.isArray(response.data?.relatedByLanguageOrType) 
       ? response.data.relatedByLanguageOrType 
       : [];
-
     // Normalize the main article
-    const normalizedArticle = BookModel(articleData);
+    const normalizedArticle = BookModel(articleData.data.article);
 
     // Normalize related articles
     const normalizedRelatedByCollection = relatedByCollection.map((item) => BookModel(item));
@@ -76,36 +74,13 @@ export const ArticleService = {
    * POST /articles
    ---------------------------------------- */
   create: async (formData) => {
-    const response = await adminApiClient.post("/articles", formData, {
+    const response = await apiClient.post("/articles", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
 
     const normalizedArticle = BookModel(response.data);
     return { ...response, data: normalizedArticle };
   },
-
-  /** ----------------------------------------
-   * UPDATE ARTICLE
-   * PUT /articles/:id
-   ---------------------------------------- */
-  update: async (id, formData) => {
-    const response = await adminApiClient.put(`/articles/${id}`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-
-    const normalizedArticle = BookModel(response.data);
-    return { ...response, data: normalizedArticle };
-  },
-
-  /** ----------------------------------------
-   * DELETE ARTICLE
-   * DELETE /articles/:id
-   ---------------------------------------- */
-  delete: async (id) => {
-    const response = await adminApiClient.delete(`/articles/${id}`);
-    return response;
-  },
-
 
 };
 

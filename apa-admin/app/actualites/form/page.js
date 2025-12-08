@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/app/components/input";
 import { Label } from "@/app/components/label";
 import { Textarea } from "@/app/components/textarea";
-import { Bell, Settings, User, Upload } from "lucide-react";
+import { Upload } from "lucide-react";
 
 export default function ActualiteFormPage() {
   const router = useRouter();
@@ -173,48 +173,7 @@ export default function ActualiteFormPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-gradient-to-r from-[#4B0082] to-[#9B59B6] px-8 py-6">
-        <div className="flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center">
-              <span className="text-2xl font-bold text-white">A</span>
-            </div>
-          </div>
-
-          {/* Navigation */}
-          <nav className="flex items-center gap-6">
-            <a href="/dashboard" className="text-white/80 hover:text-white transition-colors">
-              Dashboard
-            </a>
-            <a href="/dashboard/articles" className="text-white/80 hover:text-white transition-colors">
-              Articles
-            </a>
-            <a href="/dashboard/commandes" className="text-white/80 hover:text-white transition-colors">
-              Commandes
-            </a>
-            <a href="/dashboard/actualites" className="text-white font-semibold bg-white/20 px-6 py-2 rounded-full">
-              Actualités
-            </a>
-            <a href="/dashboard/filtres" className="text-white/80 hover:text-white transition-colors">
-              Filtres
-            </a>
-          </nav>
-
-          {/* Icons */}
-          <div className="flex items-center gap-4">
-            <button className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors">
-              <Bell className="w-5 h-5 text-white" />
-            </button>
-            <button className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors">
-              <Settings className="w-5 h-5 text-white" />
-            </button>
-            <button className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors">
-              <User className="w-5 h-5 text-white" />
-            </button>
-          </div>
-        </div>
-      </header>
+     
 
       {/* Breadcrumb */}
       <div className="px-8 py-4">

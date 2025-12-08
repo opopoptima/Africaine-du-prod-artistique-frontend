@@ -1,11 +1,12 @@
 
-import ActualitesPage from './actualites/page';
-
+import DashboardArticles from "./articles/page";
 export default function Page() {
   return (
     <div className="container mx-auto mt-8">
-      {/*<DashboardArticles />*/}
-      <ActualitesPage />
+      
+      <DashboardArticles />
+      {/*}
+      <ActualitesPage />*/}
     </div>
   );
 }

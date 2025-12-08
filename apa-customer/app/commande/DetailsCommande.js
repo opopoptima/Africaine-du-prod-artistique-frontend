@@ -17,11 +17,11 @@ export default function DetailsCommande({ formData, updateFormData }) {
             </label>
             <input
               type="text"
-              value={formData.nomLivre}
-              onChange={(e) => updateFormData('nomLivre', e.target.value)}
-              placeholder="The secret garden..."
+              value={formData.livreID}
+              onChange={(e) => updateFormData('livreID', e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-50"
               required
+              disabled
             />
           </div>
 
@@ -62,7 +62,7 @@ export default function DetailsCommande({ formData, updateFormData }) {
           </label>
           <div className="relative h-96 bg-gray-100 rounded-lg overflow-hidden shadow-lg">
             <Image
-              src="/images/books/secret-garden.jpg"
+              src={formData.coverImage || "/images/placeholder.jpg"}
               alt="Couverture du livre"
               fill
               className="object-cover"

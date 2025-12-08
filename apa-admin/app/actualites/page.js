@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/app/components/select";
 import { Badge } from "@/app/components/badge";
-import { Search, Plus, Edit2, Trash2, Bell, Settings, User } from "lucide-react";
+import { Search, Plus, Edit2, Trash2 } from "lucide-react";
 import { FiTag, FiAward, FiCalendar } from "react-icons/fi";
 
 export default function ActualitesPage() {
@@ -120,54 +120,11 @@ export default function ActualitesPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-linear-to-r from-primary-500 to-primary-300 px-8 py-6">
-        <div className="flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-primary-100 rounded-lg flex items-center justify-center">
-              {/* Logo placeholder */}
-              <span className="text-2xl font-bold text-primary-500">A</span>
-            </div>
-          </div>
-
-          {/* Navigation */}
-          <nav className="flex items-center gap-6">
-            <a href="/dashboard" className="text-white/80 hover:text-white transition-colors">
-              Dashboard
-            </a>
-            <a href="/articles" className="text-white/80 hover:text-white transition-colors">
-              Articles
-            </a>
-            <a href="/commandes" className="text-white/80 hover:text-white transition-colors">
-              Commandes
-            </a>
-            <a href="/actualites" className="text-white font-semibold bg-white/20 px-6 py-2 rounded-full">
-              Actualités
-            </a>
-            <a href="/filtres" className="text-white/80 hover:text-white transition-colors">
-              Filtres
-            </a>
-          </nav>
-
-          {/* Icons */}
-          <div className="flex items-center gap-4">
-            <button className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors">
-              <Bell className="w-5 h-5 text-white" />
-            </button>
-            <button className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors">
-              <Settings className="w-5 h-5 text-white" />
-            </button>
-            <button className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors">
-              <User className="w-5 h-5 text-white" />
-            </button>
-          </div>
-        </div>
-      </header>
-
+      
       {/* Breadcrumb */}
       <div className="px-8 py-4">
         <div className="text-sm text-secondary-700">
-          Dashboard &gt; <span className="font-semibold text-secondary-900">Actualités</span>
+          Actualités
         </div>
       </div>
 

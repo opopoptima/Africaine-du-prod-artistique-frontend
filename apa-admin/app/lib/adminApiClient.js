@@ -1,18 +1,14 @@
-// src/api/adminApiClient.js
 import axios from "axios";
 
-// Client Axios simple pour la partie admin (pas encore de login)
 const adminApiClient = axios.create({
-  baseURL: "http://localhost:5000/api", // URL de base pour l'admin
-  timeout: 10000, // 10 secondes
+  baseURL: "http://localhost:5000/api", 
+  timeout: 10000, 
 });
 
-// Intercepteur pour loguer les erreurs
 adminApiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.warn("Admin API error");
-
+    console.error("API Error:", error.response?.data || error.message);
     throw error;
   }
 );
