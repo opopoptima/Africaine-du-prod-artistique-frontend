@@ -85,61 +85,47 @@ export default function ActualiteFormPage() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  e.preventDefault();
+  setLoading(true);
 
-    try {
-      // Construct publication date
-      const { year, month, day, hour, minute } = formData.publicationDate;
-      const publicationDate = new Date(
-        parseInt(year) || new Date().getFullYear(), 
-        parseInt(month) - 1, 
-        parseInt(day), 
-        parseInt(hour), 
-        parseInt(minute)
-      );
+  try {
+    const { year, month, day, hour, minute } = formData.publicationDate;
 
-      const payload = {
-        title: formData.title,
-        subtitle: formData.subtitle,
-        category: formData.category,
-        publicationDate,
-        author: formData.author,
-        content: formData.content,
-        mediaInsertion: formData.mediaInsertion,
-        excerpt: formData.excerpt,
-        mainImage: formData.mainImage,
-        galleryImages: formData.galleryImages,
-        status: formData.status,
-        featured: formData.featured,
-      };
+    const publicationDate = new Date(
+      Number(year) || new Date().getFullYear(),
+      Number(month || 1) - 1,
+      Number(day || 1),
+      Number(hour || 0),
+      Number(minute || 0)
+    );
 
-      const url = isEditMode
+    const payload = {
+      ...formData,
+      publicationDate,
+    };
+
+    const res = await fetch(
+      isEditMode
         ? `http://localhost:5000/api/news/${editId}`
-        : "http://localhost:5000/api/news";
-      
-      const method = isEditMode ? "PUT" : "POST";
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-        },
+        : "http://localhost:5000/api/news",
+      {
+        method: isEditMode ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
-        router.push("/dashboard/actualites");
-      } else {
-        alert("Erreur lors de la sauvegarde");
       }
-    } catch (error) {
-      console.error("Erreur:", error);
-      alert("Erreur lors de la sauvegarde");
-    } finally {
-      setLoading(false);
-    }
-  };
+    );
+
+    if (!res.ok) throw new Error("Save failed");
+
+    router.push("/dashboard/actualites");
+  } catch (err) {
+    console.error(err);
+    alert("Erreur lors de l’enregistrement");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const handleMainImageUpload = (e) => {
     const file = e.target.files?.[0];
@@ -178,9 +164,9 @@ export default function ActualiteFormPage() {
       {/* Breadcrumb */}
       <div className="px-8 py-4">
         <div className="text-sm text-gray-600">
-          <a href="/dashboard" className="hover:text-[#4B0082]">Dashboard</a>
+          <a href="/dashboard" className="hover:text-primary-500">Dashboard</a>
           {" > "}
-          <a href="/dashboard/actualites" className="hover:text-[#4B0082]">Actualités</a>
+          <a href="/dashboard/actualites" className="hover:text-primary-500">Actualités</a>
           {" > "}
           <span className="font-semibold text-gray-900">
             {isEditMode ? "Modifier" : "Ajouter"}
@@ -193,7 +179,7 @@ export default function ActualiteFormPage() {
         <div className="relative bg-[#9B59B626] rounded-lg mx-auto" style={{ maxWidth: '1268px' }}>
           {/* Title */}
           <div className="px-7 py-4">
-            <h1 className="text-[32px] font-medium text-[#4B0082]" style={{ lineHeight: '48px' }}>
+            <h1 className="text-[32px] font-medium text-primary-500" style={{ lineHeight: '48px' }}>
               FICHE D'UNE ACTUALITÉ
             </h1>
           </div>
@@ -215,7 +201,7 @@ export default function ActualiteFormPage() {
                 <Input
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="flex-1 h-[46px] bg-white border border-[#DEDEDE] rounded-[4px] shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)]"
+                  className="flex-1 h-[46px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)]"
                   required
                 />
               </div>
@@ -228,7 +214,7 @@ export default function ActualiteFormPage() {
                 <Input
                   value={formData.subtitle}
                   onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
-                  className="flex-1 h-[46px] bg-white border border-[#DEDEDE] rounded-[4px] shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)]"
+                  className="flex-1 h-[46px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)]"
                 />
               </div>
 
@@ -276,7 +262,7 @@ export default function ActualiteFormPage() {
                           publicationDate: { ...formData.publicationDate, year: e.target.value },
                         })
                       }
-                      className="w-[104px] h-[33px] bg-white border border-[#DEDEDE] rounded-[4px] shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)] px-2 text-[#8A8A8A]"
+                      className="w-[104px] h-[33px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)] px-2 text-[#8A8A8A]"
                       style={{ fontSize: '16px' }}
                     />
                   </div>
@@ -294,7 +280,7 @@ export default function ActualiteFormPage() {
                           publicationDate: { ...formData.publicationDate, month: e.target.value },
                         })
                       }
-                      className="w-[104px] h-[33px] bg-white border border-[#DEDEDE] rounded-[4px] shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)] px-2 text-[#8A8A8A]"
+                      className="w-[104px] h-[33px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)] px-2 text-[#8A8A8A]"
                       style={{ fontSize: '16px' }}
                     />
                   </div>
@@ -312,7 +298,7 @@ export default function ActualiteFormPage() {
                           publicationDate: { ...formData.publicationDate, day: e.target.value },
                         })
                       }
-                      className="w-[104px] h-[33px] bg-white border border-[#DEDEDE] rounded-[4px] shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)] px-2 text-[#8A8A8A]"
+                      className="w-[104px] h-[33px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)] px-2 text-[#8A8A8A]"
                       style={{ fontSize: '16px' }}
                     />
                   </div>
@@ -330,7 +316,7 @@ export default function ActualiteFormPage() {
                           publicationDate: { ...formData.publicationDate, hour: e.target.value },
                         })
                       }
-                      className="w-[104px] h-[33px] bg-white border border-[#DEDEDE] rounded-[4px] shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)] px-2 text-[#8A8A8A]"
+                      className="w-[104px] h-[33px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)] px-2 text-[#8A8A8A]"
                       style={{ fontSize: '16px' }}
                     />
                   </div>
@@ -348,7 +334,7 @@ export default function ActualiteFormPage() {
                           publicationDate: { ...formData.publicationDate, minute: e.target.value },
                         })
                       }
-                      className="w-[104px] h-[33px] bg-white border border-[#DEDEDE] rounded-[4px] shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)] px-2 text-[#8A8A8A]"
+                      className="w-[104px] h-[33px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)] px-2 text-[#8A8A8A]"
                       style={{ fontSize: '16px' }}
                     />
                   </div>
@@ -363,7 +349,7 @@ export default function ActualiteFormPage() {
                 <Input
                   value={formData.author}
                   onChange={(e) => setFormData({ ...formData, author: e.target.value })}
-                  className="flex-1 h-[46px] bg-white border border-[#DEDEDE] rounded-[4px] shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)]"
+                  className="flex-1 h-[46px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)]"
                 />
               </div>
             </div>
@@ -384,7 +370,7 @@ export default function ActualiteFormPage() {
                 <Textarea
                   value={formData.content}
                   onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  className="flex-1 bg-white border border-[#DEDEDE] rounded-[4px] shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)]"
+                  className="flex-1 bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)]"
                   style={{ minHeight: '759px' }}
                   required
                 />
@@ -399,7 +385,7 @@ export default function ActualiteFormPage() {
                   value={formData.mediaInsertion}
                   onChange={(e) => setFormData({ ...formData, mediaInsertion: e.target.value })}
                   placeholder="(upload ou lien YouTube)"
-                  className="flex-1 h-[46px] bg-white border border-[#DEDEDE] rounded-[4px] shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)] placeholder:text-[#BBBBBB]"
+                  className="flex-1 h-[46px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)] placeholder:text-[#BBBBBB]"
                   style={{ fontSize: '16px' }}
                 />
               </div>
@@ -412,7 +398,7 @@ export default function ActualiteFormPage() {
                 <Input
                   value={formData.excerpt}
                   onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
-                  className="flex-1 h-[46px] bg-white border border-[#DEDEDE] rounded-[4px] shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)]"
+                  className="flex-1 h-[46px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)]"
                 />
               </div>
             </div>
@@ -431,7 +417,7 @@ export default function ActualiteFormPage() {
                   Image principale :
                 </Label>
                 <div className="w-[324px]">
-                  <div className="h-[402px] bg-white border border-[#DEDEDE] rounded-[4px] shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)] flex flex-col items-center justify-center relative">
+                  <div className="h-[402px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)] flex flex-col items-center justify-center relative">
                     {mainImagePreview ? (
                       <div className="relative w-full h-full p-4">
                         <img
@@ -452,9 +438,9 @@ export default function ActualiteFormPage() {
                       </div>
                     ) : (
                       <div className="flex flex-col items-start pl-6">
-                        <Upload className="w-[66px] h-[66px] text-[#4B0082] mb-4" />
+                        <Upload className="w-[66px] h-[66px] text-primary-500 mb-4" />
                         <label className="cursor-pointer">
-                          <span className="block w-[265px] h-[45px] leading-[45px] text-center bg-[rgba(255,255,255,0.7)] border border-dashed border-[#4B0082] rounded-lg text-[#4B0082] font-semibold hover:bg-white transition-colors text-xl" style={{ letterSpacing: '0.08em' }}>
+                          <span className="block w-[265px] h-[45px] leading-[45px] text-center bg-[rgba(255,255,255,0.7)] border border-dashed border-primary-500 rounded-lg text-primary-500 font-semibold hover:bg-white transition-colors text-xl" style={{ letterSpacing: '0.08em' }}>
                             Upload Image
                           </span>
                           <input
@@ -476,7 +462,7 @@ export default function ActualiteFormPage() {
                   Image Galerie :
                 </Label>
                 <div className="w-[324px]">
-                  <div className="h-[402px] bg-white border border-[#DEDEDE] rounded-[4px] shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)] flex flex-col items-center justify-center p-4 overflow-y-auto">
+                  <div className="h-[402px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)] flex flex-col items-center justify-center p-4 overflow-y-auto">
                     {galleryPreviews.length > 0 && (
                       <div className="grid grid-cols-2 gap-2 w-full mb-4">
                         {galleryPreviews.map((img, idx) => (
@@ -503,9 +489,9 @@ export default function ActualiteFormPage() {
                         ))}
                       </div>
                     )}
-                    <Upload className="w-[66px] h-[66px] text-[#4B0082] mb-4" />
+                    <Upload className="w-[66px] h-[66px] text-primary-500 mb-4" />
                     <label className="cursor-pointer">
-                      <span className="block w-[265px] h-[45px] leading-[45px] text-center bg-[rgba(255,255,255,0.7)] border border-dashed border-[#4B0082] rounded-lg text-[#4B0082] font-semibold hover:bg-white transition-colors text-xl" style={{ letterSpacing: '0.08em' }}>
+                      <span className="block w-[265px] h-[45px] leading-[45px] text-center bg-[rgba(255,255,255,0.7)] border border-dashed border-primary-500 rounded-lg text-primary-500 font-semibold hover:bg-white transition-colors text-xl" style={{ letterSpacing: '0.08em' }}>
                         Upload Images
                       </span>
                       <input
@@ -583,7 +569,7 @@ export default function ActualiteFormPage() {
               <button
                 type="button"
                 onClick={() => router.push("/dashboard/actualites")}
-                className="w-[187px] h-[45px] bg-[rgba(255,255,255,0.7)] border border-[#4B0082] rounded-lg text-[#4B0082] font-semibold hover:bg-white transition-colors text-xl"
+                className="w-[187px] h-[45px] bg-[rgba(255,255,255,0.7)] border border-primary-500 rounded-lg text-primary-500 font-semibold hover:bg-white transition-colors text-xl"
                 style={{ letterSpacing: '0.08em' }}
               >
                 Annuler
@@ -591,7 +577,7 @@ export default function ActualiteFormPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-[188px] h-[45px] bg-[#4B0082] rounded-lg text-white font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 text-xl"
+                className="w-[188px] h-[45px] bg-primary-500 rounded-lg text-white font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 text-xl"
                 style={{ letterSpacing: '0.08em' }}
               >
                 {loading ? "Enregistrement..." : "Enregistrer"}
@@ -603,7 +589,7 @@ export default function ActualiteFormPage() {
 
       {/* Footer */}
       <footer className="bg-[rgba(155,89,182,0.5)] mt-12 py-6 text-center">
-        <p className="text-[#4B0082] font-semibold text-lg">
+        <p className="text-primary-500 font-semibold text-lg">
           Centralisez la gestion des actualités pour une communication optimale !
         </p>
       </footer>

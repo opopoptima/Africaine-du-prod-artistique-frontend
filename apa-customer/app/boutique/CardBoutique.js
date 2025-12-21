@@ -6,6 +6,7 @@ import { IoEyeOutline, IoCartOutline } from "react-icons/io5";
 
 export default function CardBoutique({ article }) {
   const router = useRouter();
+  console.log("Article dans CardBoutique :", article);
 
   const handleVoirPlus = () => {
   if (!article) return;
@@ -16,9 +17,10 @@ const handleCommander = () => {
 
   // Encode values to safely pass in URL
   const cover = encodeURIComponent(article.cover || "");
-  const livreID = encodeURIComponent(article.id || "");
+  const isbn = encodeURIComponent(article.isbn || "");
+  const prixUnitaire = encodeURIComponent(article.price || 0);
 
-  router.push(`/commande?cover=${cover}&livreID=${livreID}`);
+  router.push(`/commande?cover=${cover}&isbn=${isbn}&quantity=1&prixUnitaire=${prixUnitaire}`);
 };
 
 
@@ -40,21 +42,28 @@ const handleCommander = () => {
     <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 w-full max-w-xl mx-auto">
       <div className="flex flex-col sm:flex-row gap-3 p-4 md:p-5">
         <div className="relative h-48 w-full sm:w-36 md:w-40 rounded-lg overflow-hidden">
-          <Image
-            src={coverSrc}
-            alt={title}
-            fill
-            className="object-cover transition-transform duration-500 hover:scale-105"
-            sizes="(max-width: 640px) 100vw, 180px"
-          />
+        {article?.isBestSeller && (
+        <span className="absolute -left-10 top-4 z-10 w-40 -rotate-45 bg-primary-300 py-1 text-center text-xs font-semibold text-white shadow-md">
+            Best Seller
+          </span>
+        )}
+
+        <Image
+          src={coverSrc}
+          alt={title}
+          fill
+          className="object-cover transition-transform duration-500 hover:scale-105"
+          sizes="(max-width: 640px) 100vw, 180px"
+        />
         </div>
+
 
         <div className="flex flex-col gap-2 flex-1">
           <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-primary-500 leading-snug">
             {title}
           </h2>
 
-          <p className="text-xs sm:text-sm text-secondary-700 leading-relaxed">
+          <p className="text-xs sm:text-sm text-secondary-700 leading-relaxed line-clamp-3">
             {description}
           </p>
 

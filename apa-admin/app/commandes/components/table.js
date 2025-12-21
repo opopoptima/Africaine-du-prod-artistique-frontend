@@ -347,16 +347,6 @@ export default function ArticlesPage() {
                             </Select>
                         </div>
 
-                        {/* Bouton Ajouter */}
-                        <div className="flex-1 flex justify-end">
-                            <Button
-                                onClick={handleAddNew}
-                                className="bg-primary-300 hover:bg-primary-500 text-white rounded-full px-8 py-3 font-semibold min-w-[200px]"
-                            >
-                                <Plus className="w-5 h-5 mr-2" />
-                                Ajouter une commande
-                            </Button>
-                        </div>
                     </div>
                 </div>
 

@@ -17,5 +17,9 @@ export function BookModel(data) {
     price: data.price || "0.00",
     originalPrice: data.originalPrice || null,
     stock: data.stock || 0,
+    isNew : data.isNew || false,
+    isBestSeller : data.isBestSeller || false,
+    publisher: data.publisher || "Unknown Publisher",
+    category: data.category || "Uncategorized",
   };
 }

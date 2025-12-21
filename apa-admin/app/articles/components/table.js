@@ -116,8 +116,8 @@ export default function ArticlesPage() {
         {/* Breadcrumb */}
         <div className="px-8 py-4">
           <div className="text-sm text-gray-600">
-            <a href="/dashboard" className="hover:text-[#4B0082]">Dashboard</a>{" > "}
-            <a href="/articles" className="hover:text-[#4B0082]">Articles</a>
+            <a href="/dashboard" className="hover:text-primary-500">Dashboard</a>{" > "}
+            <a href="/articles" className="hover:text-primary-500">Articles</a>
           </div>
         </div>
 

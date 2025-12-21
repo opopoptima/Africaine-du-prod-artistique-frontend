@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { IoChevronBack } from 'react-icons/io5';
 import HeroGeneral from '../components/HeroGeneral';
@@ -13,7 +13,8 @@ export default function Commande() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const cover = searchParams.get('cover') || '';
-  const livreID = searchParams.get('livreID') || '';
+  const isbn = searchParams.get('isbn') || '';
+  const prixUnitaire = searchParams.get('prixUnitaire') || 0;
   const quantity = searchParams.get('quantity') || 1;
 
   const [formData, setFormData] = useState({
@@ -23,20 +24,16 @@ export default function Commande() {
     telephone: '',
     adresse: '',
     role: '',
-    livreID: livreID,
+    isbn: isbn,
     quantite: quantity,
+    prixUnitaire: prixUnitaire,
     informations: '',
+    livraisonPrice: 8.0,
     paiementConfirme: false,
     coverImage: cover
   });
 
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (livreID) {
-      setFormData(prev => ({ ...prev, nomLivre: livreID }));
-    }
-  }, [livreID]);
 
   const updateFormData = (field, value) => {
     setFormData(prev => ({
@@ -51,18 +48,22 @@ export default function Commande() {
 
     try {
       const orderPayload = {
-        name: formData.prenom,
-        lastName: formData.nom,
-        email: formData.email,
-        address: formData.adresse,
-        articles: [
+      name: formData.prenom,
+      lastName: formData.nom,
+      email: formData.email,
+      address: formData.adresse,
+      phone: formData.telephone,
+      role: formData.role,
+      articles: [
           {
-            article: formData.nomLivre,
+            isbn: formData.isbn,
             quantity: formData.quantite
           }
         ],
-        informationDetails: formData.informations
-      };
+      livraisonPrice: formData.livraisonPrice,
+      livraisonMethod: formData.livraisonMethod, 
+      informationDetails: formData.informations 
+};
 
       const response = await OrderService.create(orderPayload);
       console.log('Commande soumise:', response.data);
@@ -80,7 +81,7 @@ export default function Commande() {
   };
 
   const handleGoBack = () => {
-    router.back(); // Navigate to previous page
+    router.back(); 
   };
 
   return (
@@ -128,8 +129,8 @@ export default function Commande() {
               type="submit"
               disabled={loading}
               className={`
-                bg-[var(--color-primary-100)] 
-                hover:bg-[var(--color-secondary-500)]
+                bg-primary-100
+                hover:bg-secondary-500
                 text-white font-bold py-4 
                 rounded-lg transition-colors cursor-pointer
                 px-40 sm:px-52 md:px-60 lg:px-72

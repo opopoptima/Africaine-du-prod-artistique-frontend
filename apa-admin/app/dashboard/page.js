@@ -1,10 +1,8 @@
-"use client";
-
+"use client";;
 import StatsGrid from "./components/StatsGrid";
 import TopProducts from "./components/TopProducts";
 import RevenueGauge from "./components/RevenueGauge";
 import VisitorChart from "./components/VisitorChart";
-import SatisfactionChart from "./components/SatisfactionChart";
 import FeaturedCard from "./components/FeaturedCard";
 import { Input } from "../components/input";
 import { Search } from "lucide-react";
@@ -15,8 +13,8 @@ export default function DashboardPage() {
       <div className="mx-auto max-w-7xl space-y-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <h1 className="text-3xl font-semibold text-[var(--color-primary-300)]">
-            Bienvenue, [Mariem]<span className="text-[var(--color-secondary-900)]"></span>
+          <h1 className="text-3xl font-semibold text-primary-300">
+            Bienvenue, [Mariem]<span className="text-secondary-900"></span>
           </h1>
           <div className="relative w-full sm:w-64">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -35,11 +33,10 @@ export default function DashboardPage() {
           {/* Featured Card */}
           <FeaturedCard />
 
-          {/* Top Products */}
+          {/* Top Products */} 
           <TopProducts />
 
-          {/* Satisfaction Chart */}
-          <SatisfactionChart />
+          
         </div>
 
         {/* Bottom Row */}

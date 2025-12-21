@@ -48,10 +48,11 @@ export default function BookPage() {
 
   // Encode values safely
   const cover = encodeURIComponent(article.cover || "");
-  const livreID = encodeURIComponent(article.id || "");
+  const isbn = encodeURIComponent(article.isbn || "");
   const qty = encodeURIComponent(quantity);
+  const prixUnitaire = encodeURIComponent(article.price || 0);
 
-  router.push(`/commande?cover=${cover}&livreID=${livreID}&quantity=${qty}`);
+  router.push(`/commande?cover=${cover}&isbn=${isbn}&quantity=${qty}&prixUnitaire=${prixUnitaire}`);
 };
 
   return (
@@ -84,7 +85,7 @@ export default function BookPage() {
 
             {/* Quantity Order Box */}
             <div className="flex justify-center sm:justify-end flex-shrink-0">
-              <QuantityOrder handleCommander={handleCommander} />
+              <QuantityOrder handleCommander={handleCommander} article={article} />
             </div>
           </div>
         </div>

@@ -17,8 +17,8 @@ export default function DetailsCommande({ formData, updateFormData }) {
             </label>
             <input
               type="text"
-              value={formData.livreID}
-              onChange={(e) => updateFormData('livreID', e.target.value)}
+              value={formData.isbn}
+              onChange={(e) => updateFormData('isbn', e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-gray-50"
               required
               disabled
@@ -68,6 +68,54 @@ export default function DetailsCommande({ formData, updateFormData }) {
               className="object-cover"
             />
           </div>
+
+         <div className="mt-6 border border-gray-200 rounded-md overflow-hidden">
+  <table className="w-full text-sm">
+    <thead className="bg-gray-100 text-gray-700">
+      <tr>
+        <th className="px-4 py-2 text-left">Prix unitaire</th>
+        <th className="px-4 py-2 text-center">Quantité</th>
+        <th className="px-4 py-2 text-right">Total</th>
+      </tr>
+    </thead>
+
+    <tbody className="divide-y">
+      <tr>
+        <td className="px-4 py-2">
+          {formData.prixUnitaire} dt
+        </td>
+        <td className="px-4 py-2 text-center">
+          {formData.quantite}
+        </td>
+        <td className="px-4 py-2 text-right font-medium">
+          {formData.prixUnitaire * formData.quantite} dt
+        </td>
+      </tr>
+
+      {/* Livraison */}
+      <tr>
+        <td className="px-4 py-2">Livraison</td>
+        <td className="px-4 py-2 text-center">—</td>
+        <td className="px-4 py-2 text-right font-medium">
+          {formData.livraisonPrice} dt
+        </td>
+      </tr>
+    </tbody>
+
+    <tfoot className="bg-gray-50">
+      <tr>
+        <td className="px-4 py-3 font-semibold" colSpan={2}>
+          Total à payer
+        </td>
+        <td className="px-4 py-3 text-right font-bold text-lg">
+          {formData.livraisonPrice +
+            formData.prixUnitaire * formData.quantite} dt
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
         </div>
       </div>
     </div>

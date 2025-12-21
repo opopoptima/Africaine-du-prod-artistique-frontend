@@ -25,34 +25,84 @@ import { FiTag, FiAward, FiCalendar } from "react-icons/fi";
 
 export default function ActualitesPage() {
   const router = useRouter();
+
   const [actualites, setActualites] = useState([]);
   const [filteredActualites, setFilteredActualites] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterReference, setFilterReference] = useState("all");
   const [filterStatut, setFilterStatut] = useState("all");
   const [filterDate, setFilterDate] = useState("all");
+
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+
   const [loading, setLoading] = useState(true);
 
-  // Fetch actualités from backend
+  // 🔹 Fetch from backend with pagination
   useEffect(() => {
     fetchActualites();
-  }, []);
+  }, [currentPage, itemsPerPage]);
 
   const fetchActualites = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/news");
-      const data = await response.json();
-      setActualites(data);
-      setFilteredActualites(data);
-    } catch (error) {
-      console.error("Erreur lors du chargement des actualités:", error);
+      const res = await fetch(
+        `http://localhost:5000/api/news?page=${currentPage}&limit=${itemsPerPage}`
+      );
+      const result = await res.json();
+
+      setActualites(result.data || []);
+      setFilteredActualites(result.data || []);
+      setTotalPages(result.meta?.pages || 1);
+      setTotalItems(result.meta?.total || 0);
+    } catch (err) {
+      console.error("Erreur lors du chargement:", err);
     } finally {
       setLoading(false);
     }
   };
+
+  // 🔹 Filters (client-side)
+  useEffect(() => {
+    let filtered = actualites;
+
+    if (searchTerm) {
+      filtered = filtered.filter(
+        (item) =>
+          item.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.subtitle?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.content?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (filterReference !== "all") {
+      filtered = filtered.filter((i) => i.category === filterReference);
+    }
+
+    if (filterStatut !== "all") {
+      filtered = filtered.filter((i) => i.status === filterStatut);
+    }
+
+    if (filterDate !== "all") {
+      filtered = [...filtered].sort((a, b) => {
+        const da = new Date(a.publicationDate || a.createdAt);
+        const db = new Date(b.publicationDate || b.createdAt);
+        return filterDate === "recent" ? db - da : da - db;
+      });
+    }
+
+    setFilteredActualites(filtered);
+    setCurrentPage(1);
+  }, [searchTerm, filterReference, filterStatut, filterDate]);
+
+  const handleDelete = async (id) => {
+    if (!confirm("Supprimer cette actualité ?")) return;
+    await fetch(`http://localhost:5000/api/news/${id}`, { method: "DELETE" });
+    fetchActualites();
+  };
+
 
   // Filter logic
   useEffect(() => {
@@ -94,20 +144,6 @@ export default function ActualitesPage() {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredActualites.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredActualites.length / itemsPerPage);
-
-  const handleDelete = async (id) => {
-    if (confirm("Êtes-vous sûr de vouloir supprimer cette actualité ?")) {
-      try {
-        await fetch(`http://localhost:5000/api/news/${id}`, {
-          method: "DELETE",
-        });
-        fetchActualites();
-      } catch (error) {
-        console.error("Erreur lors de la suppression:", error);
-      }
-    }
-  };
 
   const handleEdit = (actualite) => {
     router.push(`/dashboard/actualites/form?id=${actualite._id}`);

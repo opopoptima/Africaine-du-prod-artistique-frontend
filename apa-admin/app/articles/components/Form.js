@@ -8,32 +8,42 @@ import { useSearchParams, useRouter } from "next/navigation";
 // Composants réutilisables
 const FormField = ({ label, children }) => (
   <div className="flex items-center gap-4 py-1.5">
-    <label className="w-40 text-sm text-label flex-shrink-0">{label}</label>
+    <label className="w-40 text-sm text-label shrink-0">{label}</label>
     <div className="flex-1">{children}</div>
   </div>
 );
 
-const FormInput = ({ name, value, onChange, placeholder, type = "text" }) => (
-  <input
-    type={type}
-    name={name}
-    value={value}
-    onChange={onChange}
-    placeholder={placeholder}
-    className="w-full max-w-md h-8 px-3 border border-border rounded bg-background text-foreground text-sm focus:outline-none focus:ring-1 focus:ring-primary"
-  />
-);
+const FormInput = ({ name, value, onChange, placeholder, type = "text", required = false }) => {
+  const isInvalid = required && value.toString().trim() === "";
+  return (
+    <input
+      type={type}
+      name={name}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      className={`w-full max-w-md h-8 px-3 border rounded bg-background text-foreground text-sm focus:outline-none focus:ring-1 focus:ring-primary
+        ${isInvalid ? "border-red-500" : "border-border"}`}
+    />
+  );
+};
 
-const FormTextArea = ({ name, value, onChange, placeholder, rows = 3 }) => (
-  <textarea
-    rows={rows}
-    name={name}
-    value={value}
-    onChange={onChange}
-    placeholder={placeholder}
-    className="w-full px-3 py-2 border border-border rounded bg-background text-foreground text-sm resize-none focus:outline-none focus:ring-1 focus:ring-primary"
-  />
-);
+
+const FormTextArea = ({ name, value, onChange, placeholder, rows = 3, required = false }) => {
+  const isInvalid = required && value.toString().trim() === "";
+  return (
+    <textarea
+      rows={rows}
+      name={name}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      className={`w-full px-3 py-2 border rounded bg-background text-foreground text-sm resize-none focus:outline-none focus:ring-1 focus:ring-primary
+        ${isInvalid ? "border-red-500" : "border-border"}`}
+    />
+  );
+};
+
 
 const UploadBox = ({ file, setFile, label, subtitle }) => (
   <div className="flex flex-col items-center">
@@ -64,7 +74,14 @@ const MultiUploadBox = ({ files, setFiles, label, subtitle }) => (
         type="file"
         multiple
         className="hidden"
-        onChange={(e) => setFiles([...e.target.files])}
+        onChange={(e) => {
+          const selectedFiles = Array.from(e.target.files);
+          if (selectedFiles.length + files.length > 3) {
+            alert("Vous ne pouvez pas ajouter plus de 3 images.");
+            return;
+          }
+          setFiles([...files, ...selectedFiles]);
+        }}
       />
     </label>
     {subtitle && <span className="mt-2 text-xs text-muted-foreground">{subtitle}</span>}
@@ -75,6 +92,7 @@ const MultiUploadBox = ({ files, setFiles, label, subtitle }) => (
     )}
   </div>
 );
+
 
 const Section = ({ title, children }) => (
   <div className="bg-[#9B59B626] overflow-hidden mb-4">
@@ -94,15 +112,16 @@ const AjoutArticle = ({ articleId: articleIdProp }) => {
     title: "", author: "", publisher: "", isbn: "", category: "",
     subCategory: "", recommendedAge: "", language: "", type: "",
     dimensions: "", collection: "", schoolLevel: "", price: "", promo: "",
-    stock: "", isNew: false, description: "", summary: "", objectives: ""
+    stock: "", isNew: false, isBestSeller: false, description: "", summary: "", objectives: ""
   };
 
   const [form, setForm] = useState(initialForm);
   const [cover, setCover] = useState(null);
   const [images, setImages] = useState([]);
   const [pdfExtrait, setPdfExtrait] = useState(null);
-  const [pdfFile, setPdfFile] = useState(null);
-  const [previewFile, setPreviewFile] = useState(null);
+  const [technicalFile, setTechnicalFile] = useState(null);
+  const [printedFile, setPrintedFile] = useState(null);
+
   const [loading, setLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(false);
   const [message, setMessage] = useState("");
@@ -147,6 +166,7 @@ const AjoutArticle = ({ articleId: articleIdProp }) => {
           promo: article.promo?.toString() || "",
           stock: article.stock?.toString() || "",
           isNew: article.isNew || false,
+          isBestSeller: article.isBestSeller || false,
           description: article.description || "",
           summary: article.summary || "",
           objectives: article.objectives || "",
@@ -167,122 +187,129 @@ const AjoutArticle = ({ articleId: articleIdProp }) => {
     setForm(prev => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage("");
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setMessage("");
 
-    // Validation basique des champs requis
-    if (!form.title || form.title.trim() === "") {
-      setMessage("❌ Le titre est requis.");
+  // Validation de tous les champs requis
+  const requiredFields = [
+    { field: "title", label: "Titre" },
+    { field: "author", label: "Auteur" },
+    { field: "publisher", label: "Maison d'édition" },
+    { field: "isbn", label: "ISBN" },
+    { field: "category", label: "Catégorie" },
+    { field: "subCategory", label: "Sous-catégorie" },
+    { field: "pages", label: "N° de pages" },
+    { field: "language", label: "Langue" },
+    { field: "type", label: "Type" },
+    { field: "dimensions", label: "Dimensions" },
+    { field: "collection", label: "Collection" },
+    { field: "schoolLevel", label: "Niveau scolaire" },
+    { field: "price", label: "Prix" },
+    { field: "promo", label: "Promo" },
+    { field: "stock", label: "Quantité" },
+    { field: "description", label: "Description" },
+    { field: "summary", label: "Résumé" },
+    { field: "objectives", label: "Objectifs pédagogiques" },
+  ];
+
+  for (const { field, label } of requiredFields) {
+    if (!form[field] || form[field].toString().trim() === "") {
+      setMessage(`❌ Le champ "${label}" est requis.`);
       setLoading(false);
       return;
     }
-    if (!form.type || form.type.trim() === "") {
-      setMessage("❌ Le type est requis.");
-      setLoading(false);
-      return;
-    }
-    if (!form.language || form.language.trim() === "") {
-      setMessage("❌ La langue est requise.");
-      setLoading(false);
-      return;
-    }
+  }
 
-    try {
-      const data = new FormData();
+  // Stock minimum 1
+  if (Number(form.stock) < 1) {
+    setMessage("❌ La quantité minimale est de 1.");
+    setLoading(false);
+    return;
+  }
 
-      // Ajouter tous les champs du formulaire
-      Object.entries(form).forEach(([key, value]) => {
-        if (value === null || value === undefined) return;
+  // Fichiers requis
+  if (!cover) {
+    setMessage("❌ La couverture est requise.");
+    setLoading(false);
+    return;
+  }
+  if (!pdfExtrait) {
+    setMessage("❌ Le PDF extrait est requis.");
+    setLoading(false);
+    return;
+  }
+  if (!technicalFile) {
+    setMessage("❌ La fiche technique est requise.");
+    setLoading(false);
+    return;
+  }
+  if (!printedFile) {
+    setMessage("❌ La fiche imprimée est requise.");
+    setLoading(false);
+    return;
+  }
 
-        // Ne pas envoyer les ObjectId vides (ex: collection)
-        if (key === "collection" && value === "") return;
+  // Limite des images (1 à 3)
+  if (images.length < 1) {
+    setMessage("❌ Au moins une image est requise.");
+    setLoading(false);
+    return;
+  }
+  if (images.length > 3) {
+    setMessage("❌ Vous ne pouvez pas ajouter plus de 3 images.");
+    setLoading(false);
+    return;
+  }
 
-        // Convertir les booléens en string
-        if (typeof value === "boolean") {
-          data.append(key, value.toString());
-        } 
-        // Pour les champs numériques
-        else if (["price", "promo", "stock"].includes(key)) {
-          if (value !== "") {
-            const numValue = Number(value);
-            if (!isNaN(numValue)) {
-              data.append(key, numValue.toString());
-            }
-          }
-        } 
-        // Pour les autres champs texte
-        else {
-          data.append(key, value);
-        }
-      });
+  try {
+    const data = new FormData();
 
-      // Ajouter les fichiers
-      if (cover) data.append("cover", cover);
-      images.forEach(img => { if (img) data.append("images", img); });
-      if (pdfExtrait) data.append("pdfExtrait", pdfExtrait);
-      if (pdfFile) data.append("pdfFile", pdfFile);
-      if (previewFile) data.append("previewFile", previewFile);
+    // Ajouter tous les champs
+    Object.entries(form).forEach(([key, value]) => {
+      if (value === null || value === undefined) return;
 
-      // Log pour déboguer
-      console.log("=== DONNÉES ENVOYÉES ===");
-      for (let [key, value] of data.entries()) {
-        const displayValue = value instanceof File 
-          ? `[File: ${value.name}, size: ${value.size}]` 
-          : value;
-        console.log(`${key}:`, displayValue);
-      }
-      console.log("======================");
-
-      // Création ou mise à jour
-      if (articleId && articleId !== "new") {
-        const response = await ArticleService.update(articleId, data);
-        console.log("Réponse update:", response);
-        setMessage("✅ Article mis à jour !");
-        
-        // Optionnel: rediriger après succès
-        setTimeout(() => {
-          router.push("/admin/articles");
-        }, 1500);
+      if (typeof value === "boolean") {
+        data.append(key, value.toString());
+      } else if (["price", "promo", "stock"].includes(key)) {
+        data.append(key, Number(value).toString());
       } else {
-        const response = await ArticleService.create(data);
-        console.log("Réponse create:", response);
-        setMessage("✅ Article ajouté !");
-        
-        // Réinitialiser le formulaire
-        setForm(initialForm);
-        setCover(null);
-        setImages([]);
-        setPdfExtrait(null);
-        setPdfFile(null);
-        setPreviewFile(null);
+        data.append(key, value);
       }
-    } catch (err) {
-      console.error("=== ERREUR COMPLÈTE ===", err);
-      let errorMessage = "Erreur lors de l'enregistrement.";
-      
-      if (err.response?.data) {
-        if (typeof err.response.data === "string") {
-          errorMessage = err.response.data;
-        } else if (err.response.data.error) {
-          errorMessage = err.response.data.error;
-        } else if (err.response.data.message) {
-          errorMessage = err.response.data.message;
-        } else if (Array.isArray(err.response.data)) {
-          errorMessage = err.response.data.join(", ");
-        } else {
-          errorMessage = JSON.stringify(err.response.data);
-        }
-      } else if (err.message) {
-        errorMessage = err.message;
-      }
-      
-      setMessage(`❌ ${errorMessage}`);
-    } finally {
-      setLoading(false);
+    });
+
+    // Ajouter les fichiers
+    data.append("cover", cover);
+    images.forEach(img => data.append("images", img));
+    data.append("pdfExtrait", pdfExtrait);
+    data.append("technicalFile", technicalFile);
+    data.append("printedFile", printedFile);
+
+    // Création ou mise à jour
+    if (articleId && articleId !== "new") {
+      const response = await ArticleService.update(articleId, data);
+      setMessage("✅ Article mis à jour !");
+      setTimeout(() => router.push("/admin/articles"), 1500);
+    } else {
+      const response = await ArticleService.create(data);
+      setMessage("✅ Article ajouté !");
+      setForm(initialForm);
+      setCover(null);
+      setImages([]);
+      setPdfExtrait(null);
+      setTechnicalFile(null);
+      setPrintedFile(null);
     }
-  };
+  } catch (err) {
+    console.error("Erreur lors de l'enregistrement :", err);
+    setMessage("❌ Erreur lors de l'enregistrement.");
+  } finally {
+    setLoading(false);
+  }
+};
+
+
 
   return (
     <form onSubmit={handleSubmit} className="min-h-screen bg-background py-6 px-4">
@@ -323,20 +350,77 @@ const AjoutArticle = ({ articleId: articleIdProp }) => {
         <Section title="Images & fichiers">
           <FormField label="Couverture :"><UploadBox file={cover} setFile={setCover} label="Upload Image" /></FormField>
           <FormField label="Images (3 max) :"><MultiUploadBox files={images} setFiles={setImages} label="Upload more" subtitle="Image" /></FormField>
-          <FormField label="PDF extrait :"><UploadBox file={pdfExtrait} setFile={setPdfExtrait} label="Upload PDF" /></FormField>
-          <FormField label="PDF Fiches Techniques :"><UploadBox file={pdfFile} setFile={setPdfFile} label="Upload PDF" /></FormField>
-          <FormField label="PDF Fiches Imprimées :"><UploadBox file={previewFile} setFile={setPreviewFile} label="Upload PDF" /></FormField>
+          <FormField label="PDF extrait :">
+  <UploadBox
+    file={pdfExtrait}
+    setFile={setPdfExtrait}
+    label="Upload PDF"
+  />
+</FormField>
+
+<FormField label="Fiche technique (PDF) :">
+  <UploadBox
+    file={technicalFile}
+    setFile={setTechnicalFile}
+    label="Upload PDF"
+  />
+</FormField>
+
+<FormField label="Fiche imprimée (PDF) :">
+  <UploadBox
+    file={printedFile}
+    setFile={setPrintedFile}
+    label="Upload PDF"
+  />
+</FormField>
+
         </Section>
 
         {/* Stock */}
         <Section title="Stock">
-          <FormField label="Quantité :"><FormInput name="stock" value={form.stock} onChange={handleChange} type="number" /></FormField>
-          <FormField label="Statut produit :">
-            <label className="flex items-center gap-2">
-              <input type="checkbox" name="isNew" checked={form.isNew} onChange={handleChange} className="w-4 h-4" />
-              <span>Nouvel article</span>
-            </label>
-          </FormField>
+          <FormField label="Quantité :" required>
+  <FormInput
+    name="stock"
+    value={form.stock}
+    onChange={(e) => {
+      const value = Number(e.target.value);
+      setForm((prev) => ({
+        ...prev,
+        stock: value < 1 || isNaN(value) ? 1 : value
+      }));
+    }}
+    type="number"
+    min={1} // Prevent using keyboard arrows to go below 1
+    required
+  />
+</FormField>
+
+<FormField label="Statut produit :">
+  <label className="flex items-center gap-2">
+    <input
+      type="checkbox"
+      name="isNew"
+      checked={form.isNew}
+      onChange={handleChange}
+      className="w-4 h-4"
+    />
+    <span>Nouvel article</span>
+  </label>
+</FormField>
+
+<FormField label="Statut produit :">
+  <label className="flex items-center gap-2">
+    <input
+      type="checkbox"
+      name="isBestSeller"
+      checked={form.isBestSeller}
+      onChange={handleChange}
+      className="w-4 h-4"
+    />
+    <span>Best Seller</span>
+  </label>
+</FormField>
+
         </Section>
 
         {/* Description */}

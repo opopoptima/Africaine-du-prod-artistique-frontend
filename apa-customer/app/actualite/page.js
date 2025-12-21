@@ -5,7 +5,7 @@ import HeroGeneral from "../components/HeroGeneral";
 import ContactSection from "../components/ContactSection";
 import AlaUne from "./A-la-une";
 import TousActualites from "./tous-actualites";
-import {NewsService} from "../services/newsService";
+import { NewsService } from "../services/newsService";
 
 export default function Actualite() {
   const [actuALaUne, setActuALaUne] = useState(null); // première actualité
@@ -16,8 +16,9 @@ export default function Actualite() {
   useEffect(() => {
     const fetchActualites = async () => {
       try {
-        const response = await NewsService.getAll(); // récupère toutes les actualités
-        const allNews = response.data;
+        const response = await NewsService.getAll(); 
+        console.log("Réponse des actualités :", response.data.data);
+        const allNews = response.data.data;
 
         if (allNews.length > 0) {
           setActuALaUne(allNews[0]); // première actualité

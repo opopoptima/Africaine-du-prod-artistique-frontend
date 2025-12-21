@@ -1,23 +1,10 @@
 "use client";
 
-import { Star, BookOpen, ShoppingBag, DollarSign, Package, Users, TrendingUp, TrendingDown } from "lucide-react";
+import { ShoppingBag, DollarSign, Package, Users, TrendingUp, TrendingDown } from "lucide-react";
 import { Card } from "../../components/ui/card";
 
 const stats = [
-  {
-    icon: Star,
-    value: "50",
-    label: "Nouvelles Collections",
-    trend: "+10% vs semaine dernière",
-    isPositive: true,
-  },
-  {
-    icon: BookOpen,
-    value: "425",
-    label: "Nouveaux Livres",
-    trend: "+10% vs année dernière",
-    isPositive: true,
-  },
+  
   {
     icon: ShoppingBag,
     value: "50",
