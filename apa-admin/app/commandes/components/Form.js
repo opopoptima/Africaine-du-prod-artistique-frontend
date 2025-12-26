@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import orderService from "../../services/orderService";
 
 // --- Composants réutilisables ---- //
 
@@ -84,261 +85,389 @@ const Tabs = ({ tabs, activeTab, onTabChange }) => (
 
 // ----------------------------------------- //
 
-const AjoutCommande = ({ commandeId }) => {
+const FicheCommande = ({ commandeId }) => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("info");
+  const isNewOrder = commandeId === "new";
 
   const initialForm = {
-    reference: "CMD-2025-0001",
-    statutCommande: "Expédiée",
-    dateCommande: "2025-03-15",
-    prenom: "John",
-    nom: "John Smith",
+    statusCommande: "En attente",
+    name: "",
+    lastName: "",
+    email: "",
+    address: "",
+    phone: "",
     role: "Parent",
-    email: "john.smith@example.com",
-    telephone: "+216 12 345 678",
-    adresse: "123 Avenue Habib Bourguiba 1000 Tunis",
-    modeLivraison: "Poste",
-    numeroSuivi: "TN1234567890",
-    statutLivraison: "En cours",
-    modePaiement: "À la livraison",
-    statutPaiement: "En attente",
-    datePaiement: "2025-03-16",
-    totalHT: "120.00",
-    livraison: "5.00",
-    livre: "Australia - Land of Tomorrow",
-    auteur: "John Author",
-    isbn: "978-3-16-148410-0",
-    quantite: "2",
-    prixUnitaire: "45.00",
-    total: "90.00",
-    notes: "Client préfère la livraison le matin",
-    preparePar: "Ahmed Ben Ali",
-    valideLe: "2025-03-15",
+    informationDetails: "",
+    articles: [],
+    livraisonPrice: "0",
+    livraisonMethod: "Poste",
+    livraisonNumero: "",
+    livraisonStatus: "En cours",
+    paimentStatus: "En attente",
+    paimentDate: "",
+    notes: "",
+    preparedBy: "",
+    ValidateDate: "",
   };
 
   const [form, setForm] = useState(initialForm);
   const [loading, setLoading] = useState(false);
+  const [loadingData, setLoadingData] = useState(!isNewOrder);
   const [message, setMessage] = useState("");
+
+  // Charger les données de la commande si modification
+  useEffect(() => {
+    if (!isNewOrder) {
+      fetchOrderData();
+    }
+  }, [commandeId]);
+
+  const fetchOrderData = async () => {
+    try {
+      setLoadingData(true);
+      const data = await orderService.getOrderById(commandeId);
+      
+      // Mapper les données du backend vers le formulaire
+      setForm({
+        statusCommande: data.statusCommande || "En attente",
+        name: data.name || "",
+        lastName: data.lastName || "",
+        email: data.email || "",
+        address: data.address || "",
+        phone: data.phone || "",
+        role: data.role || "Parent",
+        informationDetails: data.informationDetails || "",
+        articles: data.articles || [],
+        livraisonPrice: data.livraisonPrice?.toString() || "0",
+        livraisonMethod: data.livraisonMethod || "Poste",
+        livraisonNumero: data.livraisonNumero || "",
+        livraisonStatus: data.livraisonStatus || "En cours",
+        paimentStatus: data.paimentStatus || "En attente",
+        paimentDate: data.paimentDate ? new Date(data.paimentDate).toISOString().split('T')[0] : "",
+        notes: data.notes || "",
+        preparedBy: data.preparedBy || "",
+        ValidateDate: data.ValidateDate ? new Date(data.ValidateDate).toISOString().split('T')[0] : "",
+        commandeId: data.commandeId,
+        createdAt: data.createdAt,
+      });
+    } catch (error) {
+      console.error("Erreur lors du chargement de la commande:", error);
+      setMessage("❌ Erreur lors du chargement de la commande");
+    } finally {
+      setLoadingData(false);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
 
-    if (!form.reference || form.reference.trim() === "") {
-      setMessage("❌ La référence est requise.");
+    // Validation
+    if (!form.name || !form.lastName || !form.email || !form.address || !form.phone) {
+      setMessage("❌ Veuillez remplir tous les champs obligatoires du client");
       setLoading(false);
       return;
     }
 
-    setTimeout(() => {
-      setMessage("✅ Commande enregistrée avec succès !");
-      setLoading(false);
+    try {
+      // Préparer les données pour l'API
+      const orderData = {
+        statusCommande: form.statusCommande,
+        name: form.name,
+        lastName: form.lastName,
+        email: form.email,
+        address: form.address,
+        phone: parseInt(form.phone),
+        role: form.role,
+        informationDetails: form.informationDetails,
+        articles: form.articles,
+        livraisonPrice: parseFloat(form.livraisonPrice),
+        livraisonMethod: form.livraisonMethod,
+        livraisonNumero: form.livraisonNumero,
+        livraisonStatus: form.livraisonStatus,
+        paimentStatus: form.paimentStatus,
+        paimentDate: form.paimentDate || null,
+        notes: form.notes,
+        preparedBy: form.preparedBy,
+        ValidateDate: form.ValidateDate || null,
+      };
+
+      if (isNewOrder) {
+        await orderService.createOrder(orderData);
+        setMessage("✅ Commande créée avec succès !");
+      } else {
+        await orderService.updateOrder(commandeId, orderData);
+        setMessage("✅ Commande mise à jour avec succès !");
+      }
+
       setTimeout(() => router.push("/commandes"), 1500);
-    }, 1000);
+    } catch (error) {
+      console.error("Erreur lors de l'enregistrement:", error);
+      setMessage("❌ Erreur lors de l'enregistrement de la commande");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const tabs = [
-  { id: "info", label: "Info Commande" },
-  { id: "client", label: "Client" },
-  { id: "articles", label: "Détails des articles" },
-  { id: "paiementLivraison", label: "Paiement & Livraison" }, 
-];
+    { id: "info", label: "Info Commande" },
+    { id: "client", label: "Client" },
+    { id: "articles", label: "Détails des articles" },
+    { id: "paiementLivraison", label: "Paiement & Livraison" },
+  ];
 
+  if (loadingData) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-primary-300 border-t-primary-500 rounded-full animate-spin"></div>
+          <p className="text-primary-500 font-semibold">Chargement...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="min-h-screen bg-background py-6 px-4">
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center justify-between mb-2">
           <div className="text-sm text-gray-500 font-medium">
-            Dashboard &gt; Commandes &gt; Modifier
+            Dashboard &gt; Commandes &gt; {isNewOrder ? "Nouvelle" : "Modifier"}
           </div>
         </div>
-        <h1 className="text-lg font-semibold text-primary-500 mb-4 pl-3">FICHE COMMANDE</h1>
+        <h1 className="text-lg font-semibold text-primary-500 mb-4 pl-3">
+          {isNewOrder ? "NOUVELLE COMMANDE" : "FICHE COMMANDE"}
+        </h1>
 
         <Tabs tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
 
         {/* ------------- INFO ---------------- */}
         {activeTab === "info" && (
           <Section title="Info Commande">
-            <FormField label="Référence commande :">
-              <FormInput value={form.reference} readOnly />
-            </FormField>
+            {!isNewOrder && (
+              <FormField label="Référence commande :">
+                <FormInput value={form.commandeId || "Génération automatique"} readOnly />
+              </FormField>
+            )}
 
             <FormField label="Statut commande :">
               <RadioGroup
-                name="statutCommande"
-                value={form.statutCommande}
+                name="statusCommande"
+                value={form.statusCommande}
                 onChange={handleChange}
                 options={[
-                  { value: "Expédiée", label: "Expédiée" },
+                  { value: "En attente", label: "En attente" },
                   { value: "Livrée", label: "Livrée" },
                   { value: "Annulée", label: "Annulée" },
                 ]}
               />
             </FormField>
 
-            <FormField label="Date commande :">
-              <FormInput
-                type="date"
-                value={form.dateCommande}
-                readOnly
-              />
-            </FormField>
-
-            <FormField label="Total Sans livraision :">
-              <FormInput value={form.total} readOnly/>
-            </FormField>
+            {!isNewOrder && form.createdAt && (
+              <FormField label="Date commande :">
+                <FormInput
+                  value={new Date(form.createdAt).toISOString().split('T')[0]}
+                  readOnly
+                />
+              </FormField>
+            )}
           </Section>
         )}
 
         {/* ------------- CLIENT ---------------- */}
         {activeTab === "client" && (
           <Section title="Client">
-            <FormField label="Prénom :">
-              <FormInput value={form.prenom} readOnly />
+            <FormField label="Prénom * :">
+              <FormInput 
+                name="name" 
+                value={form.name} 
+                onChange={handleChange}
+                placeholder="Entrez le prénom"
+              />
             </FormField>
-            <FormField label="Nom :">
-              <FormInput value={form.nom} readOnly />
+            <FormField label="Nom * :">
+              <FormInput 
+                name="lastName" 
+                value={form.lastName} 
+                onChange={handleChange}
+                placeholder="Entrez le nom"
+              />
             </FormField>
             <FormField label="Role :">
-              <FormInput value={form.role} readOnly />
+              <RadioGroup
+                name="role"
+                value={form.role}
+                onChange={handleChange}
+                options={[
+                  { value: "Enfant", label: "Enfant" },
+                  { value: "Parent", label: "Parent" },
+                  { value: "Passionné du livre", label: "Passionné" },
+                  { value: "Professionnel", label: "Professionnel" },
+                ]}
+              />
             </FormField>
-            <FormField label="E-mail :">
-              <FormInput type="email" value={form.email} readOnly />
+            <FormField label="E-mail * :">
+              <FormInput 
+                type="email" 
+                name="email" 
+                value={form.email} 
+                onChange={handleChange}
+                placeholder="exemple@email.com"
+              />
             </FormField>
-            <FormField label="Téléphone :">
-              <FormInput value={form.telephone} readOnly />
+            <FormField label="Téléphone * :">
+              <FormInput 
+                name="phone" 
+                value={form.phone} 
+                onChange={handleChange}
+                placeholder="+216 12 345 678"
+              />
             </FormField>
-            <FormField label="Adresse :">
-              <FormInput name="adresse" value={form.adresse} onChange={handleChange} />
+            <FormField label="Adresse * :">
+              <FormInput 
+                name="address" 
+                value={form.address} 
+                onChange={handleChange}
+                placeholder="Entrez l'adresse complète"
+              />
+            </FormField>
+            <FormField label="Informations :">
+              <FormTextArea 
+                name="informationDetails" 
+                value={form.informationDetails} 
+                onChange={handleChange}
+                placeholder="Informations supplémentaires"
+              />
             </FormField>
           </Section>
         )}
 
         {/* ------------- ARTICLES -------------- */}
         {activeTab === "articles" && (
-          <Section title="Détail de l'article">
-            <FormField label="ISBN :">
-              <FormInput value={form.isbn} readOnly />
-            </FormField>
-            <FormField label="Titre :">
-              <FormInput value={form.livre} readOnly />
-            </FormField>
-            <FormField label="Auteur :">
-              <FormInput value={form.auteur} readOnly />
-            </FormField>
-            <FormField label="Quantité :">
-              <FormInput type="number" name="quantite" value={form.quantite} readOnly />
-            </FormField>
-            <FormField label="Prix Unitaire :">
-              <FormInput type="number" value={form.prixUnitaire} readOnly />
-            </FormField>
-            <div className="mt-4 p-4">
-              <FormField label="Livraison :">
-                <FormInput name="livraison" value={form.livraison} onChange={handleChange} />
-              </FormField>
-              <FormField label="Total TTC :">
-                <FormInput
-                  name="totalTTC"
-                  value={(
-                    parseFloat(form.quantite) * parseFloat(form.prixUnitaire) +
-                    parseFloat(form.livraison || 0)
-                  ).toFixed(2)}
-                  readOnly
-                />
-              </FormField>
+          <Section title="Détail des articles">
+            <div className="text-sm text-gray-500 mb-4">
+              Note: La gestion des articles se fait via l'interface de sélection des produits
             </div>
+            
+            <FormField label="Frais de livraison :">
+              <FormInput 
+                type="number" 
+                name="livraisonPrice" 
+                value={form.livraisonPrice} 
+                onChange={handleChange}
+                placeholder="0.00"
+                step="0.01"
+              />
+            </FormField>
           </Section>
         )}
 
         {/* ------------- PAIEMENT, LIVRAISON & NOTES -------------- */}
-      {activeTab === "paiementLivraison" && (
-        <>
-          {/* Paiement */}
+        {activeTab === "paiementLivraison" && (
+          <>
+            {/* Livraison */}
+            <Section title="Livraison">
+              <FormField label="Mode de livraison :">
+                <RadioGroup
+                  name="livraisonMethod"
+                  value={form.livraisonMethod}
+                  onChange={handleChange}
+                  options={[
+                    { value: "Poste", label: "Poste" },
+                    { value: "Transporteur", label: "Transporteur" },
+                    { value: "Retrait magasin", label: "Retrait magasin" },
+                  ]}
+                />
+              </FormField>
 
-          {/* Livraison */}
-          <Section title="Livraison">
-            <FormField label="Mode de livraison :">
-              <RadioGroup
-                name="modeLivraison"
-                value={form.modeLivraison}
-                onChange={handleChange}
-                options={[
-                  { value: "Poste", label: "Poste" },
-                  { value: "Transporteur", label: "Transporteur" },
-                  { value: "Retrait magasin", label: "Retrait magasin" },
-                ]}
-              />
-            </FormField>
+              <FormField label="Numéro de suivi :">
+                <FormInput 
+                  name="livraisonNumero" 
+                  value={form.livraisonNumero} 
+                  onChange={handleChange}
+                  placeholder="Ex: TN1234567890"
+                />
+              </FormField>
 
-            <FormField label="Numéro de suivi :">
-              <FormInput name="numeroSuivi" value={form.numeroSuivi} onChange={handleChange} />
-            </FormField>
+              <FormField label="Statut livraison :">
+                <RadioGroup
+                  name="livraisonStatus"
+                  value={form.livraisonStatus}
+                  onChange={handleChange}
+                  options={[
+                    { value: "En cours", label: "En cours" },
+                    { value: "Livrée", label: "Livrée" },
+                    { value: "Retournée", label: "Retournée" },
+                  ]}
+                />
+              </FormField>
+            </Section>
 
-            <FormField label="Statut livraison :">
-              <RadioGroup
-                name="statutLivraison"
-                value={form.statutLivraison}
-                onChange={handleChange}
-                options={[
-                  { value: "En cours", label: "En cours" },
-                  { value: "Livrée", label: "Livrée" },
-                  { value: "Retournée", label: "Retournée" },
-                ]}
-              />
-            </FormField>
-          </Section>
-          <Section title="Paiement">
-            <FormField label="Statut Paiement :">
-              <RadioGroup
-                name="statutPaiement"
-                value={form.statutPaiement}
-                onChange={handleChange}
-                options={[
-                  { value: "En attente", label: "En attente" },
-                  { value: "Payé", label: "Payé" },
-                  { value: "Refusé", label: "Refusé" },
-                  { value: "Remboursé", label: "Remboursé" },
-                ]}
-              />
-            </FormField>
+            {/* Paiement */}
+            <Section title="Paiement">
+              <FormField label="Statut Paiement :">
+                <RadioGroup
+                  name="paimentStatus"
+                  value={form.paimentStatus}
+                  onChange={handleChange}
+                  options={[
+                    { value: "En attente", label: "En attente" },
+                    { value: "Payée", label: "Payée" },
+                    { value: "Réfusée", label: "Réfusée" },
+                    { value: "Remboursée", label: "Remboursée" },
+                  ]}
+                />
+              </FormField>
 
-            <FormField label="Date :">
-              <FormInput
-                type="date"
-                name="datePaiement"
-                value={form.datePaiement}
-                onChange={handleChange}
-              />
-            </FormField>
-          </Section>
+              <FormField label="Date paiement :">
+                <FormInput
+                  type="date"
+                  name="paimentDate"
+                  value={form.paimentDate}
+                  onChange={handleChange}
+                />
+              </FormField>
+            </Section>
 
-          
+            {/* Notes */}
+            <Section title="Notes">
+              <FormField label="Notes / Observations :">
+                <FormTextArea 
+                  name="notes" 
+                  value={form.notes} 
+                  onChange={handleChange} 
+                  rows={4}
+                  placeholder="Notes ou observations sur la commande"
+                />
+              </FormField>
 
-          {/* Notes */}
-          <Section title="Notes">
-            <FormField label="Notes / Observations :">
-              <FormTextArea name="notes" value={form.notes} onChange={handleChange} rows={4} />
-            </FormField>
+              <FormField label="Préparé par :">
+                <FormInput 
+                  name="preparedBy" 
+                  value={form.preparedBy} 
+                  onChange={handleChange}
+                  placeholder="Nom de la personne"
+                />
+              </FormField>
 
-            <FormField label="Préparé par :">
-              <FormInput name="preparePar" value={form.preparePar} onChange={handleChange} />
-            </FormField>
-
-            <FormField label="Validé le :">
-              <FormInput type="date" name="valideLe" value={form.valideLe} onChange={handleChange} />
-            </FormField>
-          </Section>
-        </>
-      )}
-
+              <FormField label="Validé le :">
+                <FormInput 
+                  type="date" 
+                  name="ValidateDate" 
+                  value={form.ValidateDate} 
+                  onChange={handleChange} 
+                />
+              </FormField>
+            </Section>
+          </>
+        )}
 
         {/* --- Boutons --- */}
         <div className="flex justify-end gap-4 pt-4 pr-2">
@@ -375,4 +504,4 @@ const AjoutCommande = ({ commandeId }) => {
   );
 };
 
-export default AjoutCommande;
+export default FicheCommande;

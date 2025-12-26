@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/app/components/button";
 import { Input } from "@/app/components/input";
@@ -23,115 +23,13 @@ import { Badge } from "@/app/components/badge";
 import { Search, Plus, Edit2, Trash2 } from "lucide-react";
 import { FiAward, FiCalendar, FiTruck } from "react-icons/fi";
 import ConfirmDeleteModal from "./delete";
+import orderService from "../../services/orderService";
 
-// DONNÉES STATIQUES POUR DEMO
-const FAKE_COMMANDES = [
-    {
-        _id: "1",
-        idClient: "1",
-        reference: "CMD-2025-0001",
-        statutCommande: "Expédiée",
-        statutPaiement: "Payé",
-        totalCommande: 89.5,
-        dateCommande: "2023-03-12",
-    },
-    {
-        _id: "2",
-        idClient: "2",
-        reference: "CMD-2025-0002",
-        statutCommande: "Livrée",
-        statutPaiement: "Payé",
-        totalCommande: 120.9,
-        dateCommande: "2022-06-27",
-    },
-    {
-        _id: "3",
-        idClient: "3",
-        reference: "CMD-2025-0003",
-        statutCommande: "En attente",
-        statutPaiement: "En attente",
-        totalCommande: 89.5,
-        dateCommande: "2024-01-08",
-    },
-    {
-        _id: "4",
-        idClient: "4",
-        reference: "CMD-2025-0004",
-        statutCommande: "Annulée",
-        statutPaiement: "Remboursé",
-        totalCommande: 32.0,
-        dateCommande: "2021-10-05",
-    },
-    {
-        _id: "5",
-        idClient: "5",
-        reference: "CMD-2025-0005",
-        statutCommande: "Remboursée",
-        statutPaiement: "Refusé",
-        totalCommande: 32.0,
-        dateCommande: "2023-02-19",
-    },
-    {
-        _id: "6",
-        idClient: "6",
-        reference: "CMD-2025-0006",
-        statutCommande: "Livrée",
-        statutPaiement: "Payé",
-        totalCommande: 89.5,
-        dateCommande: "2022-08-30",
-    },
-    {
-        _id: "7",
-        idClient: "7",
-        reference: "CMD-2025-0007",
-        statutCommande: "Livrée",
-        statutPaiement: "Payé",
-        totalCommande: 79.0,
-        dateCommande: "2024-04-23",
-    },
-    {
-        _id: "8",
-        idClient: "8",
-        reference: "CMD-2025-0008",
-        statutCommande: "Expédiée",
-        statutPaiement: "En attente",
-        totalCommande: 89.5,
-        dateCommande: "2020-11-14",
-    },
-    {
-        _id: "9",
-        idClient: "9",
-        reference: "CMD-2025-0009",
-        statutCommande: "Annulée",
-        statutPaiement: "Remboursé",
-        totalCommande: 89.5,
-        dateCommande: "2023-07-06",
-    },
-    {
-        _id: "10",
-        idClient: "10",
-        reference: "CMD-2025-0010",
-        statutCommande: "Expédiée",
-        statutPaiement: "En attente",
-        totalCommande: 120.9,
-        dateCommande: "2021-12-31",
-    },
-    {
-        _id: "11",
-        idClient: "11",
-        reference: "CMD-2025-0011",
-        statutCommande: "Livrée",
-        statutPaiement: "Payé",
-        totalCommande: 89.5,
-        dateCommande: "2024-08-10",
-    },
-];
-
-export default function ArticlesPage() {
+export default function CommandesTable() {
     const router = useRouter();
 
-    const [commandes, setCommandes] = useState(FAKE_COMMANDES);
-    const [loading, setLoading] = useState(false);
+    const [commandes, setCommandes] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const [searchTerm, setSearchTerm] = useState("");
     const [filterStatutCommande, setFilterStatutCommande] = useState("all");
@@ -145,24 +43,51 @@ export default function ArticlesPage() {
     const [selectedId, setSelectedId] = useState(null);
     const [loadingDelete, setLoadingDelete] = useState(false);
 
+    // Récupérer les commandes au chargement
+    useEffect(() => {
+        fetchCommandes();
+    }, []);
+
+    const fetchCommandes = async () => {
+        try {
+            setLoading(true);
+            const data = await orderService.getAllOrders();
+            setCommandes(data);
+        } catch (error) {
+            console.error("Erreur lors du chargement des commandes:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Calculer le total de la commande
+    const calculateTotal = (order) => {
+        if (!order.articles || order.articles.length === 0) return 0;
+        const articlesTotal = order.articles.reduce((sum, item) => {
+            return sum + (item.quantity * (item.article?.price || 0));
+        }, 0);
+        return articlesTotal + (order.livraisonPrice || 0);
+    };
+
     // Filtrage des commandes
     const filteredCommandes = commandes
         .filter((cmd) => {
             const matchSearch =
                 !searchTerm ||
-                cmd.reference.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                cmd.idClient.toLowerCase().includes(searchTerm.toLowerCase());
+                cmd.commandeId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                cmd.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                cmd.email?.toLowerCase().includes(searchTerm.toLowerCase());
             const matchStatutCmd =
                 filterStatutCommande === "all" ||
-                cmd.statutCommande === filterStatutCommande;
+                cmd.statusCommande === filterStatutCommande;
             const matchStatutPay =
                 filterStatutPaiement === "all" ||
-                cmd.statutPaiement === filterStatutPaiement;
+                cmd.paimentStatus === filterStatutPaiement;
             return matchSearch && matchStatutCmd && matchStatutPay;
         })
         .sort((a, b) => {
-            const dateA = new Date(a.dateCommande);
-            const dateB = new Date(b.dateCommande);
+            const dateA = new Date(a.createdAt);
+            const dateB = new Date(b.createdAt);
             return sortOrder === "desc" ? dateB - dateA : dateA - dateB;
         });
 
@@ -178,15 +103,20 @@ export default function ArticlesPage() {
         setIsModalOpen(true);
     };
 
-    const handleConfirmDelete = () => {
+    const handleConfirmDelete = async () => {
         if (!selectedId) return;
-        setLoadingDelete(true);
-        setTimeout(() => {
+        try {
+            setLoadingDelete(true);
+            await orderService.deleteOrder(selectedId);
             setCommandes(commandes.filter((cmd) => cmd._id !== selectedId));
-            setLoadingDelete(false);
             setIsModalOpen(false);
             setSelectedId(null);
-        }, 500);
+        } catch (error) {
+            console.error("Erreur lors de la suppression:", error);
+            alert("Erreur lors de la suppression de la commande");
+        } finally {
+            setLoadingDelete(false);
+        }
     };
 
     const handleEdit = (commande) => {
@@ -199,16 +129,12 @@ export default function ArticlesPage() {
 
     const getStatutCommandeBadgeClass = (statut) => {
         switch (statut) {
-            case "Expédiée":
-                return "bg-blue-500 text-white";
+            case "En attente":
+                return "bg-orange-400 text-white";
             case "Livrée":
                 return "bg-green-500 text-white";
-            case "En attente":
-                return "bg-gray-400 text-white";
             case "Annulée":
-                return "bg-gray-600 text-white";
-            case "Remboursée":
-                return "bg-purple-500 text-white";
+                return "bg-red-500 text-white";
             default:
                 return "bg-gray-300 text-gray-700";
         }
@@ -216,13 +142,13 @@ export default function ArticlesPage() {
 
     const getStatutPaiementBadgeClass = (statut) => {
         switch (statut) {
-            case "Payé":
+            case "Payée":
                 return "bg-green-500 text-white";
             case "En attente":
                 return "bg-orange-400 text-white";
-            case "Refusé":
+            case "Réfusée":
                 return "bg-red-500 text-white";
-            case "Remboursé":
+            case "Remboursée":
                 return "bg-purple-500 text-white";
             default:
                 return "bg-gray-300 text-gray-700";
@@ -232,12 +158,12 @@ export default function ArticlesPage() {
     return (
         <div>
             <div
-                className={`min-h-screen bg-white transition-all duration-300 ${isModalOpen ? "blur-sm" : ""
-                    }`}
+                className={`min-h-screen bg-white transition-all duration-300 ${
+                    isModalOpen ? "blur-sm" : ""
+                }`}
             >
-                {/* HEADER : breadcrumb + filtres + recherche */}
+                {/* HEADER */}
                 <div className="px-8 pt-4 pb-2 flex flex-col gap-4">
-                    {/* Breadcrumb + recherche */}
                     <div className="flex items-center justify-between">
                         <div className="text-sm text-gray-600">
                             <a href="/dashboard" className="hover:text-[#5B1E8C]">
@@ -262,10 +188,8 @@ export default function ArticlesPage() {
                         </div>
                     </div>
 
-                    {/* 3 boutons filtres style “pill” */}
+                    {/* Filtres */}
                     <div className="flex items-center gap-4">
-
-                        {/* ---------- Filtre Référence ---------- */}
                         <div className="w-[150px]">
                             <Select
                                 value={filterStatutCommande}
@@ -279,22 +203,18 @@ export default function ArticlesPage() {
                                         <span className="w-5 h-5 rounded-full bg-[#F5F1FF] flex items-center justify-center">
                                             <FiTruck className="w-3 h-3 text-[#5B1E8C]" />
                                         </span>
-                                        <SelectValue placeholder="Référence" />
+                                        <SelectValue placeholder="Statut commande" />
                                     </div>
                                 </SelectTrigger>
-
                                 <SelectContent className="rounded-2xl">
                                     <SelectItem value="all">Tous</SelectItem>
-                                    <SelectItem value="Expédiée">Expédiée</SelectItem>
-                                    <SelectItem value="Livrée">Livrée</SelectItem>
                                     <SelectItem value="En attente">En attente</SelectItem>
+                                    <SelectItem value="Livrée">Livrée</SelectItem>
                                     <SelectItem value="Annulée">Annulée</SelectItem>
-                                    <SelectItem value="Remboursée">Remboursée</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
 
-                        {/* ---------- Filtre Statut Paiement ---------- */}
                         <div className="w-[150px]">
                             <Select
                                 value={filterStatutPaiement}
@@ -308,21 +228,19 @@ export default function ArticlesPage() {
                                         <span className="w-5 h-5 rounded-full bg-[#F5F1FF] flex items-center justify-center">
                                             <FiAward className="w-3 h-3 text-[#5B1E8C]" />
                                         </span>
-                                        <SelectValue placeholder="Statut" />
+                                        <SelectValue placeholder="Statut paiement" />
                                     </div>
                                 </SelectTrigger>
-
                                 <SelectContent className="rounded-2xl">
                                     <SelectItem value="all">Tous</SelectItem>
-                                    <SelectItem value="Payé">Payé</SelectItem>
+                                    <SelectItem value="Payée">Payée</SelectItem>
                                     <SelectItem value="En attente">En attente</SelectItem>
-                                    <SelectItem value="Refusé">Refusé</SelectItem>
-                                    <SelectItem value="Remboursé">Remboursé</SelectItem>
+                                    <SelectItem value="Réfusée">Réfusée</SelectItem>
+                                    <SelectItem value="Remboursée">Remboursée</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
 
-                        {/* ---------- Filtre Date ---------- */}
                         <div className="w-[150px]">
                             <Select
                                 value={sortOrder}
@@ -339,30 +257,26 @@ export default function ArticlesPage() {
                                         <SelectValue placeholder="Date" />
                                     </div>
                                 </SelectTrigger>
-
                                 <SelectContent className="rounded-2xl">
                                     <SelectItem value="desc">Plus récent</SelectItem>
                                     <SelectItem value="asc">Plus ancien</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
-
                     </div>
                 </div>
 
-
-                {/* Main : table + pagination */}
+                {/* Table */}
                 <main className="px-8 py-4">
-                    {/* Table */}
                     <div className="bg-white rounded-lg border border-secondary-700/20 overflow-hidden">
                         <Table>
                             <TableHeader className="bg-primary-500">
                                 <TableRow>
                                     <TableHead className="text-white font-semibold">
-                                        ID commande
+                                        Référence
                                     </TableHead>
                                     <TableHead className="text-white font-semibold">
-                                        Référence
+                                        Client
                                     </TableHead>
                                     <TableHead className="text-white font-semibold">
                                         Statut commande
@@ -371,7 +285,7 @@ export default function ArticlesPage() {
                                         Statut paiement
                                     </TableHead>
                                     <TableHead className="text-white font-semibold">
-                                        Total commande
+                                        Total
                                     </TableHead>
                                     <TableHead className="text-white font-semibold">
                                         Date
@@ -383,7 +297,7 @@ export default function ArticlesPage() {
                             </TableHeader>
                             <TableBody>
                                 {loading ? (
-                                    <TableRow key="loading">
+                                    <TableRow>
                                         <TableCell colSpan={7} className="text-center py-12">
                                             <div className="flex flex-col items-center justify-center gap-4">
                                                 <div className="w-12 h-12 border-4 border-primary-300 border-t-primary-500 rounded-full animate-spin"></div>
@@ -394,7 +308,7 @@ export default function ArticlesPage() {
                                         </TableCell>
                                     </TableRow>
                                 ) : paginatedCommandes.length === 0 ? (
-                                    <TableRow key="no-commandes">
+                                    <TableRow>
                                         <TableCell colSpan={7} className="text-center py-12">
                                             <div className="flex flex-col items-center justify-center gap-4">
                                                 <p className="text-gray-500 font-semibold">
@@ -404,8 +318,7 @@ export default function ArticlesPage() {
                                                     onClick={handleAddNew}
                                                     className="bg-primary-300 hover:bg-primary-500 text-white rounded-full px-6 py-2"
                                                 >
-                                                    <Plus className="w-4 h-4 mr-2" /> Ajouter une
-                                                    commande
+                                                    <Plus className="w-4 h-4 mr-2" /> Ajouter une commande
                                                 </Button>
                                             </div>
                                         </TableCell>
@@ -414,49 +327,46 @@ export default function ArticlesPage() {
                                     paginatedCommandes.map((item, index) => (
                                         <TableRow
                                             key={item._id}
-                                            className={`${index % 2 === 0 ? "bg-white" : "bg-primary-300/10"
-                                                } hover:bg-primary-300/20`}
+                                            className={`${
+                                                index % 2 === 0 ? "bg-white" : "bg-primary-300/10"
+                                            } hover:bg-primary-300/20`}
                                         >
                                             <TableCell className="font-medium">
-                                                {item.idClient || "N/A"}
+                                                {item.commandeId || "N/A"}
                                             </TableCell>
-                                            <TableCell>{item.reference || "N/A"}</TableCell>
+                                            <TableCell>
+                                                {item.name} {item.lastName}
+                                            </TableCell>
                                             <TableCell>
                                                 <Badge
                                                     className={getStatutCommandeBadgeClass(
-                                                        item.statutCommande
+                                                        item.statusCommande
                                                     )}
                                                 >
-                                                    {item.statutCommande || "Inconnu"}
+                                                    {item.statusCommande}
                                                 </Badge>
                                             </TableCell>
                                             <TableCell>
                                                 <Badge
                                                     className={getStatutPaiementBadgeClass(
-                                                        item.statutPaiement
+                                                        item.paimentStatus
                                                     )}
                                                 >
-                                                    {item.statutPaiement || "Inconnu"}
+                                                    {item.paimentStatus}
                                                 </Badge>
                                             </TableCell>
                                             <TableCell>
-                                                {item.totalCommande
-                                                    ? `${parseFloat(
-                                                        item.totalCommande
-                                                    ).toFixed(2)} TND`
-                                                    : "N/A"}
+                                                {calculateTotal(item).toFixed(2)} TND
                                             </TableCell>
                                             <TableCell>
-                                                {item.dateCommande
-                                                    ? new Date(item.dateCommande).toLocaleDateString(
-                                                        "fr-FR",
-                                                        {
-                                                            year: "numeric",
-                                                            month: "long",
-                                                            day: "numeric",
-                                                        }
-                                                    )
-                                                    : "N/A"}
+                                                {new Date(item.createdAt).toLocaleDateString(
+                                                    "fr-FR",
+                                                    {
+                                                        year: "numeric",
+                                                        month: "long",
+                                                        day: "numeric",
+                                                    }
+                                                )}
                                             </TableCell>
                                             <TableCell>
                                                 <div className="flex items-center justify-center gap-3">
@@ -522,48 +432,39 @@ export default function ArticlesPage() {
                                 <Button
                                     variant="outline"
                                     size="sm"
-                                    onClick={() =>
-                                        setCurrentPage((p) => Math.max(1, p - 1))
-                                    }
+                                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                                     disabled={currentPage === 1}
                                 >
                                     ‹
                                 </Button>
-                                {Array.from(
-                                    { length: Math.min(5, totalPages) },
-                                    (_, i) => {
-                                        const pageNum =
-                                            currentPage <= 3
-                                                ? i + 1
-                                                : currentPage > totalPages - 3
-                                                    ? totalPages - 4 + i
-                                                    : currentPage - 2 + i;
-                                        if (pageNum < 1 || pageNum > totalPages) return null;
-                                        return (
-                                            <Button
-                                                key={pageNum}
-                                                variant={
-                                                    currentPage === pageNum ? "default" : "outline"
-                                                }
-                                                size="sm"
-                                                onClick={() => setCurrentPage(pageNum)}
-                                                className={
-                                                    currentPage === pageNum
-                                                        ? "bg-primary-500 text-white rounded-full"
-                                                        : "rounded-full"
-                                                }
-                                            >
-                                                {pageNum}
-                                            </Button>
-                                        );
-                                    }
-                                )}
+                                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                                    const pageNum =
+                                        currentPage <= 3
+                                            ? i + 1
+                                            : currentPage > totalPages - 3
+                                            ? totalPages - 4 + i
+                                            : currentPage - 2 + i;
+                                    if (pageNum < 1 || pageNum > totalPages) return null;
+                                    return (
+                                        <Button
+                                            key={pageNum}
+                                            variant={currentPage === pageNum ? "default" : "outline"}
+                                            size="sm"
+                                            onClick={() => setCurrentPage(pageNum)}
+                                            className={
+                                                currentPage === pageNum
+                                                    ? "bg-primary-500 text-white rounded-full"
+                                                    : "rounded-full"
+                                            }
+                                        >
+                                            {pageNum}
+                                        </Button>
+                                    );
+                                })}
                                 <Button
                                     variant="outline"
                                     size="sm"
-                                    onClick={() =>
-                                        setCurrentPage((p) => Math.min(totalPages, p + 1))
-                                    }
+                                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                                     disabled={currentPage === totalPages}
                                 >
                                     ›
