@@ -70,7 +70,7 @@ export default function BookPage() {
             quality={90}
           />
         </div>
-        <div className="absolute inset-0 z-[1] bg-gradient-to-r from-white/70 via-white/0 to-[var(--color-primary-300)]/50" />
+        <div className="absolute inset-0 z-1 bg-linear-to-r from-white/70 via-white/0 to-primary-300/50" />
         <div className="relative z-10 container w-full">
           <CardDetail article={article} />
 
@@ -84,7 +84,7 @@ export default function BookPage() {
             </div>
 
             {/* Quantity Order Box */}
-            <div className="flex justify-center sm:justify-end flex-shrink-0">
+            <div className="flex justify-center sm:justify-end shrink-0">
               <QuantityOrder handleCommander={handleCommander} article={article} />
             </div>
           </div>

@@ -4,6 +4,15 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { IoChevronBack, IoChevronForward, IoClose } from "react-icons/io5";
 import { FaPlay, FaPause, FaVolumeUp } from "react-icons/fa";
+import dynamic from "next/dynamic";
+import "react-pdf/dist/Page/AnnotationLayer.css";
+import "react-pdf/dist/Page/TextLayer.css";
+
+// Dynamically import PdfFlipBook to avoid SSR issues
+const PdfFlipBook = dynamic(() => import("./PdfFlipBook"), {
+  ssr: false,
+  loading: () => <div className="text-white">Chargement du PDF...</div>,
+});
 
 export default function CardDetail({ article }) {
   // Safe destructure with defaults
@@ -23,6 +32,7 @@ export default function CardDetail({ article }) {
     originalPrice = null,
     stock = 0,
     objectives = "No objectives provided",
+    pdfExtrait = null, // PDF URL
   } = article || {};
 
   // Ensure images array always has at least the cover
@@ -42,6 +52,7 @@ export default function CardDetail({ article }) {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  
   const utteranceRef = useRef(null);
   const timerRef = useRef(null);
 
@@ -136,6 +147,7 @@ export default function CardDetail({ article }) {
     document.body.style.overflow = "unset";
   };
 
+
   if (!article) {
     return (
       <div className="bg-white rounded-xl shadow-md w-full max-w-xl mx-auto p-6 text-center text-gray-500">
@@ -151,7 +163,7 @@ export default function CardDetail({ article }) {
           {/* Cover photo */}
           <div className="flex flex-col items-center justify-center w-full h-full">
             <div
-              className="relative w-56 md:w-64 lg:w-72 aspect-[2/3] max-h-[80vh] overflow-hidden rounded-xl shadow-md border border-primary-300/40 cursor-pointer"
+              className="relative w-56 md:w-64 lg:w-72 aspect-2/3 max-h-[80vh] overflow-hidden rounded-xl shadow-md border border-primary-300/40 cursor-pointer"
               onClick={openModal}
             >
               <Image
@@ -186,58 +198,55 @@ export default function CardDetail({ article }) {
             </div>
 
             <div className="space-y-1.5 lg:space-y-2">
-                <h3 className="text-base lg:text-lg font-semibold text-primary-300">
-                  Présentation et Résumé
-                </h3>
-                  <p className="text-xs md:text-sm text-secondary-700 leading-relaxed">
+              <h3 className="text-base lg:text-lg font-semibold text-primary-300">
+                Présentation et Résumé
+              </h3>
+              <p className="text-xs md:text-sm text-secondary-700 leading-relaxed">
                 {description}
               </p>
-                {/* Compact Audio Player */}
-                <div className="inline-flex items-center gap-2 bg-gray-100 rounded-full px-3 py-1.5 shadow-sm">
-                  {/* Play/Pause Button */}
-                  <button
-                    type="button"
-                    onClick={isSpeaking ? stopSpeech : speakText}
-                    className="w-8 h-8 rounded-full bg-purple-600 hover:bg-purple-700 text-white shadow-md transition-all duration-200 flex items-center justify-center flex-shrink-0"
-                    aria-label={isSpeaking ? "Arrêter la lecture" : "Écouter le texte"}
-                  >
-                    {isSpeaking ? (
-                      <FaPause className="w-3 h-3" />
-                    ) : (
-                      <FaPlay className="w-3 h-3 ml-0.5" />
-                    )}
-                  </button>
+              {/* Compact Audio Player */}
+              <div className="inline-flex items-center gap-2 bg-gray-100 rounded-full px-3 py-1.5 shadow-sm">
+                {/* Play/Pause Button */}
+                <button
+                  type="button"
+                  onClick={isSpeaking ? stopSpeech : speakText}
+                  className="w-8 h-8 rounded-full bg-purple-600 hover:bg-purple-700 text-white shadow-md transition-all duration-200 flex items-center justify-center shrink-0"
+                  aria-label={isSpeaking ? "Arrêter la lecture" : "Écouter le texte"}
+                >
+                  {isSpeaking ? (
+                    <FaPause className="w-3 h-3" />
+                  ) : (
+                    <FaPlay className="w-3 h-3 ml-0.5" />
+                  )}
+                </button>
 
-                  {/* Waveform */}
-                  <div className="flex items-center gap-0.5 h-5">
-                    {[...Array(15)].map((_, i) => (
-                      <div
-                        key={i}
-                        className={`w-0.5 bg-gray-800 rounded-full transition-all duration-150 ${
-                          isSpeaking ? "animate-pulse" : ""
-                        }`}
-                        style={{
-                          height: isSpeaking
-                            ? `${Math.random() * 60 + 40}%`
-                            : "30%",
-                          animationDelay: `${i * 0.05}s`,
-                          opacity: isSpeaking ? 0.8 : 0.4,
-                        }}
-                      />
-                    ))}
-                  </div>
-
-                  {/* Time */}
-                  <span className="text-xs font-medium text-gray-600 min-w-[2.5rem] text-right">
-                    {formatTime(isSpeaking ? currentTime : duration)}
-                  </span>
-
-                  {/* Volume Icon */}
-                  <FaVolumeUp className="w-4 h-4 text-gray-600 flex-shrink-0" />
+                {/* Waveform */}
+                <div className="flex items-center gap-0.5 h-5">
+                  {[...Array(15)].map((_, i) => (
+                    <div
+                      key={i}
+                      className={`w-0.5 bg-gray-800 rounded-full transition-all duration-150 ${
+                        isSpeaking ? "animate-pulse" : ""
+                      }`}
+                      style={{
+                        height: isSpeaking
+                          ? `${Math.random() * 60 + 40}%`
+                          : "30%",
+                        animationDelay: `${i * 0.05}s`,
+                        opacity: isSpeaking ? 0.8 : 0.4,
+                      }}
+                    />
+                  ))}
                 </div>
-              
 
-              
+                {/* Time */}
+                <span className="text-xs font-medium text-gray-600 min-w-10 text-right">
+                  {formatTime(isSpeaking ? currentTime : duration)}
+                </span>
+
+                {/* Volume Icon */}
+                <FaVolumeUp className="w-4 h-4 text-gray-600 shrink-0" />
+              </div>
 
               <h3 className="text-base lg:text-lg font-semibold text-primary-300">
                 Objectifs Pédagogiques
@@ -305,65 +314,78 @@ export default function CardDetail({ article }) {
         </div>
       </section>
 
-      {/* Zoom Modal */}
+      {/* Modal - PDF Flipbook or Image Zoom */}
       {isModalOpen && (
+  <div
+    className="fixed inset-0 bg-black/95 z-9999 flex items-center justify-center "
+    onClick={closeModal}
+  >
+    {/* Close button - also high z-index */}
+    <button
+      onClick={closeModal}
+      className="absolute  top-24 sm:top-18 right-2 bg-gray-200 hover:bg-white/20 text-black rounded-full p-2 transition-all duration-200 z-999"
+    >
+      <IoClose className="size-8" />
+    </button>
+
+    {pdfExtrait ? (
+      <PdfFlipBook
+        pdfExtrait={pdfExtrait}
+        cover={cover}
+        title={title}
+        author={author}
+        onClose={closeModal}
+      />
+    ) : (
+      <>
+        {images.length > 1 && (
+          <>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                prevImage();
+              }}
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white rounded-full p-4 transition-all z-[9999]"
+            >
+              <IoChevronBack className="size-8" />
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                nextImage();
+              }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white rounded-full p-4 transition-all z-[9999]"
+            >
+              <IoChevronForward className="size-8" />
+            </button>
+          </>
+        )}
+
         <div
-          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center animate-in fade-in duration-300"
-          onClick={closeModal}
+          className="relative w-[92vw] h-[92vh] max-w-7xl cursor-zoom-in"
+          onClick={(e) => e.stopPropagation()}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
         >
-          <button
-            onClick={closeModal}
-            className="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white rounded-full p-3 transition-all duration-200 z-50"
-          >
-            <IoClose className="size-6" />
-          </button>
-
-          {images.length > 1 && (
-            <>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  prevImage();
-                }}
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white rounded-full p-3 transition-all duration-200 z-50"
-              >
-                <IoChevronBack className="size-6" />
-              </button>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  nextImage();
-                }}
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white rounded-full p-3 transition-all duration-200 z-50"
-              >
-                <IoChevronForward className="size-6" />
-              </button>
-            </>
-          )}
-
-          <div
-            className="relative w-[90vw] h-[90vh] max-w-6xl cursor-zoom-in"
-            onClick={(e) => e.stopPropagation()}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-          >
-            <div className="relative w-full h-full overflow-hidden rounded-lg">
-              <Image
-                src={images[currentImageIndex]}
-                alt={`${title} - Image ${currentImageIndex + 1}`}
-                fill
-                className="object-contain transition-transform duration-500 ease-in-out"
-                style={{
-                  transform: isZoomed ? "scale(2.5)" : "scale(1)",
-                  transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
-                }}
-                sizes="90vw"
-                priority
-              />
-            </div>
+          <div className="relative w-full h-full overflow-hidden rounded-xl shadow-2xl">
+            <Image
+              src={images[currentImageIndex]}
+              alt={`${title} - Image ${currentImageIndex + 1}`}
+              fill
+              className="object-contain transition-transform duration-500 ease-out"
+              style={{
+                transform: isZoomed ? "scale(2.5)" : "scale(1)",
+                transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
+              }}
+              sizes="92vw"
+              priority
+            />
           </div>
         </div>
-      )}
+      </>
+    )}
+  </div>
+)}
     </>
   );
 }
