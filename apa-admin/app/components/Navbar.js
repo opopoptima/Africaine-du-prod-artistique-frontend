@@ -1,6 +1,4 @@
-"use client";
-
-import { Bell, Settings, User } from "lucide-react";
+"use client";;
 import { usePathname } from "next/navigation";
 
 export default function Navbar() {
@@ -44,18 +42,7 @@ export default function Navbar() {
           })}
         </nav>
 
-        {/* Icons */}
-        <div className="flex items-center gap-4">
-          <button className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors">
-            <Bell className="w-5 h-5 text-white" />
-          </button>
-          <button className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors">
-            <Settings className="w-5 h-5 text-white" />
-          </button>
-          <button className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center hover:bg-white/30 transition-colors">
-            <User className="w-5 h-5 text-white" />
-          </button>
-        </div>
+        
       </div>
     </header>
   );
