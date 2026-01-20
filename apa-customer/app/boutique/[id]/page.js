@@ -1,5 +1,5 @@
 'use client';
-import ContactSection from '@/app/components/ContactSection';
+import ContactSection from '../../components/ContactSection';
 import CardDetail from './CardDetails';
 import QuantityOrder from './QuantityOrder';
 import Image from "next/image";
@@ -8,7 +8,7 @@ import BookGallery from './BookGalery';
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ArticleService } from '@/app/services/articleService';
+import { ArticleService } from '../../services/articleService';
 export default function BookPage() {
   const params = useParams();
   const router = useRouter();

@@ -1,4 +1,4 @@
-import IconCard from "@/app/components/IconCard";
+import IconCard from "../components/IconCard";
 export default function MissionSection() {
   const cards = [
     {

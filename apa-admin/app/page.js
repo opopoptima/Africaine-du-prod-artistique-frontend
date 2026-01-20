@@ -5,8 +5,7 @@ export default function Page() {
     <div className="container mx-auto mt-8">
       
       <DashboardArticles />
-      {/*}
-      <ActualitesPage />*/}
+      
     </div>
   );
 }

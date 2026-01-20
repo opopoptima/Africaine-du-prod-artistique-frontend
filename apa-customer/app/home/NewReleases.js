@@ -1,8 +1,8 @@
-import { Button } from "@/app/components/ui/button";
-import { Badge } from "@/app/components/ui/badge";
-import { Card } from "@/app/components/ui/card";
+import { Button } from "../components/ui/button";
+import { Card } from "../components/ui/card";
 import { Heart, Eye } from "lucide-react";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/app/components/ui/carousel";
+import { Badge } from "../components/ui/badge";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../components/ui/carousel";
 
 const books = [
   { id: 1, image: "/images/NewReleases/BOOK1.png", title: "My Dearest Darkest", author: "By Gianna Berge", price: "$120.00", isBestseller: true },
