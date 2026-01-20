@@ -110,101 +110,96 @@ export default function ArticlesPage() {
   return (
     <div>
       <div className={`min-h-screen bg-white transition-all duration-300 ${isModalOpen ? "blur-sm" : ""}`}>
-        {/* Header */}
-       
+        {/* HEADER */}
+        <div className="px-8 pt-4 pb-2 flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-gray-600">
+              <a href="/dashboard" className="hover:text-[#5B1E8C]">Dashboard</a>
+              {" > "}
+              <span className="text-[#5B1E8C] font-semibold">Articles</span>
+            </div>
 
-        {/* Breadcrumb */}
-        <div className="px-8 py-4">
-          <div className="text-sm text-gray-600">
-            <a href="/dashboard" className="hover:text-primary-500">Dashboard</a>{" > "}
-            <a href="/articles" className="hover:text-primary-500">Articles</a>
-          </div>
-        </div>
-
-        {/* Main */}
-        <main className="px-8 py-6">
-          {/* Search */}
-          <div className="flex justify-end mb-6">
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-primary-300" />
+            <div className="relative w-72">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#B58AD9]" />
               <Input
                 type="text"
-                placeholder="Rechercher un livre..."
+                placeholder="Recherche"
                 value={searchTerm}
                 onChange={(e) => {
                   setSearchTerm(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="pl-12 pr-4 py-2.5 w-80 border-secondary-700/20 rounded-full text-primary-300 placeholder:text-primary-300/60"
+                className="pl-10 pr-4 py-2 h-9 w-full border-[#E0D5F5] rounded-full text-sm text-[#5B1E8C] placeholder:text-[#B58AD9]"
               />
             </div>
           </div>
 
-          {/* Filters + Add button */}
-          <div className="relative flex items-center justify-center mb-6 gap-4">
-            {/* Type */}
-            <Select value={filterType} onValueChange={(v) => { setFilterType(v); setCurrentPage(1); }}>
-              <SelectTrigger className="w-44 border-secondary-700/20 rounded-[28px] px-4 py-3 h-auto">
-                <SelectValue>
+          {/* Filtres */}
+          <div className="flex items-center gap-4">
+            <div className="w-[150px]">
+              <Select value={filterType} onValueChange={(v) => { setFilterType(v); setCurrentPage(1); }}>
+                <SelectTrigger className="w-full h-9 rounded-full border-[#E0D5F5] px-3 py-0 text-xs text-gray-700">
                   <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-primary-300/20 flex items-center justify-center">
-                      <FiBook className="w-3 h-3 text-primary-500" />
+                    <span className="w-5 h-5 rounded-full bg-[#F5F1FF] flex items-center justify-center">
+                      <FiBook className="w-3 h-3 text-[#5B1E8C]" />
                     </span>
-                    <span className="text-sm font-medium">{filterType === "all" ? "Type" : filterType}</span>
+                    <SelectValue placeholder="Type" />
                   </div>
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent className="rounded-2xl">
-                <SelectItem value="all">Tous</SelectItem>
-                <SelectItem value="Coloriage">Coloriage</SelectItem>
-              </SelectContent>
-            </Select>
+                </SelectTrigger>
+                <SelectContent className="rounded-2xl">
+                  <SelectItem value="all">Tous</SelectItem>
+                  <SelectItem value="Coloriage">Coloriage</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-            {/* Statut */}
-            <Select value={filterStatut} onValueChange={(v) => { setFilterStatut(v); setCurrentPage(1); }}>
-              <SelectTrigger className="w-44 border-secondary-700/20 rounded-[28px] px-4 py-3 h-auto">
-                <SelectValue>
+            <div className="w-[150px]">
+              <Select value={filterStatut} onValueChange={(v) => { setFilterStatut(v); setCurrentPage(1); }}>
+                <SelectTrigger className="w-full h-9 rounded-full border-[#E0D5F5] px-3 py-0 text-xs text-gray-700">
                   <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-primary-300/20 flex items-center justify-center">
-                      <FiAward className="w-3 h-3 text-primary-500" />
+                    <span className="w-5 h-5 rounded-full bg-[#F5F1FF] flex items-center justify-center">
+                      <FiAward className="w-3 h-3 text-[#5B1E8C]" />
                     </span>
-                    <span className="text-sm font-medium">{filterStatut === "all" ? "Statut" : filterStatut}</span>
+                    <SelectValue placeholder="Statut" />
                   </div>
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent className="rounded-2xl">
-                <SelectItem value="all">Tous</SelectItem>
-                <SelectItem value="En stock">En stock</SelectItem>
-                <SelectItem value="Rupture">Rupture</SelectItem>
-                <SelectItem value="Précommande">Précommande</SelectItem>
-              </SelectContent>
-            </Select>
+                </SelectTrigger>
+                <SelectContent className="rounded-2xl">
+                  <SelectItem value="all">Tous</SelectItem>
+                  <SelectItem value="En stock">En stock</SelectItem>
+                  <SelectItem value="Rupture">Rupture</SelectItem>
+                  <SelectItem value="Précommande">Précommande</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-            {/* Date */}
-            <Select value={sortOrder} onValueChange={(v) => { setSortOrder(v); setCurrentPage(1); }}>
-              <SelectTrigger className="w-44 border-secondary-700/20 rounded-[48px] px-4 py-3 h-auto">
-                <SelectValue>
+            <div className="w-[150px]">
+              <Select value={sortOrder} onValueChange={(v) => { setSortOrder(v); setCurrentPage(1); }}>
+                <SelectTrigger className="w-full h-9 rounded-full border-[#E0D5F5] px-3 py-0 text-xs text-gray-700">
                   <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-primary-300/20 flex items-center justify-center">
-                      <FiCalendar className="w-3 h-3 text-primary-500" />
+                    <span className="w-5 h-5 rounded-full bg-[#F5F1FF] flex items-center justify-center">
+                      <FiCalendar className="w-3 h-3 text-[#5B1E8C]" />
                     </span>
-                    <span className="text-sm font-medium">{sortOrder === "desc" ? "Plus récent" : "Plus ancien"}</span>
+                    <SelectValue placeholder="Date" />
                   </div>
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent className="rounded-2xl">
-                <SelectItem value="desc">Plus récent</SelectItem>
-                <SelectItem value="asc">Plus ancien</SelectItem>
-              </SelectContent>
-            </Select>
+                </SelectTrigger>
+                <SelectContent className="rounded-2xl">
+                  <SelectItem value="desc">Plus récent</SelectItem>
+                  <SelectItem value="asc">Plus ancien</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-            <div className="absolute right-0">
-              <Button onClick={handleAddNew} className="bg-primary-300 hover:bg-primary-500 text-white rounded-full px-10 py-4 font-semibold">
-                <Plus className="w-5 h-5 mr-2" />
-                Ajouter un article
+            <div className="ml-auto">
+              <Button onClick={handleAddNew} className="bg-primary-300 hover:bg-primary-500 text-white rounded-full px-6 py-2 font-semibold h-9">
+                <Plus className="w-4 h-4 mr-1" />
+                Ajouter
               </Button>
             </div>
           </div>
+        </div>
+
+        {/* Main */}
+        <main className="px-8 py-4">
 
           {/* Table */}
           <div className="bg-white rounded-lg border border-secondary-700/20 overflow-hidden">

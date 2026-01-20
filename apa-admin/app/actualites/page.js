@@ -22,6 +22,7 @@ import {
 import { Badge } from "@/app/components/badge";
 import { Search, Plus, Edit2, Trash2 } from "lucide-react";
 import { FiTag, FiAward, FiCalendar } from "react-icons/fi";
+import ConfirmDeleteModal from "./form/delete";
 
 export default function ActualitesPage() {
   const router = useRouter();
@@ -39,6 +40,9 @@ export default function ActualitesPage() {
   const [totalItems, setTotalItems] = useState(0);
 
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+  const [loadingDelete, setLoadingDelete] = useState(false);
 
   // 🔹 Fetch from backend with pagination
   useEffect(() => {
@@ -48,17 +52,25 @@ export default function ActualitesPage() {
   const fetchActualites = async () => {
     setLoading(true);
     try {
+      console.log("Fetching actualités...");
       const res = await fetch(
         `http://localhost:5000/api/news?page=${currentPage}&limit=${itemsPerPage}`
       );
+      
+      if (!res.ok) {
+        throw new Error(`Erreur HTTP: ${res.status}`);
+      }
+      
       const result = await res.json();
+      console.log("Actualités reçues:", result);
 
       setActualites(result.data || []);
       setFilteredActualites(result.data || []);
       setTotalPages(result.meta?.pages || 1);
       setTotalItems(result.meta?.total || 0);
     } catch (err) {
-      console.error("Erreur lors du chargement:", err);
+      console.error("Erreur détaillée lors du chargement:", err);
+      alert(`Erreur lors du chargement des actualités: ${err.message}`);
     } finally {
       setLoading(false);
     }
@@ -95,50 +107,38 @@ export default function ActualitesPage() {
 
     setFilteredActualites(filtered);
     setCurrentPage(1);
-  }, [searchTerm, filterReference, filterStatut, filterDate]);
+  }, [searchTerm, filterReference, filterStatut, filterDate, actualites]);
 
-  const handleDelete = async (id) => {
-    if (!confirm("Supprimer cette actualité ?")) return;
-    await fetch(`http://localhost:5000/api/news/${id}`, { method: "DELETE" });
-    fetchActualites();
+  const handleDeleteClick = (id) => {
+    setSelectedId(id);
+    setIsModalOpen(true);
   };
 
-
-  // Filter logic
-  useEffect(() => {
-    let filtered = actualites;
-
-    // Search filter
-    if (searchTerm) {
-      filtered = filtered.filter((item) =>
-        item.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.subtitle?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.content?.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    // Category filter
-    if (filterReference !== "all") {
-      filtered = filtered.filter((item) => item.category === filterReference);
-    }
-
-    // Status filter
-    if (filterStatut !== "all") {
-      filtered = filtered.filter((item) => item.status === filterStatut);
-    }
-
-    // Date filter
-    if (filterDate !== "all") {
-      filtered = [...filtered].sort((a, b) => {
-        const dateA = new Date(a.publicationDate || a.createdAt);
-        const dateB = new Date(b.publicationDate || b.createdAt);
-        return filterDate === "recent" ? dateB - dateA : dateA - dateB;
+  const handleConfirmDelete = async () => {
+    if (!selectedId) return;
+    setLoadingDelete(true);
+    try {
+      console.log("Suppression de l'actualité ID:", selectedId);
+      const response = await fetch(`http://localhost:5000/api/news/${selectedId}`, { 
+        method: "DELETE" 
       });
+      
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+      
+      console.log("Actualité supprimée avec succès");
+      fetchActualites();
+      setIsModalOpen(false);
+      setSelectedId(null);
+      alert("Actualité supprimée avec succès!");
+    } catch (err) {
+      console.error("Erreur détaillée lors de la suppression:", err);
+      alert(`Erreur lors de la suppression: ${err.message}`);
+    } finally {
+      setLoadingDelete(false);
     }
-
-    setFilteredActualites(filtered);
-    setCurrentPage(1); // Reset to first page when filters change
-  }, [searchTerm, filterReference, filterStatut, filterDate, actualites]);
+  };
 
   // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -146,7 +146,8 @@ export default function ActualitesPage() {
   const currentItems = filteredActualites.slice(indexOfFirstItem, indexOfLastItem);
 
   const handleEdit = (actualite) => {
-    router.push(`/dashboard/actualites/form?id=${actualite._id}`);
+    console.log("Édition de l'actualité:", actualite._id);
+    router.push(`/actualites/form?id=${actualite._id}`);
   };
 
   const handleAddNew = () => {
@@ -154,49 +155,69 @@ export default function ActualitesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header */}
-      
-      {/* Breadcrumb */}
-      <div className="px-8 py-4">
-        <div className="text-sm text-secondary-700">
-          Actualités
+    <div className="min-h-screen bg-white relative">
+      {/* Modal overlay - positioned absolutely to cover entire viewport */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center">
+          <ConfirmDeleteModal 
+            isOpen={isModalOpen}
+            onClose={() => {
+              setIsModalOpen(false);
+              setSelectedId(null);
+            }}
+            onConfirm={handleConfirmDelete}
+            loading={loadingDelete}
+          />
         </div>
-      </div>
+      )}
 
-      {/* Main Content */}
-      <main className="px-8 py-6">
-        {/* Search - Top row */}
-        <div className="flex justify-end mb-6">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-primary-300" />
-            <Input
-              type="text"
-              placeholder="Recherche"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-12 pr-4 py-2.5 w-80 border-secondary-700/20 rounded-full text-primary-300 placeholder:text-primary-300/60"
-            />
+      {/* Header */}
+      <div className="px-8 pt-4 pb-2 flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-gray-600">
+            <a href="/dashboard" className="hover:text-[#5B1E8C]">
+              Dashboard
+            </a>
+            {" > "}
+            <span className="text-[#5B1E8C] font-semibold">Actualités</span>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <Button 
+              onClick={handleAddNew}
+              className="bg-[#5B1E8C] hover:bg-[#4a1870] text-white rounded-full h-9 px-4 flex items-center gap-2"
+            >
+              <Plus className="w-4 h-4 cursor:pointer" />
+              Ajouter
+            </Button>
+            <div className="relative w-72">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#B58AD9]" />
+              <Input
+                type="text"
+                placeholder="Recherche"
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setCurrentPage(1);
+                }}
+                className="pl-10 pr-4 py-2 h-9 w-full border-[#E0D5F5] rounded-full text-sm text-[#5B1E8C] placeholder:text-[#B58AD9]"
+              />
+            </div>
           </div>
         </div>
 
-        {/* Filters & Add Button - Second row */}
-        <div className="relative flex items-center justify-center mb-6">
-          {/* Filters - Centered */}
-          <div className="flex items-center gap-4">
+        {/* Filters */}
+        <div className="flex items-center gap-4">
+          <div className="w-[150px]">
             {/* Reference Filter */}
             <Select value={filterReference} onValueChange={setFilterReference}>
-              <SelectTrigger className="w-40 border-secondary-700/20 rounded-[28px] px-4 py-3 h-auto">
-                <SelectValue>
-                  <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-primary-300/20 flex items-center justify-center">
-                      <FiTag className="w-3 h-3 text-primary-500" />
-                    </span>
-                    <span className="text-sm font-medium">
-                      {filterReference === "all" ? "Catégorie" : filterReference}
-                    </span>
-                  </div>
-                </SelectValue>
+              <SelectTrigger className="w-[150px] h-9 rounded-full border-[#E0D5F5] px-3 py-0 text-xs text-gray-700">
+                <div className="flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-[#F5F1FF] flex items-center justify-center">
+                    <FiTag className="w-3 h-3 text-[#5B1E8C]" />
+                  </span>
+                  <SelectValue placeholder="Catégorie" />
+                </div>
               </SelectTrigger>
               <SelectContent className="rounded-2xl">
                 <SelectItem value="all">Tous</SelectItem>
@@ -206,20 +227,18 @@ export default function ActualitesPage() {
                 <SelectItem value="Blog">Blog</SelectItem>
               </SelectContent>
             </Select>
+          </div>
 
+          <div className="w-[150px]">
             {/* Statut Filter */}
             <Select value={filterStatut} onValueChange={setFilterStatut}>
-              <SelectTrigger className="w-40 border-secondary-700/20 rounded-[28px] px-4 py-3 h-auto">
-                <SelectValue>
-                  <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-primary-300/20 flex items-center justify-center">
-                      <FiAward className="w-3 h-3 text-primary-500" />
-                    </span>
-                    <span className="text-sm font-medium">
-                      {filterStatut === "all" ? "Statut" : filterStatut}
-                    </span>
-                  </div>
-                </SelectValue>
+              <SelectTrigger className="w-[150px] h-9 rounded-full border-[#E0D5F5] px-3 py-0 text-xs text-gray-700">
+                <div className="flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-[#F5F1FF] flex items-center justify-center">
+                    <FiAward className="w-3 h-3 text-[#5B1E8C]" />
+                  </span>
+                  <SelectValue placeholder="Statut" />
+                </div>
               </SelectTrigger>
               <SelectContent className="rounded-2xl">
                 <SelectItem value="all">Tous</SelectItem>
@@ -228,20 +247,18 @@ export default function ActualitesPage() {
                 <SelectItem value="Brouillon">Brouillon</SelectItem>
               </SelectContent>
             </Select>
+          </div>
 
+          <div className="w-[150px]">
             {/* Date Filter */}
             <Select value={filterDate} onValueChange={setFilterDate}>
-              <SelectTrigger className="w-40 border-secondary-700/20 rounded-[48px] px-4 py-3 h-auto">
-                <SelectValue>
-                  <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-primary-300/20 flex items-center justify-center">
-                      <FiCalendar className="w-3 h-3 text-primary-500" />
-                    </span>
-                    <span className="text-sm font-medium">
-                      {filterDate === "all" ? "Date" : filterDate === "recent" ? "Plus récent" : "Plus ancien"}
-                    </span>
-                  </div>
-                </SelectValue>
+              <SelectTrigger className="w-[150px] h-9 rounded-full border-[#E0D5F5] px-3 py-0 text-xs text-gray-700">
+                <div className="flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-[#F5F1FF] flex items-center justify-center">
+                    <FiCalendar className="w-3 h-3 text-[#5B1E8C]" />
+                  </span>
+                  <SelectValue placeholder="Date" />
+                </div>
               </SelectTrigger>
               <SelectContent className="rounded-2xl">
                 <SelectItem value="all">Tous</SelectItem>
@@ -250,19 +267,11 @@ export default function ActualitesPage() {
               </SelectContent>
             </Select>
           </div>
-
-          {/* Add Button - Positioned Absolute Right */}
-          <div className="absolute right-0">
-            <Button 
-              onClick={handleAddNew}
-              className="bg-primary-300 hover:bg-primary-500 text-white rounded-full px-10 py-4 font-semibold"
-            >
-              <Plus className="w-5 h-5 mr-2" />
-              Ajouter une actualité
-            </Button>
-          </div>
         </div>
+      </div>
 
+      {/* Main Content */}
+      <main className="px-8 py-4">
         {/* Table */}
         <div className="bg-white rounded-lg border border-secondary-700/20 overflow-hidden">
           <Table>
@@ -290,16 +299,13 @@ export default function ActualitesPage() {
               ) : currentItems.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={7} className="text-center py-12">
-                    <div className="flex flex-col items-center justify-center gap-4">
-                      <p className="text-gray-500 font-semibold">Aucune actualité trouvée</p>
-                      <Button 
-                        onClick={handleAddNew}
-                        className="bg-primary-300 hover:bg-primary-500 text-white rounded-full px-6 py-2"
-                      >
-                        <Plus className="w-4 h-4 mr-2" />
-                        Ajouter une actualité
-                      </Button>
-                    </div>
+                    <p className="text-gray-500 font-semibold">Aucune actualité trouvée</p>
+                    <button 
+                      onClick={fetchActualites}
+                      className="mt-4 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600"
+                    >
+                      Recharger
+                    </button>
                   </TableCell>
                 </TableRow>
               ) : (
@@ -308,17 +314,18 @@ export default function ActualitesPage() {
                   key={item._id} 
                   className={`${index % 2 === 0 ? 'bg-white' : 'bg-primary-300/10'} hover:bg-primary-300/20`}
                 >
-                  <TableCell className="font-medium">ACT-2025-{item._id.slice(-3)}</TableCell>
+                  <TableCell className="font-medium">ACT-{new Date(item.publicationDate || item.createdAt).getFullYear()}-{item._id ? item._id.slice(-4) : "0000"}</TableCell>
                   <TableCell>{item.title || "Sans titre"}</TableCell>
                   <TableCell>{item.category || item.program || "Blog"}</TableCell>
                   <TableCell>
                     <Badge
-                      className={`
-                        ${item.status === "Publié" ? "bg-primary-300" : ""}
-                        ${item.status === "Archivé" ? "bg-secondary-700" : ""}
-                        ${item.status === "Brouillon" ? "border-primary-300 text-primary-300" : ""}
-                      `}
-                      variant={item.status === "Brouillon" ? "outline" : "default"}
+                      className={`px-3 py-1 rounded-full ${
+                        item.status === "Publié" ? "bg-green-500 text-white" :
+                        item.status === "Archivé" ? "bg-gray-500 text-white" :
+                        item.status === "Brouillon" ? "bg-orange-400 text-white" :
+                        "bg-blue-500 text-white"
+                      }`}
+                      variant="default"
                     >
                       {item.status || "Brouillon"}
                     </Badge>
@@ -344,12 +351,14 @@ export default function ActualitesPage() {
                       <button 
                         onClick={() => handleEdit(item)}
                         className="p-2 hover:bg-secondary-100/10 rounded transition-colors"
+                        title="Modifier"
                       >
                         <Edit2 className="w-4 h-4 text-secondary-700" />
                       </button>
                       <button
-                        onClick={() => handleDelete(item._id)}
+                        onClick={() => handleDeleteClick(item._id)}
                         className="p-2 hover:bg-secondary-100/10 rounded transition-colors"
+                        title="Supprimer"
                       >
                         <Trash2 className="w-4 h-4 text-red-500" />
                       </button>
@@ -378,7 +387,7 @@ export default function ActualitesPage() {
               </SelectContent>
             </Select>
             <span className="text-sm font-semibold text-primary-500 min-w-[100px]">
-              de {filteredActualites.length} rangées
+              {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, filteredActualites.length)} sur {filteredActualites.length} résultats
             </span>
           </div>
 
@@ -388,6 +397,7 @@ export default function ActualitesPage() {
               size="sm"
               onClick={() => setCurrentPage(1)}
               disabled={currentPage === 1}
+              className="rounded-full"
             >
               «
             </Button>
@@ -396,6 +406,7 @@ export default function ActualitesPage() {
               size="sm"
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
+              className="rounded-full"
             >
               ‹
             </Button>
@@ -424,6 +435,7 @@ export default function ActualitesPage() {
               size="sm"
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
+              className="rounded-full"
             >
               ›
             </Button>
@@ -432,6 +444,7 @@ export default function ActualitesPage() {
               size="sm"
               onClick={() => setCurrentPage(totalPages)}
               disabled={currentPage === totalPages}
+              className="rounded-full"
             >
               »
             </Button>
@@ -443,7 +456,7 @@ export default function ActualitesPage() {
       {/* Footer */}
       <footer className="bg-primary-300 mt-12 py-6 text-center">
         <p className="text-primary-500 font-semibold text-lg">
-          Centralisez la gestion des commandes pour une organisation optimale et un meilleur suivi opérationnel !
+          Centralisez la gestion des actualités pour une organisation optimale et un meilleur suivi opérationnel !
         </p>
       </footer>
     </div>

@@ -38,7 +38,7 @@ export default function ConfirmDeleteModal({ isOpen, onClose, onConfirm, loading
                     </div>
 
                     <h3 id="confirm-delete-title" className="text-xl font-semibold text-gray-900">
-                        Êtes-vous sûr de vouloir supprimer cet article ?
+                        Êtes-vous sûr de vouloir supprimer cet commande ?
                     </h3>
 
                     <div className="flex gap-4 w-full">
