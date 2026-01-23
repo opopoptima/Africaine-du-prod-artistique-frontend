@@ -24,5 +24,7 @@ export function BookModel(data) {
     pdfExtrait: data.pdfExtrait || null,
     printedFile: data.printedFile || null,
     technicalFile: data.technicalFile || null,
+    collection : data.collection || null,
+    objectives : data.objectives || null,
   };
 }

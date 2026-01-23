@@ -24,7 +24,7 @@ export default function BottomBanner() {
       <div className="relative z-10 mx-auto w-full flex flex-col md:flex-row justify-center items-center gap-5">
         
         <Link 
-            href="/articles"
+            href="/boutique"
             className="flex items-center justify-center p-5 bg-white/72 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1 w-70 md:max-w-md"
             >
             {/* Conteneur Icône */}
@@ -43,7 +43,7 @@ export default function BottomBanner() {
 
 
         <Link 
-          href="/evenements" 
+          href="/actualite" 
           // Fond clair, coin arrondi, ombre, effet de survol
           className="flex items-center justify-center p-5 bg-white/72 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1 w-70 md:max-w-md"
 

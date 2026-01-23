@@ -13,7 +13,7 @@ export default function AutresActu({ actu1, actu2 }) {
       </h2>
 
       {/* Grille sans text-center → le texte des cartes reste aligné à gauche */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-12">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-12">
         {actuList.map((actu) => (
           <ActualiteCard key={actu._id} actu={actu} />
         ))}

@@ -43,31 +43,39 @@ export const ArticleService = {
    * Returns: { article, relatedByCollection, relatedByLanguageOrType }
    ---------------------------------------- */
   getById: async (id) => {
-    const response = await apiClient.get(`/articles/${id}`);
-    // API returns: { success: true, data: { article, relatedByCollection, relatedByLanguageOrType } }
-    const articleData = response.data?.article || response.data;
-    const relatedByCollection = Array.isArray(response.data?.relatedByCollection) 
-      ? response.data.relatedByCollection 
-      : [];
-    const relatedByLanguageOrType = Array.isArray(response.data?.relatedByLanguageOrType) 
-      ? response.data.relatedByLanguageOrType 
-      : [];
-    // Normalize the main article
-    const normalizedArticle = BookModel(articleData.data.article);
+  const response = await apiClient.get(`/articles/${id}`);
 
-    // Normalize related articles
-    const normalizedRelatedByCollection = relatedByCollection.map((item) => BookModel(item));
-    const normalizedRelatedByLanguageOrType = relatedByLanguageOrType.map((item) => BookModel(item));
+  const payload = response.data;
 
-    return {
-      success: response.success ?? true,
-      data: {
-        article: normalizedArticle,
-        relatedByCollection: normalizedRelatedByCollection,
-        relatedByLanguageOrType: normalizedRelatedByLanguageOrType,
-      },
-    };
-  },
+  const article = payload?.data?.article;
+    const relatedByLanguageOrType = Array.isArray(payload?.data?.relatedByLanguageOrType)
+      ? payload.data.relatedByLanguageOrType
+      : [];
+
+    const relatedByCollection = Array.isArray(payload?.data?.relatedByCollection)
+      ? payload.data.relatedByCollection
+      : [];
+
+  // Normalize main article
+  const normalizedArticle = article ? BookModel(article) : null;
+
+  // Normalize related articles
+  const normalizedRelatedByLanguageOrType =
+    relatedByLanguageOrType.map((item) => BookModel(item));
+  // Normalize related articles
+  const normalizedRelatedByCollection =
+    relatedByCollection.map((item) => BookModel(item));
+
+  return {
+    success: payload?.success ?? true,
+    data: {
+      article: normalizedArticle,
+      relatedByLanguageOrType: normalizedRelatedByLanguageOrType,
+      relatedByCollection: normalizedRelatedByCollection,
+    },
+  };
+},
+
 
   /** ----------------------------------------
    * CREATE ARTICLE

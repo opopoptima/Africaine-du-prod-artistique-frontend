@@ -1,5 +1,4 @@
-"use client";
-
+"use client";;
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/app/components/input";
@@ -17,17 +16,14 @@ export default function ActualiteFormPage() {
     title: "",
     subtitle: "",
     category: "Blog",
-    publicationDate: {
-      year: new Date().getFullYear().toString(),
-      month: "",
-      day: "",
-      hour: "",
-      minute: "",
-    },
+    eventDate: "", // ← string for datetime-local
+    publicCible: "",
+    lieu: "",
+    theme: "",
     author: "Admin, Librairie",
     content: "",
     mediaInsertion: "",
-    excerpt: "",
+    description: "",
     mainImage: "",
     galleryImages: [],
     status: "Publié",
@@ -38,9 +34,7 @@ export default function ActualiteFormPage() {
   const [loadingForm, setLoadingForm] = useState(false);
   const [mainImagePreview, setMainImagePreview] = useState("");
   const [galleryPreviews, setGalleryPreviews] = useState([]);
-  const [apiTestResult, setApiTestResult] = useState(null);
 
-  // Fetch actualité data when in edit mode
   useEffect(() => {
     if (isEditMode && editId) {
       console.log("Mode édition activé pour ID:", editId);
@@ -48,160 +42,60 @@ export default function ActualiteFormPage() {
     }
   }, [editId]);
 
-  // Fonction pour tester l'API et voir la structure des données
-  const testApiConnection = async () => {
-    try {
-      console.log("Test de connexion à l'API...");
-      const response = await fetch(`http://localhost:5000/api/news/${editId}`);
-      const data = await response.json();
-      console.log("Données brutes de l'API:", data);
-      
-      setApiTestResult({
-        status: response.status,
-        data: data,
-        ok: response.ok
-      });
-      
-      // Afficher la structure des données dans la console
-      console.log("Structure des données:");
-      console.log("- title:", data.title);
-      console.log("- subtitle:", data.subtitle);
-      console.log("- category:", data.category);
-      console.log("- publicationDate:", data.publicationDate);
-      console.log("- content:", data.content?.substring(0, 50) + "...");
-      console.log("- author:", data.author);
-      console.log("- status:", data.status);
-      
-      return data;
-    } catch (error) {
-      console.error("Erreur lors du test API:", error);
-      setApiTestResult({
-        error: error.message,
-        ok: false
-      });
-      return null;
-    }
-  };
-
   const fetchActualite = async () => {
     setLoadingForm(true);
     try {
-      console.log(`Fetching actualité: http://localhost:5000/api/news/${editId}`);
       const response = await fetch(`http://localhost:5000/api/news/${editId}`);
       console.log("Response status:", response.status);
-      
+
       if (!response.ok) {
         throw new Error(`Erreur HTTP: ${response.status}`);
       }
-      
-      const data = await response.json();
-      console.log("Données complètes reçues:", data);
-      
-      // Vérifier si les données sont dans une propriété 'data'
-      const actualData = data.data || data;
-      console.log("Données à utiliser:", actualData);
 
-      // Parser la date de publication - gérer différents formats
-      let pubDate;
-      
-      if (actualData.publicationDate) {
-        console.log("Publication date raw:", actualData.publicationDate);
-        
-        // Si c'est un string ISO
-        if (typeof actualData.publicationDate === 'string') {
-          pubDate = new Date(actualData.publicationDate);
-          console.log("Parsed from ISO string:", pubDate);
+      const json = await response.json();
+      const actualData = json.data || json;
+
+      // Format eventDate for <input type="datetime-local">
+      let eventDateStr = "";
+      if (actualData.eventDate) {
+        const d = new Date(actualData.eventDate);
+        if (!isNaN(d.getTime())) {
+          eventDateStr = d.toISOString().slice(0, 16); // YYYY-MM-DDThh:mm
         }
-        // Si c'est un objet avec propriétés séparées
-        else if (actualData.publicationDate.year) {
-          console.log("Date from object:", actualData.publicationDate);
-          pubDate = new Date(
-            Number(actualData.publicationDate.year),
-            Number(actualData.publicationDate.month || 1) - 1,
-            Number(actualData.publicationDate.day || 1),
-            Number(actualData.publicationDate.hour || 0),
-            Number(actualData.publicationDate.minute || 0)
-          );
-        }
-        // Si c'est un timestamp
-        else {
-          pubDate = new Date(actualData.publicationDate);
-        }
-      } else {
-        pubDate = new Date();
       }
 
-      console.log("Date finalement utilisée:", pubDate);
-
-      // Formatter la date pour le formulaire
-      const formattedDate = {
-        year: String(pubDate.getFullYear()),
-        month: String(pubDate.getMonth() + 1).padStart(2, "0"),
-        day: String(pubDate.getDate()).padStart(2, "0"),
-        hour: String(pubDate.getHours()).padStart(2, "0"),
-        minute: String(pubDate.getMinutes()).padStart(2, "0"),
-      };
-
-      console.log("Date formatée:", formattedDate);
-
-      // Mettre à jour le formData
-      const updatedFormData = {
+      setFormData({
         title: actualData.title || "",
         subtitle: actualData.subtitle || "",
         category: actualData.category || "Blog",
-        publicationDate: formattedDate,
+        eventDate: eventDateStr,
+        publicCible: actualData.publicCible || "",
+        lieu: actualData.lieu || "",
+        theme: actualData.theme || "",
         author: actualData.author || "Admin, Librairie",
         content: actualData.content || "",
         mediaInsertion: actualData.mediaInsertion || "",
-        excerpt: actualData.excerpt || "",
+        description: actualData.description || "",
         mainImage: actualData.mainImage || "",
         galleryImages: actualData.galleryImages || [],
         status: actualData.status || "Publié",
-        featured: actualData.featured || false,
-      };
+        featured: !!actualData.featured,
+      });
 
-      console.log("FormData après mise à jour:", updatedFormData);
-      setFormData(updatedFormData);
-
-      // Mettre à jour les previews d'images
       if (actualData.mainImage) {
         console.log("Main image found:", actualData.mainImage);
         setMainImagePreview(actualData.mainImage);
       }
-      
+
       if (actualData.galleryImages?.length > 0) {
         console.log("Gallery images found:", actualData.galleryImages.length);
         setGalleryPreviews(actualData.galleryImages);
       }
 
       console.log("Formulaire rempli avec succès!");
-
     } catch (error) {
       console.error("Erreur détaillée lors du chargement:", error);
       alert(`Erreur lors du chargement de l'actualité: ${error.message}`);
-      
-      // Tenter de charger des données de test pour debug
-      console.log("Tentative de chargement de données de test...");
-      setFormData({
-        title: "Titre de test pour débogage",
-        subtitle: "Sous-titre de test",
-        category: "Blog",
-        publicationDate: {
-          year: "2025",
-          month: "01",
-          day: "20",
-          hour: "17",
-          minute: "50",
-        },
-        author: "Admin, Librairie",
-        content: "Contenu de test...",
-        mediaInsertion: "",
-        excerpt: "Extrait de test",
-        mainImage: "",
-        galleryImages: [],
-        status: "Publié",
-        featured: false,
-      });
     } finally {
       setLoadingForm(false);
     }
@@ -212,49 +106,38 @@ export default function ActualiteFormPage() {
     setLoading(true);
 
     try {
-      const { year, month, day, hour, minute } = formData.publicationDate;
-
-      // Validation et création de la date
-      const pubYear = Number(year) || new Date().getFullYear();
-      const pubMonth = Number(month || 1) - 1;
-      const pubDay = Number(day || 1);
-      const pubHour = Number(hour || 0);
-      const pubMinute = Number(minute || 0);
-
-      const publicationDate = new Date(pubYear, pubMonth, pubDay, pubHour, pubMinute);
-      
-      console.log("Date à envoyer:", publicationDate.toISOString());
-
       const payload = {
         title: formData.title,
         subtitle: formData.subtitle,
         category: formData.category,
-        publicationDate: publicationDate.toISOString(),
+        eventDate: formData.eventDate || undefined, // ← will default in schema
+        lieu: formData.lieu,
+        publicCible: formData.publicCible,
+        theme: formData.theme,
         author: formData.author,
         content: formData.content,
         mediaInsertion: formData.mediaInsertion,
-        excerpt: formData.excerpt,
+        description: formData.description,
         mainImage: formData.mainImage,
         galleryImages: formData.galleryImages,
         status: formData.status,
         featured: formData.featured,
       };
 
-      console.log("Payload final:", payload);
-
-      const url = isEditMode 
+      const url = isEditMode
         ? `http://localhost:5000/api/news/${editId}`
         : "http://localhost:5000/api/news";
 
       const method = isEditMode ? "PUT" : "POST";
 
       console.log(`Envoi ${method} à ${url}`);
+      console.log("Payload envoyé:", payload);
 
       const res = await fetch(url, {
         method: method,
-        headers: { 
+        headers: {
           "Content-Type": "application/json",
-          "Accept": "application/json"
+          "Accept": "application/json",
         },
         body: JSON.stringify(payload),
       });
@@ -272,7 +155,6 @@ export default function ActualiteFormPage() {
         throw new Error(`Erreur ${res.status}: ${errorData.message || "Save failed"}`);
       }
 
-      // Essayer de parser la réponse JSON
       let result;
       try {
         result = JSON.parse(responseText);
@@ -285,7 +167,6 @@ export default function ActualiteFormPage() {
       alert(isEditMode ? "Actualité mise à jour avec succès!" : "Actualité créée avec succès!");
       router.push("/actualites");
       router.refresh();
-
     } catch (err) {
       console.error("Erreur lors de l'enregistrement:", err);
       alert(`Erreur lors de l'enregistrement: ${err.message}`);
@@ -321,20 +202,12 @@ export default function ActualiteFormPage() {
     });
   };
 
-  // Afficher un indicateur de chargement
   if (loadingForm && isEditMode) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-primary-300 border-t-primary-500 rounded-full animate-spin mx-auto"></div>
           <p className="mt-4 text-primary-500">Chargement de l'actualité...</p>
-          <p className="text-sm text-gray-500 mt-2">ID: {editId}</p>
-          <button
-            onClick={testApiConnection}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            Tester l'API manuellement
-          </button>
         </div>
       </div>
     );
@@ -435,108 +308,60 @@ export default function ActualiteFormPage() {
                 </div>
               </div>
 
-              {/* Date de publication */}
+              {/* Public Cible */}
               <div className="flex items-center gap-4">
                 <Label className="text-black w-48 text-left" style={{ fontFamily: 'Poppins', fontWeight: 500, fontSize: '14px', lineHeight: '100%' }}>
-                  Date de publication :
+                  Public Cible :
                 </Label>
-                <div className="flex-1 flex gap-2 items-end">
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-xs text-[#03151E]" style={{ lineHeight: '16px' }}>Année</span>
-                    <Input
-                      type="number"
-                      min="2020"
-                      max="2099"
-                      placeholder="AAAA"
-                      value={formData.publicationDate.year}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          publicationDate: { ...formData.publicationDate, year: e.target.value },
-                        })
-                      }
-                      className="w-[70px] h-[28px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)] px-2 text-center"
-                      style={{ fontSize: '12px' }}
-                      disabled={loading}
-                    />
-                  </div>
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-xs text-[#03151E]" style={{ lineHeight: '16px' }}>Mois</span>
-                    <Input
-                      type="number"
-                      min="1"
-                      max="12"
-                      placeholder="MM"
-                      value={formData.publicationDate.month}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          publicationDate: { ...formData.publicationDate, month: e.target.value },
-                        })
-                      }
-                      className="w-[70px] h-[28px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)] px-2 text-center"
-                      style={{ fontSize: '12px' }}
-                      disabled={loading}
-                    />
-                  </div>
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-xs text-[#03151E]" style={{ lineHeight: '16px' }}>Jour</span>
-                    <Input
-                      type="number"
-                      min="1"
-                      max="31"
-                      placeholder="JJ"
-                      value={formData.publicationDate.day}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          publicationDate: { ...formData.publicationDate, day: e.target.value },
-                        })
-                      }
-                      className="w-[70px] h-[28px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)] px-2 text-center"
-                      style={{ fontSize: '12px' }}
-                      disabled={loading}
-                    />
-                  </div>
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-xs text-[#03151E]" style={{ lineHeight: '16px' }}>Heure</span>
-                    <Input
-                      type="number"
-                      min="0"
-                      max="23"
-                      placeholder="HH"
-                      value={formData.publicationDate.hour}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          publicationDate: { ...formData.publicationDate, hour: e.target.value },
-                        })
-                      }
-                      className="w-[70px] h-[28px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)] px-2 text-center"
-                      style={{ fontSize: '12px' }}
-                      disabled={loading}
-                    />
-                  </div>
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-xs text-[#03151E]" style={{ lineHeight: '16px' }}>Minute</span>
-                    <Input
-                      type="number"
-                      min="0"
-                      max="59"
-                      placeholder="Mn"
-                      value={formData.publicationDate.minute}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          publicationDate: { ...formData.publicationDate, minute: e.target.value },
-                        })
-                      }
-                      className="w-[70px] h-[28px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)] px-2 text-center"
-                      style={{ fontSize: '12px' }}
-                      disabled={loading}
-                    />
-                  </div>
-                </div>
+                <Input
+                  value={formData.publicCible}
+                  onChange={(e) => setFormData({ ...formData, publicCible: e.target.value })}
+                  className="flex-1 h-[36px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)]"
+                  disabled={loading}
+                  placeholder="Entrez le public cible (optionnel)"
+                />
+              </div>
+
+              {/* Thèmes */}
+              <div className="flex items-center gap-4">
+                <Label className="text-black w-48 text-left" style={{ fontFamily: 'Poppins', fontWeight: 500, fontSize: '14px', lineHeight: '100%' }}>
+                  Thèmes :
+                </Label>
+                <Input
+                  value={formData.theme}
+                  onChange={(e) => setFormData({ ...formData, theme: e.target.value })}
+                  className="flex-1 h-[36px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)]"
+                  disabled={loading}
+                  placeholder="Entrez les thèmes (optionnel)"
+                />
+              </div>
+
+              {/* Lieu */}
+              <div className="flex items-center gap-4">
+                <Label className="text-black w-48 text-left" style={{ fontFamily: 'Poppins', fontWeight: 500, fontSize: '14px', lineHeight: '100%' }}>
+                  Lieu :
+                </Label>
+                <Input
+                  value={formData.lieu}
+                  onChange={(e) => setFormData({ ...formData, lieu: e.target.value })}
+                  className="flex-1 h-[36px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)]"
+                  disabled={loading}
+                  placeholder="Entrez le lieu"
+                />
+              </div>
+
+              {/* Date de l'événement */}
+              <div className="flex items-center gap-4">
+                <Label className="text-black w-48 text-left" style={{ fontFamily: 'Poppins', fontWeight: 500, fontSize: '14px', lineHeight: '100%' }}>
+                  Date de l'événement :
+                </Label>
+                <Input
+                  type="datetime-local"
+                  value={formData.eventDate}
+                  onChange={(e) => setFormData({ ...formData, eventDate: e.target.value })}
+                  className="flex-1 h-[36px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)]"
+                  disabled={loading}
+                />
               </div>
 
               {/* Auteur */}
@@ -562,6 +387,19 @@ export default function ActualiteFormPage() {
             </div>
 
             <div className="px-10 py-4 space-y-4">
+              {/* Description */}
+              <div className="flex items-center gap-4">
+                <Label className="text-black w-48 text-left" style={{ fontFamily: 'Poppins', fontWeight: 500, fontSize: '14px', lineHeight: '100%' }}>
+                  Description :
+                </Label>
+                <Input
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  className="flex-1 h-[36px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)]"
+                  disabled={loading}
+                  placeholder="Court extrait"
+                />
+              </div>
               {/* Corps de l'article */}
               <div className="flex gap-4">
                 <Label className="text-black w-48 text-left pt-2" style={{ fontFamily: 'Poppins', fontWeight: 500, fontSize: '14px', lineHeight: '100%' }}>
@@ -578,34 +416,9 @@ export default function ActualiteFormPage() {
                 />
               </div>
 
-              {/* Insertion média */}
-              <div className="flex items-center gap-4">
-                <Label className="text-black w-48 text-left" style={{ fontFamily: 'Poppins', fontWeight: 500, fontSize: '14px', lineHeight: '100%' }}>
-                  Insertion média :
-                </Label>
-                <Input
-                  value={formData.mediaInsertion}
-                  onChange={(e) => setFormData({ ...formData, mediaInsertion: e.target.value })}
-                  placeholder="(upload ou lien YouTube)"
-                  className="flex-1 h-[36px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)] placeholder:text-[#BBBBBB] text-sm"
-                  style={{ fontSize: '14px' }}
-                  disabled={loading}
-                />
-              </div>
+              
 
-              {/* Extrait */}
-              <div className="flex items-center gap-4">
-                <Label className="text-black w-48 text-left" style={{ fontFamily: 'Poppins', fontWeight: 500, fontSize: '14px', lineHeight: '100%' }}>
-                  Extrait (aperçu court) :
-                </Label>
-                <Input
-                  value={formData.excerpt}
-                  onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
-                  className="flex-1 h-[36px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)]"
-                  disabled={loading}
-                  placeholder="Court extrait qui apparaîtra dans les listes"
-                />
-              </div>
+              
             </div>
 
             {/* Médias et affichage */}

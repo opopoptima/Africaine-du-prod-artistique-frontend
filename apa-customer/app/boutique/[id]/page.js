@@ -1,4 +1,4 @@
-'use client';
+'use client';;
 import ContactSection from '../../components/ContactSection';
 import CardDetail from './CardDetails';
 import QuantityOrder from './QuantityOrder';
@@ -13,17 +13,24 @@ export default function BookPage() {
   const params = useParams();
   const router = useRouter();
   const [article, setArticle] = useState(null);
+  const [relatedByLanguage, setRelatedByLanguage] = useState([]);
+  const [relatedByCollection, setRelatedByCollection] = useState([]);
+
 
   useEffect(() => {
-    async function fetchArticle() {
-      if (!params.id) return;
-      console.log("Fetching article with ID:", params.id);
-      const data = await ArticleService.getById(params.id);
-      console.log(data.data.article);
-      setArticle(data.data.article);
-    }
-    fetchArticle();
-  }, [params.id]);
+  async function fetchArticle() {
+    if (!params.id) return;
+
+    const data = await ArticleService.getById(params.id);
+
+    setArticle(data.data.article);
+    setRelatedByLanguage(data.data.relatedByLanguageOrType || []);
+    setRelatedByCollection(data.data.relatedByCollection || []);
+  }
+
+  fetchArticle();
+}, [params.id]);
+
 
   const products = [
     {
@@ -92,50 +99,52 @@ export default function BookPage() {
       </section>
 
       {/* Similar articles */}
+      {relatedByCollection.length > 0 && (
       <div className="space-y-10 my-8">
         <h2 className="text-lg sm:text-xl md:text-4xl font-bold text-primary-500 leading-snug text-center">
           Articles similaires
         </h2>
-        {Array.from({ length: Math.ceil(products.length / 2) }).map((_, rowIndex) => (
-          <div className="flex gap-6" key={rowIndex}>
-            {products.slice(rowIndex * 2, rowIndex * 2 + 2).map((product) => (
-              <CardBoutique
-                key={product.id}
-                article={{
-                  id: product.id,
-                  title: product.title,
-                  description: product.description,
-                  cover: product.imageSrc,
-                  images: [product.imageSrc],
-                }}
-              />
-            ))}
-          </div>
-        ))}
-      </div>
+
+        {Array.from({ length: Math.ceil(relatedByCollection.length / 2) }).map(
+          (_, rowIndex) => (
+            <div className="flex gap-6" key={rowIndex}>
+              {relatedByCollection
+                .slice(rowIndex * 2, rowIndex * 2 + 2)
+                .map((item) => (
+                  <CardBoutique
+                    key={item.id}
+                    article={item}
+                  />
+                ))}
+            </div>
+          )
+        )}
+      </div>)}
 
       {/* Other language */}
-      <div className="space-y-10 my-8">
-        <h2 className="text-lg sm:text-xl md:text-4xl font-bold text-primary-500 leading-snug text-center">
-          Disponible dans une autre langue
-        </h2>
-        {Array.from({ length: Math.ceil(products.length / 2) }).map((_, rowIndex) => (
-          <div className="flex gap-6" key={rowIndex}>
-            {products.slice(rowIndex * 2, rowIndex * 2 + 2).map((product) => (
+{relatedByLanguage.length > 0 && (
+  <div className="space-y-10 my-8">
+    <h2 className="text-lg sm:text-xl md:text-4xl font-bold text-primary-500 leading-snug text-center">
+      Disponible dans une autre langue
+    </h2>
+
+    {Array.from({ length: Math.ceil(relatedByLanguage.length / 2) }).map(
+      (_, rowIndex) => (
+        <div className="flex gap-6" key={rowIndex}>
+          {relatedByLanguage
+            .slice(rowIndex * 2, rowIndex * 2 + 2)
+            .map((item) => (
               <CardBoutique
-                key={product.id}
-                article={{
-                  id: product.id,
-                  title: product.title,
-                  description: product.description,
-                  cover: product.imageSrc,
-                  images: [product.imageSrc],
-                }}
+                key={item.id}
+                article={item}
               />
             ))}
-          </div>
-        ))}
-      </div>
+        </div>
+      )
+    )}
+  </div>
+)}
+
 
       <ContactSection />
     </>

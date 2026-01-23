@@ -1,5 +1,4 @@
 import adminApiClient from "../lib/adminApiClient";
-
 import { BookModel } from "../models/BookModel";
 
 export const ArticleService = {
@@ -13,60 +12,57 @@ export const ArticleService = {
    * Example: /articles?page=1&limit=10&q=roman&type=roman&language=fr&sort=price:asc
    ---------------------------------------- */
   getAll: async ({
-  page = 1,
-  limit = 20,
-  q = "",
-  sort = "createdAt:desc",
-  filters = {},
-} = {}) => {
-  const params = { page, limit, q, sort, ...filters, t: Date.now() }; 
+    page = 1,
+    limit = 20,
+    q = "",
+    sort = "createdAt:desc",
+    filters = {},
+  } = {}) => {
+    const params = { page, limit, q, sort, ...filters, t: Date.now() };
 
-  const response = await adminApiClient.get("/articles", {
-    params,
-  });
+    const response = await adminApiClient.get("/articles", {
+      params,
+    });
 
-  const articles = Array.isArray(response.data?.data) ? response.data.data : [];
-  const meta = response.data?.meta || { total: 0, page: 1, limit: 20, pages: 0 };
+    const articles = Array.isArray(response.data?.data) ? response.data.data : [];
+    const meta = response.data?.meta || { total: 0, page: 1, limit: 20, pages: 0 };
 
-  const normalizedArticles = articles.map((item) => BookModel(item));
+    const normalizedArticles = articles.map((item) => BookModel(item));
 
-  return {
-    success: response.data?.success ?? true,
-    data: normalizedArticles,
-    meta,
-  };
-},
+    return {
+      success: response.data?.success ?? true,
+      data: normalizedArticles,
+      meta,
+    };
+  },
 
   /** ----------------------------------------
    * GET ARTICLE BY ID
    * GET /articles/:id
    * Returns: { article, relatedByCollection, relatedByLanguageOrType }
+   * NOTE: Returns RAW article data for edit form compatibility
    ---------------------------------------- */
   getById: async (id) => {
     const response = await adminApiClient.get(`/articles/${id}`);
 
-    // API returns: { success: true, data: { article, relatedByCollection, relatedByLanguageOrType } }
-    const articleData = response.data?.article || response.data;
-    const relatedByCollection = Array.isArray(response.data?.relatedByCollection) 
-      ? response.data.relatedByCollection 
+    // Extract data from nested structure
+    const responseData = response.data?.data || response.data;
+    const articleData = responseData?.article || responseData;
+    
+    const relatedByCollection = Array.isArray(responseData?.relatedByCollection)
+      ? responseData.relatedByCollection
       : [];
-    const relatedByLanguageOrType = Array.isArray(response.data?.relatedByLanguageOrType) 
-      ? response.data.relatedByLanguageOrType 
+    const relatedByLanguageOrType = Array.isArray(responseData?.relatedByLanguageOrType)
+      ? responseData.relatedByLanguageOrType
       : [];
 
-    // Normalize the main article
-    const normalizedArticle = BookModel(articleData);
-
-    // Normalize related articles
-    const normalizedRelatedByCollection = relatedByCollection.map((item) => BookModel(item));
-    const normalizedRelatedByLanguageOrType = relatedByLanguageOrType.map((item) => BookModel(item));
-
+    // Return RAW article data (do NOT normalize for edit form)
     return {
-      success: response.success ?? true,
+      success: response.data?.success ?? true,
       data: {
-        article: normalizedArticle,
-        relatedByCollection: normalizedRelatedByCollection,
-        relatedByLanguageOrType: normalizedRelatedByLanguageOrType,
+        article: articleData, // Keep original field names
+        relatedByCollection: relatedByCollection.map((item) => BookModel(item)),
+        relatedByLanguageOrType: relatedByLanguageOrType.map((item) => BookModel(item)),
       },
     };
   },
@@ -80,7 +76,8 @@ export const ArticleService = {
       headers: { "Content-Type": "multipart/form-data" },
     });
 
-    const normalizedArticle = BookModel(response.data);
+    const articleData = response.data?.data || response.data;
+    const normalizedArticle = BookModel(articleData);
     return { ...response, data: normalizedArticle };
   },
 
@@ -93,7 +90,8 @@ export const ArticleService = {
       headers: { "Content-Type": "multipart/form-data" },
     });
 
-    const normalizedArticle = BookModel(response.data);
+    const articleData = response.data?.data || response.data;
+    const normalizedArticle = BookModel(articleData);
     return { ...response, data: normalizedArticle };
   },
 
@@ -105,7 +103,4 @@ export const ArticleService = {
     const response = await adminApiClient.delete(`/articles/${id}`);
     return response;
   },
-
-
 };
-

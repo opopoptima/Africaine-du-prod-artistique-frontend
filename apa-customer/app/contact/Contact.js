@@ -1,40 +1,76 @@
 "use client";
-
+import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { Input } from "../components/ui/input";
-import { Textarea } from "../components/ui/textarea";
-import { Button } from "../components/ui/button";
-// Removed the import for RadioGroup and RadioGroupItem:
-// import { RadioGroup, RadioGroupItem } from "@/app/components/ui/radio-group";
+import emailjs from '@emailjs/browser';
 
 export default function ContactForm() {
-  const { handleSubmit, control } = useForm({
+  const [isLoading, setIsLoading] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
+
+  const { handleSubmit, control, reset } = useForm({
     defaultValues: {
       firstName: "",
       lastName: "",
       email: "",
-      type: "", // This will be handled by native <input type="radio">
       phone: "",
-      message: "",
-    },
+      message: ""
+    }
   });
 
-  const onSubmit = (data) => {
-    const subject = encodeURIComponent("Nouveau message depuis le site");
-    const body = encodeURIComponent(
-      `Prénom: ${data.firstName}
-Nom: ${data.lastName}
-Email: ${data.email}
-Type: ${data.type}
-Téléphone: ${data.phone}
-Message: ${data.message}`
-    );
+  // Initialiser EmailJS au chargement du composant
+  useEffect(() => {
+    emailjs.init("4Vjm15f1roGMNIgCG");
+  }, []);
 
-    window.location.href = `mailto:rais.asma99@gmail.com?subject=${subject}&body=${body}`;
+  const onSubmit = async (data) => {
+    setIsLoading(true);
+    setSubmitStatus(null);
+
+    try {
+
+      // Préparer les données pour EmailJS
+      const templateParams = {
+        from_name: `${data.firstName} ${data.lastName}`,
+        from_email: data.email,
+        phone: data.phone || "Non renseigné",
+        message: data.message,
+        to_email: "rais.asma99@gmail.com"
+      };
+
+      console.log("Envoi en cours avec les paramètres:", templateParams);
+
+      // Envoyer l'email
+      // ⚠️ IMPORTANT: Remplacez "VOTRE_TEMPLATE_ID" par votre vrai Template ID
+      // Trouvez-le ici: https://dashboard.emailjs.com/admin/templates
+      const response = await emailjs.send(
+        "service_lhdmnxn",
+        "template_lemklep", 
+        templateParams
+      );
+      
+      console.log("Réponse EmailJS:", response);
+      
+      if (response.status === 200) {
+        setSubmitStatus("success");
+        reset();
+      } else {
+        throw new Error(`Statut inattendu: ${response.status}`);
+      }
+      
+    } catch (error) {
+      console.error("Erreur détaillée:", {
+        message: error?.message || error?.text || "Erreur inconnue",
+        status: error?.status,
+        text: error?.text,
+        error: error
+      });
+      setSubmitStatus("error");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    // Styling remains the same
     <div className="w-auto max-w-5xl mx-4 md:mx-auto p-4 sm:p-6 md:p-8 bg-white rounded-xl shadow-primary-300 shadow-lg flex flex-col md:flex-row gap-6 md:gap-12 my-6 sm:my-8 md:my-10 lg:my-12">
       
       {/* Left: Form */}
@@ -44,147 +80,131 @@ Message: ${data.message}`
           Une question ? Un projet ? N'hésitez pas à nous écrire, nous serons ravis de vous répondre
         </p>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        {/* Messages de statut */}
+        {submitStatus === "success" && (
+          <div className="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+            ✅ Votre message a été envoyé avec succès !
+          </div>
+        )}
+        {submitStatus === "error" && (
+          <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+            ❌ Une erreur s'est produite. Veuillez réessayer ou nous contacter directement à omarchokri03@gmail.com
+          </div>
+        )}
 
-          {/* First & Last Name */}
+        <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Controller
               name="firstName"
               control={control}
-              render={({ field }) => (
-                <Input placeholder="Prénom" {...field} className="bg-gray-100" />
+              rules={{ required: "Le prénom est requis" }}
+              render={({ field, fieldState }) => (
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Prénom"
+                    {...field}
+                    className="flex h-10 w-full rounded-md border border-gray-300 bg-gray-100 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50"
+                    disabled={isLoading}
+                  />
+                  {fieldState.error && (
+                    <p className="text-red-500 text-xs mt-1">{fieldState.error.message}</p>
+                  )}
+                </div>
               )}
             />
-
             <Controller
               name="lastName"
               control={control}
-              render={({ field }) => (
-                <Input placeholder="Nom" {...field} className="bg-gray-100" />
-              )}
-            />
-          </div>
-
-          {/* Email */}
-          <Controller
-            name="email"
-            control={control}
-            render={({ field }) => (
-              <Input type="email" placeholder="Email" {...field} className="bg-gray-100" />
-            )}
-          />
-
-          <div className="space-y-2">
-
-            <Controller
-              name="type"
-              control={control}
-              // Destructure field to get onChange and value for manual radio management
-              render={({ field: { onChange, value } }) => (
-                // Replaced RadioGroup with a simple div with the existing flex class
-                <div className="flex gap-6" role="radiogroup">
-                  
-                  {/* Option 1: Enfant */}
-                  <div className="flex items-center space-x-2">
-                    {/* Replaced RadioGroupItem with native input[type=radio] */}
-                    <input 
-                      type="radio"
-                      id="enf" 
-                      value="enfant"
-                      // Use the field's onChange function and current value for checked state
-                      checked={value === "enfant"}
-                      onChange={() => onChange("enfant")}
-                      // Apply default radio styling using Tailwind
-                      className="h-4 w-4 text-primary-500 border-gray-300 focus:ring-primary-500 cursor-pointer"
-                    />
-                    <label htmlFor="enf" className="text-sm cursor-pointer">
-                      Enfant
-                    </label>
-                  </div>
-
-                  {/* Option 2: Parent */}
-                  <div className="flex items-center space-x-2">
-                    <input 
-                      type="radio"
-                      id="par" 
-                      value="parent"
-                      checked={value === "parent"}
-                      onChange={() => onChange("parent")}
-                      className="h-4 w-4 text-primary-500 border-gray-300 focus:ring-primary-500 cursor-pointer"
-                    />
-                    <label htmlFor="par" className="text-sm cursor-pointer">
-                      Parent
-                    </label>
-                  </div>
-
-                  {/* Option 3: Passionné des livres */}
-                  <div className="flex items-center space-x-2">
-                    <input 
-                      type="radio"
-                      id="pass" 
-                      value="passionne"
-                      checked={value === "passionne"}
-                      onChange={() => onChange("passionne")}
-                      className="h-4 w-4 text-primary-500 border-gray-300 focus:ring-primary-500 cursor-pointer"
-                    />
-                    <label htmlFor="pass" className="text-sm cursor-pointer">
-                      Passionné des livres
-                    </label>
-                  </div>
-
-                  {/* Option 4: Professionnel */}
-                  <div className="flex items-center space-x-2">
-                    <input 
-                      type="radio"
-                      id="pro" 
-                      value="professionnel"
-                      checked={value === "professionnel"}
-                      onChange={() => onChange("professionnel")}
-                      className="h-4 w-4 text-primary-500 border-gray-300 focus:ring-primary-500 cursor-pointer"
-                    />
-                    <label htmlFor="pro" className="text-sm cursor-pointer">
-                      Professionnel
-                    </label>
-                  </div>
+              rules={{ required: "Le nom est requis" }}
+              render={({ field, fieldState }) => (
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Nom"
+                    {...field}
+                    className="flex h-10 w-full rounded-md border border-gray-300 bg-gray-100 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50"
+                    disabled={isLoading}
+                  />
+                  {fieldState.error && (
+                    <p className="text-red-500 text-xs mt-1">{fieldState.error.message}</p>
+                  )}
                 </div>
               )}
             />
           </div>
-          {/* ------------------------------------------------------------- */}
 
-          {/* Phone */}
+          <Controller
+            name="email"
+            control={control}
+            rules={{ 
+              required: "L'email est requis",
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "Email invalide"
+              }
+            }}
+            render={({ field, fieldState }) => (
+              <div>
+                <input
+                  type="email"
+                  placeholder="Email"
+                  {...field}
+                  className="flex h-10 w-full rounded-md border border-gray-300 bg-gray-100 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={isLoading}
+                />
+                {fieldState.error && (
+                  <p className="text-red-500 text-xs mt-1">{fieldState.error.message}</p>
+                )}
+              </div>
+            )}
+          />
+          
           <Controller
             name="phone"
             control={control}
             render={({ field }) => (
-              <Input type="tel" placeholder="Numéro de téléphone" {...field} className="bg-gray-100" />
-            )}
-          />
-
-          {/* Message */}
-          <Controller
-            name="message"
-            control={control}
-            render={({ field }) => (
-              <Textarea
-                placeholder="Message"
-                rows={4}
+              <input
+                type="tel"
+                placeholder="Numéro de téléphone (optionnel)"
                 {...field}
-                className="w-full h-full resize-none bg-gray-100"
+                className="flex h-10 w-full rounded-md border border-gray-300 bg-gray-100 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={isLoading}
               />
             )}
           />
+          
+          <Controller
+            name="message"
+            control={control}
+            rules={{ required: "Le message est requis" }}
+            render={({ field, fieldState }) => (
+              <div>
+                <textarea
+                  placeholder="Message"
+                  rows={4}
+                  {...field}
+                  className="flex min-h-[80px] w-full rounded-md border border-gray-300 bg-gray-100 px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50 resize-none"
+                  disabled={isLoading}
+                />
+                {fieldState.error && (
+                  <p className="text-red-500 text-xs mt-1">{fieldState.error.message}</p>
+                )}
+              </div>
+            )}
+          />
 
-          <Button
-            type="submit"
-            className="bg-gradient-to-r from-primary-500 to-primary-300 rounded-xl w-full"
+          <button
+            onClick={handleSubmit(onSubmit)}
+            disabled={isLoading}
+            className="inline-flex items-center justify-center rounded-xl text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-primary-500 to-primary-300 text-white hover:opacity-90 h-10 py-2 px-4 w-full"
           >
-            Envoyer le message
-          </Button>
-        </form>
+            {isLoading ? "Envoi en cours..." : "Envoyer le message"}
+          </button>
+        </div>
       </div>
 
-      {/* Right image */}
+      {/* Right: Image / Info */}
       <div className="hidden md:flex flex-1 flex-col justify-center items-center">
         <img
           src="/images/Contact/contact.png"

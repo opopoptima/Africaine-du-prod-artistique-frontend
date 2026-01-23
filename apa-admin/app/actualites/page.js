@@ -24,6 +24,9 @@ import { Search, Plus, Edit2, Trash2 } from "lucide-react";
 import { FiTag, FiAward, FiCalendar } from "react-icons/fi";
 import ConfirmDeleteModal from "./form/delete";
 
+// Adjust the import path according to your project structure
+import { NewsService } from "../services/newsService";
+
 export default function ActualitesPage() {
   const router = useRouter();
 
@@ -44,7 +47,6 @@ export default function ActualitesPage() {
   const [selectedId, setSelectedId] = useState(null);
   const [loadingDelete, setLoadingDelete] = useState(false);
 
-  // 🔹 Fetch from backend with pagination
   useEffect(() => {
     fetchActualites();
   }, [currentPage, itemsPerPage]);
@@ -52,33 +54,44 @@ export default function ActualitesPage() {
   const fetchActualites = async () => {
     setLoading(true);
     try {
-      console.log("Fetching actualités...");
-      const res = await fetch(
-        `http://localhost:5000/api/news?page=${currentPage}&limit=${itemsPerPage}`
-      );
-      
-      if (!res.ok) {
-        throw new Error(`Erreur HTTP: ${res.status}`);
-      }
-      
-      const result = await res.json();
-      console.log("Actualités reçues:", result);
+      // Use the service with pagination params
+      const response = await NewsService.getAll({
+        page: currentPage,
+        limit: itemsPerPage,
+        // You can add q: searchTerm if you want server-side search later
+        // sort: "createdAt:desc"  ← optional
+      });
 
-      setActualites(result.data || []);
-      setFilteredActualites(result.data || []);
+      // The service returns axios-like response → response.data
+      const result = response.data;
+
+      // Extract items (same structure as before)
+      const newsItems = Array.isArray(result?.data?.items)
+        ? result.data.items
+        : Array.isArray(result?.data)
+        ? result.data
+        : [];
+
+      setActualites(newsItems);
+      setFilteredActualites(newsItems);
       setTotalPages(result.meta?.pages || 1);
       setTotalItems(result.meta?.total || 0);
     } catch (err) {
-      console.error("Erreur détaillée lors du chargement:", err);
-      alert(`Erreur lors du chargement des actualités: ${err.message}`);
+      console.error("Erreur lors du chargement des actualités:", err);
+      setActualites([]);
+      setFilteredActualites([]);
     } finally {
       setLoading(false);
     }
   };
 
-  // 🔹 Filters (client-side)
   useEffect(() => {
-    let filtered = actualites;
+    if (!Array.isArray(actualites)) {
+      setFilteredActualites([]);
+      return;
+    }
+
+    let filtered = [...actualites];
 
     if (searchTerm) {
       filtered = filtered.filter(
@@ -99,8 +112,8 @@ export default function ActualitesPage() {
 
     if (filterDate !== "all") {
       filtered = [...filtered].sort((a, b) => {
-        const da = new Date(a.publicationDate || a.createdAt);
-        const db = new Date(b.publicationDate || b.createdAt);
+        const da = new Date(a.publicationDate || a.createdAt || 0);
+        const db = new Date(b.publicationDate || b.createdAt || 0);
         return filterDate === "recent" ? db - da : da - db;
       });
     }
@@ -116,37 +129,30 @@ export default function ActualitesPage() {
 
   const handleConfirmDelete = async () => {
     if (!selectedId) return;
+
     setLoadingDelete(true);
     try {
-      console.log("Suppression de l'actualité ID:", selectedId);
-      const response = await fetch(`http://localhost:5000/api/news/${selectedId}`, { 
-        method: "DELETE" 
-      });
-      
-      if (!response.ok) {
-        throw new Error(`Erreur HTTP: ${response.status}`);
-      }
-      
-      console.log("Actualité supprimée avec succès");
+      // Use the service for delete
+      await NewsService.delete(selectedId);
+
+      // Refresh list
       fetchActualites();
       setIsModalOpen(false);
       setSelectedId(null);
-      alert("Actualité supprimée avec succès!");
+      alert("Actualité supprimée avec succès !");
     } catch (err) {
-      console.error("Erreur détaillée lors de la suppression:", err);
-      alert(`Erreur lors de la suppression: ${err.message}`);
+      console.error("Erreur lors de la suppression:", err);
+      alert(`Erreur lors de la suppression : ${err.message || "Erreur inconnue"}`);
     } finally {
       setLoadingDelete(false);
     }
   };
 
-  // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredActualites.slice(indexOfFirstItem, indexOfLastItem);
 
   const handleEdit = (actualite) => {
-    console.log("Édition de l'actualité:", actualite._id);
     router.push(`/actualites/form?id=${actualite._id}`);
   };
 
@@ -156,10 +162,9 @@ export default function ActualitesPage() {
 
   return (
     <div className="min-h-screen bg-white relative">
-      {/* Modal overlay - positioned absolutely to cover entire viewport */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center">
-          <ConfirmDeleteModal 
+          <ConfirmDeleteModal
             isOpen={isModalOpen}
             onClose={() => {
               setIsModalOpen(false);
@@ -171,7 +176,6 @@ export default function ActualitesPage() {
         </div>
       )}
 
-      {/* Header */}
       <div className="px-8 pt-4 pb-2 flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <div className="text-sm text-gray-600">
@@ -183,7 +187,7 @@ export default function ActualitesPage() {
           </div>
 
           <div className="flex items-center gap-4">
-            <Button 
+            <Button
               onClick={handleAddNew}
               className="bg-[#5B1E8C] hover:bg-[#4a1870] text-white rounded-full h-9 px-4 flex items-center gap-2"
             >
@@ -206,10 +210,8 @@ export default function ActualitesPage() {
           </div>
         </div>
 
-        {/* Filters */}
         <div className="flex items-center gap-4">
           <div className="w-[150px]">
-            {/* Reference Filter */}
             <Select value={filterReference} onValueChange={setFilterReference}>
               <SelectTrigger className="w-[150px] h-9 rounded-full border-[#E0D5F5] px-3 py-0 text-xs text-gray-700">
                 <div className="flex items-center gap-2">
@@ -230,7 +232,6 @@ export default function ActualitesPage() {
           </div>
 
           <div className="w-[150px]">
-            {/* Statut Filter */}
             <Select value={filterStatut} onValueChange={setFilterStatut}>
               <SelectTrigger className="w-[150px] h-9 rounded-full border-[#E0D5F5] px-3 py-0 text-xs text-gray-700">
                 <div className="flex items-center gap-2">
@@ -250,7 +251,6 @@ export default function ActualitesPage() {
           </div>
 
           <div className="w-[150px]">
-            {/* Date Filter */}
             <Select value={filterDate} onValueChange={setFilterDate}>
               <SelectTrigger className="w-[150px] h-9 rounded-full border-[#E0D5F5] px-3 py-0 text-xs text-gray-700">
                 <div className="flex items-center gap-2">
@@ -270,9 +270,7 @@ export default function ActualitesPage() {
         </div>
       </div>
 
-      {/* Main Content */}
       <main className="px-8 py-4">
-        {/* Table */}
         <div className="bg-white rounded-lg border border-secondary-700/20 overflow-hidden">
           <Table>
             <TableHeader className="bg-primary-500">
@@ -300,7 +298,7 @@ export default function ActualitesPage() {
                 <TableRow>
                   <TableCell colSpan={7} className="text-center py-12">
                     <p className="text-gray-500 font-semibold">Aucune actualité trouvée</p>
-                    <button 
+                    <button
                       onClick={fetchActualites}
                       className="mt-4 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600"
                     >
@@ -310,150 +308,161 @@ export default function ActualitesPage() {
                 </TableRow>
               ) : (
                 currentItems.map((item, index) => (
-                <TableRow 
-                  key={item._id} 
-                  className={`${index % 2 === 0 ? 'bg-white' : 'bg-primary-300/10'} hover:bg-primary-300/20`}
-                >
-                  <TableCell className="font-medium">ACT-{new Date(item.publicationDate || item.createdAt).getFullYear()}-{item._id ? item._id.slice(-4) : "0000"}</TableCell>
-                  <TableCell>{item.title || "Sans titre"}</TableCell>
-                  <TableCell>{item.category || item.program || "Blog"}</TableCell>
-                  <TableCell>
-                    <Badge
-                      className={`px-3 py-1 rounded-full ${
-                        item.status === "Publié" ? "bg-green-500 text-white" :
-                        item.status === "Archivé" ? "bg-gray-500 text-white" :
-                        item.status === "Brouillon" ? "bg-orange-400 text-white" :
-                        "bg-blue-500 text-white"
-                      }`}
-                      variant="default"
-                    >
-                      {item.status || "Brouillon"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    {item.publicationDate
-                      ? new Date(item.publicationDate).toLocaleDateString("fr-FR", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })
-                      : item.createdAt
-                      ? new Date(item.createdAt).toLocaleDateString("fr-FR", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })
-                      : "N/A"}
-                  </TableCell>
-                  <TableCell>{item.author || "Admin, Librairie"}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center justify-center gap-2">
-                      <button 
-                        onClick={() => handleEdit(item)}
-                        className="p-2 hover:bg-secondary-100/10 rounded transition-colors"
-                        title="Modifier"
+                  <TableRow
+                    key={item._id}
+                    className={`${index % 2 === 0 ? "bg-white" : "bg-primary-300/10"} hover:bg-primary-300/20`}
+                  >
+                    <TableCell className="font-medium">
+                      ACT-
+                      {new Date(item.publicationDate || item.createdAt).getFullYear()}-
+                      {item._id ? item._id.slice(-4) : "0000"}
+                    </TableCell>
+                    <TableCell>{item.title || "Sans titre"}</TableCell>
+                    <TableCell>{item.category || item.program || "Blog"}</TableCell>
+                    <TableCell>
+                      <Badge
+                        className={`px-3 py-1 rounded-full ${
+                          item.status === "Publié"
+                            ? "bg-green-500 text-white"
+                            : item.status === "Archivé"
+                            ? "bg-gray-500 text-white"
+                            : item.status === "Brouillon"
+                            ? "bg-orange-400 text-white"
+                            : "bg-blue-500 text-white"
+                        }`}
+                        variant="default"
                       >
-                        <Edit2 className="w-4 h-4 text-secondary-700" />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteClick(item._id)}
-                        className="p-2 hover:bg-secondary-100/10 rounded transition-colors"
-                        title="Supprimer"
-                      >
-                        <Trash2 className="w-4 h-4 text-red-500" />
-                      </button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
+                        {item.status || "Brouillon"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      {item.publicationDate
+                        ? new Date(item.publicationDate).toLocaleDateString("fr-FR", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })
+                        : item.createdAt
+                        ? new Date(item.createdAt).toLocaleDateString("fr-FR", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })
+                        : "N/A"}
+                    </TableCell>
+                    <TableCell>{item.author || "Admin, Librairie"}</TableCell>
+                    <TableCell>
+                      <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => handleEdit(item)}
+                          className="p-2 hover:bg-secondary-100/10 rounded transition-colors"
+                          title="Modifier"
+                        >
+                          <Edit2 className="w-4 h-4 text-secondary-700" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteClick(item._id)}
+                          className="p-2 hover:bg-secondary-100/10 rounded transition-colors"
+                          title="Supprimer"
+                        >
+                          <Trash2 className="w-4 h-4 text-red-500" />
+                        </button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
               )}
             </TableBody>
           </Table>
         </div>
 
-        {/* Pagination */}
         {!loading && filteredActualites.length > 0 && (
-        <div className="flex items-center justify-between mt-6">
-          <div className="flex items-center gap-6">
-            <span className="text-sm font-semibold text-primary-500 min-w-[120px]">Lignes par page</span>
-            <Select value={itemsPerPage.toString()} onValueChange={(val) => setItemsPerPage(Number(val))}>
-              <SelectTrigger className="w-14 h-10 rounded-full border-primary-500 px-2">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="rounded-2xl">
-                <SelectItem value="10">10</SelectItem>
-                <SelectItem value="20">20</SelectItem>
-                <SelectItem value="50">50</SelectItem>
-              </SelectContent>
-            </Select>
-            <span className="text-sm font-semibold text-primary-500 min-w-[100px]">
-              {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, filteredActualites.length)} sur {filteredActualites.length} résultats
-            </span>
+          <div className="flex items-center justify-between mt-6">
+            <div className="flex items-center gap-6">
+              <span className="text-sm font-semibold text-primary-500 min-w-[120px]">
+                Lignes par page
+              </span>
+              <Select
+                value={itemsPerPage.toString()}
+                onValueChange={(val) => setItemsPerPage(Number(val))}
+              >
+                <SelectTrigger className="w-14 h-10 rounded-full border-primary-500 px-2">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-2xl">
+                  <SelectItem value="10">10</SelectItem>
+                  <SelectItem value="20">20</SelectItem>
+                  <SelectItem value="50">50</SelectItem>
+                </SelectContent>
+              </Select>
+              <span className="text-sm font-semibold text-primary-500 min-w-[100px]">
+                {indexOfFirstItem + 1}–{Math.min(indexOfLastItem, filteredActualites.length)} sur{" "}
+                {filteredActualites.length} résultats
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(1)}
+                disabled={currentPage === 1}
+                className="rounded-full"
+              >
+                «
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="rounded-full"
+              >
+                ‹
+              </Button>
+
+              {[...Array(Math.min(5, totalPages))].map((_, i) => {
+                const pageNum = i + 1;
+                return (
+                  <Button
+                    key={pageNum}
+                    variant={currentPage === pageNum ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setCurrentPage(pageNum)}
+                    className={
+                      currentPage === pageNum
+                        ? "bg-primary-500 text-white rounded-full"
+                        : "rounded-full"
+                    }
+                  >
+                    {pageNum}
+                  </Button>
+                );
+              })}
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="rounded-full"
+              >
+                ›
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(totalPages)}
+                disabled={currentPage === totalPages}
+                className="rounded-full"
+              >
+                »
+              </Button>
+            </div>
           </div>
-
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setCurrentPage(1)}
-              disabled={currentPage === 1}
-              className="rounded-full"
-            >
-              «
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              disabled={currentPage === 1}
-              className="rounded-full"
-            >
-              ‹
-            </Button>
-
-            {[...Array(Math.min(5, totalPages))].map((_, i) => {
-              const pageNum = i + 1;
-              return (
-                <Button
-                  key={pageNum}
-                  variant={currentPage === pageNum ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setCurrentPage(pageNum)}
-                  className={
-                    currentPage === pageNum
-                      ? "bg-primary-500 text-white rounded-full"
-                      : "rounded-full"
-                  }
-                >
-                  {pageNum}
-                </Button>
-              );
-            })}
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              disabled={currentPage === totalPages}
-              className="rounded-full"
-            >
-              ›
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setCurrentPage(totalPages)}
-              disabled={currentPage === totalPages}
-              className="rounded-full"
-            >
-              »
-            </Button>
-          </div>
-        </div>
         )}
       </main>
 
-      {/* Footer */}
       <footer className="bg-primary-300 mt-12 py-6 text-center">
         <p className="text-primary-500 font-semibold text-lg">
           Centralisez la gestion des actualités pour une organisation optimale et un meilleur suivi opérationnel !

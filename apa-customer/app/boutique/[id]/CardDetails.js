@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { IoChevronBack, IoChevronForward, IoClose } from "react-icons/io5";
 import { FaPlay, FaPause, FaVolumeUp } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
+
 import dynamic from "next/dynamic";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
@@ -71,8 +73,21 @@ export default function CardDetail({ article }) {
     // Stop any ongoing speech
     window.speechSynthesis.cancel();
 
+    // Map language to speech synthesis language code
+    const languageMap = {
+      "English": "en-US",
+      "Français": "fr-FR",
+      "Arabe": "ar-SA",
+      "en": "en-US",
+      "fr": "fr-FR",
+      "ar": "ar-SA",
+    };
+
+    const speechLang = languageMap[language] || "en-US";
+    console.log("langue", speechLang);
+
     const utterance = new window.SpeechSynthesisUtterance(description);
-    utterance.lang = "fr-FR";
+    utterance.lang = speechLang;
     utterance.rate = 1;
     utterance.pitch = 1;
 
@@ -162,19 +177,31 @@ export default function CardDetail({ article }) {
         <div className="grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-6 lg:gap-12 xl:gap-16 p-4 md:p-5 lg:p-8 items-center">
           {/* Cover photo */}
           <div className="flex flex-col items-center justify-center w-full h-full">
-            <div
-              className="relative w-56 md:w-64 lg:w-72 aspect-2/3 max-h-[80vh] overflow-hidden rounded-xl shadow-md border border-primary-300/40 cursor-pointer"
-              onClick={openModal}
-            >
-              <Image
-                src={images[currentImageIndex]}
-                alt={`${title} cover`}
-                fill
-                className="object-cover"
-                sizes="(max-width: 640px) 80vw, (max-width: 1024px) 20rem, 18rem"
-              />
-            </div>
-          </div>
+  <div
+    className="group relative w-56 md:w-64 lg:w-72 aspect-2/3 max-h-[80vh] overflow-hidden rounded-xl shadow-md border border-primary-300/40 cursor-pointer"
+    onClick={openModal}
+  >
+    {/* Cover image */}
+    <Image
+      src={images[currentImageIndex]}
+      alt={`${title} cover`}
+      fill
+      className="object-cover transition-transform duration-300 group-hover:scale-105"
+      sizes="(max-width: 640px) 80vw, (max-width: 1024px) 20rem, 18rem"
+    />
+
+    {/* Hover overlay */}
+    <div className="absolute inset-0 bg-primary-500/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+      <div className="flex flex-col items-center gap-2 text-white">
+        <FaEye className="text-2xl" />
+        <span className="text-sm font-semibold tracking-wide uppercase">
+          Aperçus
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
 
           {/* Details */}
           <div className="space-y-3 lg:space-y-4">
@@ -188,11 +215,11 @@ export default function CardDetail({ article }) {
               <div className="flex items-baseline gap-2 lg:gap-3">
                 {originalPrice && (
                   <span className="text-secondary-700 line-through text-sm lg:text-base">
-                    ${originalPrice}
+                    {originalPrice} dt
                   </span>
                 )}
                 <span className="text-xl md:text-2xl lg:text-3xl font-black text-primary-100">
-                  ${price}
+                  {price} dt
                 </span>
               </div>
             </div>
@@ -275,7 +302,7 @@ export default function CardDetail({ article }) {
 
             {/* --- DESKTOP VERSION: table specs --- */}
             <div className="hidden sm:block rounded-lg lg:rounded-xl border border-primary-300/50 overflow-x-auto">
-              <table className="w-full min-w-[500px]">
+              <table className="w-full min-w-125">
                 <thead>
                   <tr className="bg-white">
                     {specs.map((s, idx) => (
@@ -345,7 +372,7 @@ export default function CardDetail({ article }) {
                 e.stopPropagation();
                 prevImage();
               }}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white rounded-full p-4 transition-all z-[9999]"
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white rounded-full p-4 transition-all z-9999"
             >
               <IoChevronBack className="size-8" />
             </button>
@@ -354,7 +381,7 @@ export default function CardDetail({ article }) {
                 e.stopPropagation();
                 nextImage();
               }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white rounded-full p-4 transition-all z-[9999]"
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white rounded-full p-4 transition-all z-9999"
             >
               <IoChevronForward className="size-8" />
             </button>

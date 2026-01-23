@@ -1,11 +1,22 @@
+'use client';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { authStorage } from './services/auth';
 
-import DashboardArticles from "./articles/page";
-export default function Page() {
+export default function HomePage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    if (authStorage.isAuthenticated()) {
+      router.push('/dashboard');
+    } else {
+      router.push('/auth/login');
+    }
+  }, [router]);
+
   return (
-    <div className="container mx-auto mt-8">
-      
-      <DashboardArticles />
-      
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4B0082]"></div>
     </div>
   );
 }

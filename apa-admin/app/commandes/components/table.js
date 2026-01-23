@@ -62,10 +62,21 @@ export default function CommandesTable() {
 
     // Calculer le total de la commande
     const calculateTotal = (order) => {
-        if (!order.articles || order.articles.length === 0) return 0;
+        if (!order.articles || order.articles.length === 0) {
+            return order.livraisonPrice || 0;
+        }
+     
         const articlesTotal = order.articles.reduce((sum, item) => {
-            return sum + (item.quantity * (item.article?.price || 0));
+            if (!item.article) return sum;
+            
+            // Use promotional price if available, otherwise use regular price
+            const price = item.article.promo && item.article.promo > 0 
+                ? item.article.promo 
+                : item.article.price || 0;
+            
+            return sum + (price * item.quantity);
         }, 0);
+        
         return articlesTotal + (order.livraisonPrice || 0);
     };
 

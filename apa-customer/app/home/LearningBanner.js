@@ -63,6 +63,7 @@ export default function LearningBanner() {
                 />
               </div>
               <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-full px-2">
+             
                   <Button 
                     size="sm"
                     className="w-full bg-primary-100 text-white hover:bg-secondary-100 hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl hover:text-primary-100 group text-xs md:text-sm"
@@ -70,7 +71,7 @@ export default function LearningBanner() {
                     Explorer la boutique
                     <ArrowRight className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" />
                   </Button>
-
+              
                 </div>
             </div>
 

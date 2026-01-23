@@ -1,54 +1,81 @@
-"use client";;
+"use client";
+
+import { useEffect, useState } from "react";
+import PeriodSelector from "./components/PeriodSelector";
 import StatsGrid from "./components/StatsGrid";
-import TopProducts from "./components/TopProducts";
-import RevenueGauge from "./components/RevenueGauge";
-import VisitorChart from "./components/VisitorChart";
-import FeaturedCard from "./components/FeaturedCard";
-import { Input } from "../components/input";
-import { Search } from "lucide-react";
+import SalesChartCard from "./components/SalesChartCard";
+import OrdersChartCard from "./components/OrdersChartCard";
+import { KPIService } from "../services/kpiService";
+import { ShoppingBag, DollarSign, Package } from "lucide-react";
 
 export default function DashboardPage() {
+  const today = new Date().toISOString().split("T")[0];
+
+  const [mode, setMode] = useState("day");
+  const [period, setPeriod] = useState({ start: today, end: today });
+  const [kpi, setKpi] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchKPI() {
+      setLoading(true);
+      try {
+        const kpiData = await KPIService.getKPI({
+          mode,
+          start: period.start,
+          end: period.end,
+        });
+        setKpi(kpiData);
+      } catch (error) {
+        console.error("Failed to fetch KPI data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchKPI();
+  }, [mode, period]);
+
+  if (loading)
+    return <p className="p-8 text-center text-gray-500">Chargement des KPIs...</p>;
+
+  const stats = [
+    {
+      icon: ShoppingBag,
+      value: kpi.totalOrders,
+      label: "Commandes au total",
+      trend: kpi.trendText.orders,
+      isPositive: kpi.trends.orders >= 0,
+    },
+    {
+      icon: DollarSign,
+      value: `${kpi.totalRevenue.toLocaleString()} DT`,
+      label: "Ventes au total",
+      trend: kpi.trendText.revenue,
+      isPositive: kpi.trends.revenue >= 0,
+    },
+    {
+      icon: Package,
+      value: kpi.totalProducts,
+      label: "Produits vendus",
+      trend: kpi.trendText.products,
+      isPositive: kpi.trends.products >= 0,
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="mx-auto max-w-7xl space-y-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <h1 className="text-3xl font-semibold text-primary-300">
-            Bienvenue, [Mariem]<span className="text-secondary-900"></span>
-          </h1>
-          <div className="relative w-full sm:w-64">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              placeholder="Recherche"
-              className="pl-10 bg-card border-border"
-            />
-          </div>
-        </div>
+    <div className="p-8 min-h-screen space-y-8">
+      <PeriodSelector
+        mode={mode}
+        setMode={setMode}
+        period={period}
+        setPeriod={setPeriod}
+      />
 
-        {/* Stats Grid */}
-        <StatsGrid />
+      <StatsGrid stats={stats} />
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          {/* Featured Card */}
-          <FeaturedCard />
-
-          {/* Top Products */} 
-          <TopProducts />
-
-          
-        </div>
-
-        {/* Bottom Row */}
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          {/* Revenue Gauge */}
-          <RevenueGauge />
-
-          {/* Visitor Chart */}
-          <div className="lg:col-span-2">
-            <VisitorChart />
-          </div>
-        </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <SalesChartCard mode={mode} period={period} kpi={kpi} />
+        <OrdersChartCard mode={mode} period={period} kpi={kpi} />
       </div>
     </div>
   );

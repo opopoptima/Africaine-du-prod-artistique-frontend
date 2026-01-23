@@ -1,7 +1,6 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 export const api = {
-  // Login
   login: async (email, password) => {
     const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
       method: 'POST',
@@ -20,7 +19,24 @@ export const api = {
     return data;
   },
 
-  // Forgot Password (à implémenter côté backend)
+  verifyToken: async (token) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/verify`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      return response.ok;
+    } catch {
+      return false;
+    }
+  },
+
+  logout: async () => {
+    authStorage.removeToken();
+  },
+
   forgotPassword: async (email) => {
     const response = await fetch(`${API_BASE_URL}/api/auth/forgot-password`, {
       method: 'POST',
@@ -39,7 +55,6 @@ export const api = {
     return data;
   },
 
-  // Reset Password (à implémenter côté backend)
   resetPassword: async (email, newPassword, otp) => {
     const response = await fetch(`${API_BASE_URL}/api/auth/reset-password`, {
       method: 'POST',
@@ -59,7 +74,6 @@ export const api = {
   },
 };
 
-// Helper pour stocker le token
 export const authStorage = {
   setToken: (token) => {
     if (typeof window !== 'undefined') {
@@ -78,5 +92,9 @@ export const authStorage = {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('token');
     }
+  },
+
+  isAuthenticated: () => {
+    return !!authStorage.getToken();
   },
 };

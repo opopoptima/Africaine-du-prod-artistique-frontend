@@ -2,6 +2,18 @@ import Link from "next/link";
 import { ArrowRight, Calendar } from "lucide-react";
 
 export default function ActualiteCard({ actu }) {
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+
+    const optionsDate = { day: "2-digit", month: "long", year: "numeric" };
+    const optionsTime = { hour: "2-digit", minute: "2-digit" };
+
+    const formattedDate = date.toLocaleDateString("fr-FR", optionsDate);
+    const formattedTime = date.toLocaleTimeString("fr-FR", optionsTime);
+
+    return `${formattedDate} à ${formattedTime}`;
+  };
   return (
     <Link href={`/actualite/${actu._id}`} className="group block">
       <article
@@ -16,7 +28,7 @@ export default function ActualiteCard({ actu }) {
         {/* IMAGE : on utilise flex + grow pour qu’elle prenne le maximum possible */}
         <div className="relative flex-1 min-h-0 bg-gray-50">
           <img
-            src={ "/images/actualites/actualite1.png"}
+            src={ actu.mainImage }
             alt={actu.title}
             className="w-full h-full object-cover"
             style={{ borderRadius: 0 }}
@@ -39,7 +51,7 @@ export default function ActualiteCard({ actu }) {
           <div className="flex items-center justify-between">
             <span className="flex items-center gap-2 text-primary-100 text-xs font-medium">
               <Calendar size={14} />
-              <span className="truncate">{actu.eventDate}</span>
+              <span className="truncate">{formatDate(actu.eventDate)}</span>
             </span>
 
             {/* Cercle parfait */}

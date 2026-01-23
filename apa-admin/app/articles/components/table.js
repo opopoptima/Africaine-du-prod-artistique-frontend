@@ -19,9 +19,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/app/components/select";
-import { Badge } from "@/app/components/badge";
 import { Search, Plus, Edit2, Trash2 } from "lucide-react";
-import { FiAward, FiCalendar, FiBook } from "react-icons/fi";
+import { FiCalendar, FiBook } from "react-icons/fi";
 import { ArticleService } from "../../services/articleService";
 import ConfirmDeleteModal from "./delete";
 import { BookModel } from "../../models/BookModel";
@@ -35,7 +34,6 @@ export default function ArticlesPage() {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("all");
-  const [filterStatut, setFilterStatut] = useState("all");
   const [sortOrder, setSortOrder] = useState("desc");
 
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -55,12 +53,10 @@ export default function ArticlesPage() {
         q: searchTerm || undefined,
         sort: `createdAt:${sortOrder}`,
         ...(filterType !== "all" && { type: filterType }),
-        ...(filterStatut !== "all" && { statut: filterStatut }),
       };
 
       const res = await ArticleService.getAll(params);
 
-      // Map backend data using BookModel to ensure all fields exist
       const normalizedArticles = (res.data || res.articles || []).map(BookModel);
 
       setArticles(normalizedArticles);
@@ -69,11 +65,10 @@ export default function ArticlesPage() {
       console.error("Error fetching articles:", err);
       setArticles([]);
       setMeta({ total: 0, page: 1, pages: 1, limit: itemsPerPage });
-      
     } finally {
       setLoading(false);
     }
-  }, [currentPage, itemsPerPage, searchTerm, filterType, filterStatut, sortOrder]);
+  }, [currentPage, itemsPerPage, searchTerm, filterType, sortOrder]);
 
   useEffect(() => {
     fetchArticles();
@@ -154,25 +149,6 @@ export default function ArticlesPage() {
             </div>
 
             <div className="w-[150px]">
-              <Select value={filterStatut} onValueChange={(v) => { setFilterStatut(v); setCurrentPage(1); }}>
-                <SelectTrigger className="w-full h-9 rounded-full border-[#E0D5F5] px-3 py-0 text-xs text-gray-700">
-                  <div className="flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-[#F5F1FF] flex items-center justify-center">
-                      <FiAward className="w-3 h-3 text-[#5B1E8C]" />
-                    </span>
-                    <SelectValue placeholder="Statut" />
-                  </div>
-                </SelectTrigger>
-                <SelectContent className="rounded-2xl">
-                  <SelectItem value="all">Tous</SelectItem>
-                  <SelectItem value="En stock">En stock</SelectItem>
-                  <SelectItem value="Rupture">Rupture</SelectItem>
-                  <SelectItem value="Précommande">Précommande</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="w-[150px]">
               <Select value={sortOrder} onValueChange={(v) => { setSortOrder(v); setCurrentPage(1); }}>
                 <SelectTrigger className="w-full h-9 rounded-full border-[#E0D5F5] px-3 py-0 text-xs text-gray-700">
                   <div className="flex items-center gap-2">
@@ -209,16 +185,15 @@ export default function ArticlesPage() {
                   <TableHead className="text-white font-semibold">ISBN / Ref</TableHead>
                   <TableHead className="text-white font-semibold">Titre</TableHead>
                   <TableHead className="text-white font-semibold">Type</TableHead>
-                  <TableHead className="text-white font-semibold">Statut</TableHead>
                   <TableHead className="text-white font-semibold">Prix</TableHead>
-                  <TableHead className="text-white font-semibold">Ajouté le</TableHead>
+                  <TableHead className="text-white font-semibold">Stock</TableHead>
                   <TableHead className="text-white font-semibold text-center">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {loading ? (
                   <TableRow key="loading">
-                    <TableCell colSpan={7} className="text-center py-12">
+                    <TableCell colSpan={6} className="text-center py-12">
                       <div className="flex flex-col items-center justify-center gap-4">
                         <div className="w-12 h-12 border-4 border-primary-300 border-t-primary-500 rounded-full animate-spin"></div>
                         <p className="text-primary-500 font-semibold">Chargement des articles...</p>
@@ -227,7 +202,7 @@ export default function ArticlesPage() {
                   </TableRow>
                 ) : articles.length === 0 ? (
                   <TableRow key="no-articles">
-                    <TableCell colSpan={7} className="text-center py-12">
+                    <TableCell colSpan={6} className="text-center py-12">
                       <div className="flex flex-col items-center justify-center gap-4">
                         <p className="text-gray-500 font-semibold">Aucun article trouvé</p>
                         <Button onClick={handleAddNew} className="bg-primary-300 hover:bg-primary-500 text-white rounded-full px-6 py-2">
@@ -239,32 +214,31 @@ export default function ArticlesPage() {
                 ) : (
                   articles.map((item, index) => (
                     <TableRow
-                      key={item.id} 
-
+                      key={item._id || `article-${index}`}
                       className={`${index % 2 === 0 ? "bg-white" : "bg-primary-300/10"} hover:bg-primary-300/20`}
                     >
                       <TableCell className="font-medium">{item.isbn || "N/A"}</TableCell>
                       <TableCell className="max-w-xs truncate">{item.title || "Sans titre"}</TableCell>
                       <TableCell>{item.type || "Non défini"}</TableCell>
                       <TableCell>
-                        <Badge className={
-                          item.statut === "En stock" ? "bg-green-500 text-white" :
-                          item.statut === "Rupture" ? "bg-red-500 text-white" :
-                          item.statut === "Précommande" ? "bg-orange-500 text-white" : ""
-                        }>
-                          {item.statut || "Inconnu"}
-                        </Badge>
+                        {item.price && item.price !== "0.00" 
+                          ? `${parseFloat(item.price).toFixed(2)} TND` 
+                          : item.originalPrice ? `${parseFloat(item.originalPrice).toFixed(2)} TND` : "N/A"}
                       </TableCell>
-                      <TableCell>{item.price ? `${parseFloat(item.price).toFixed(2)} €` : "N/A"}</TableCell>
-                      <TableCell>
-                        {item.createdAt ? new Date(item.createdAt).toLocaleDateString("fr-FR", { year: "numeric", month: "long", day: "numeric" }) : "N/A"}
-                      </TableCell>
+                      <TableCell>{item.stock || 0}</TableCell>
+                      
                       <TableCell>
                         <div className="flex items-center justify-center gap-3">
-                          <button onClick={() => handleEdit(item)} className="p-2 hover:bg-secondary-100/10 rounded transition-colors">
+                          <button 
+                            onClick={() => handleEdit(item)} 
+                            className="p-2 hover:bg-secondary-100/10 rounded transition-colors"
+                          >
                             <Edit2 className="w-4 h-4 text-secondary-700" />
                           </button>
-                          <button onClick={() => handleOpenModal(item._id)} className="p-2 hover:bg-red-100/20 rounded transition-colors">
+                          <button 
+                            onClick={() => handleOpenModal(item._id)} 
+                            className="p-2 hover:bg-red-100/20 rounded transition-colors"
+                          >
                             <Trash2 className="w-4 h-4 text-red-500" />
                           </button>
                         </div>
@@ -303,7 +277,13 @@ export default function ArticlesPage() {
                   const pageNum = currentPage <= 3 ? i + 1 : currentPage > meta.pages - 3 ? meta.pages - 4 + i : currentPage - 2 + i;
                   if (pageNum < 1 || pageNum > meta.pages) return null;
                   return (
-                    <Button key={pageNum} variant={currentPage === pageNum ? "default" : "outline"} size="sm" onClick={() => setCurrentPage(pageNum)} className={currentPage === pageNum ? "bg-primary-500 text-white rounded-full" : "rounded-full"}>
+                    <Button 
+                      key={pageNum} 
+                      variant={currentPage === pageNum ? "default" : "outline"} 
+                      size="sm" 
+                      onClick={() => setCurrentPage(pageNum)} 
+                      className={currentPage === pageNum ? "bg-primary-500 text-white rounded-full" : "rounded-full"}
+                    >
                       {pageNum}
                     </Button>
                   );

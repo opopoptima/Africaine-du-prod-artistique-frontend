@@ -1,9 +1,9 @@
-import apiClient from "../lib/apiClient";
+import adminApiClient from "../lib/adminApiClient";
 
 export const NewsService = {
   // GET /news?page=&limit=&q=&sort= (for public - excludes Brouillon)
   getAll: ({ page = 1, limit = 10, q = "", sort = "" } = {}) => 
-    apiClient.get("/news", {
+    adminApiClient.get("/news/all", {
       params: {
         page,
         limit,
@@ -13,14 +13,14 @@ export const NewsService = {
     }),
 
   // GET /news/:id (for public - excludes Brouillon)
-  getById: (id) => apiClient.get(`/news/${id}`),
+  getById: (id) => adminApiClient.get(`/news/${id}`),
 
   // POST /news
-  create: (newsData) => apiClient.post("/news", newsData),
+  create: (newsData) => adminApiClient.post("/news", newsData),
 
   // PUT /news/:id
-  update: (id, newsData) => apiClient.put(`/news/${id}`, newsData),
+  update: (id, newsData) => adminApiClient.put(`/news/${id}`, newsData),
 
   // DELETE /news/:id
-  delete: (id) => apiClient.delete(`/news/${id}`),
+  delete: (id) => adminApiClient.delete(`/news/${id}`),
 };

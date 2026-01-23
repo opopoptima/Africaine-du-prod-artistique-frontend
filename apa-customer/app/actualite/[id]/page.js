@@ -6,53 +6,94 @@ import HeroSectionAct from "./HeroSection";
 import AproposActu from "./Apropos-actu";
 import AutresActu from "./Autresactu";
 import GalleryCarousel from "./gallerie";
-import {NewsService} from "../../services/newsService";
+import { NewsService } from "../../services/newsService";
 
 export default function NewsDetail() {
   const { id } = useParams(); // récupère l'id depuis l'URL dynamique
   const [news, setNews] = useState(null);
-  const [otherNews, setOtherNews] = useState([]); // pour les deux autres news
+  const [otherNews, setOtherNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        // Récupérer la news principale
-        const response = await NewsService.getById(id);
-        setNews(response.data);
+      setLoading(true);
+      setError(null);
 
-        // Récupérer toutes les news
-        const allResponse = await NewsService.getAll();
-        const others = allResponse.data
+      try {
+        // ✅ Récupérer la news principale
+        const response = await NewsService.getById(id);
+        if (!response?.data?.success) {
+          throw new Error(response?.data?.error || "News not found");
+        }
+        setNews(response.data.data);
+
+        // ✅ Récupérer toutes les news (publiées)
+        const allResponse = await NewsService.getAll({
+          page: 1,
+          limit: 20,
+          sort: "createdAt:desc",
+        });
+
+        if (!allResponse?.data?.success) {
+          throw new Error(allResponse?.data?.error || "Failed to fetch news");
+        }
+
+        const allNews = Array.isArray(allResponse.data.data.items)
+          ? allResponse.data.data.items
+          : [];
+
+        const others = allNews
           .filter((item) => item._id !== id) // exclure la news courante
           .slice(0, 2); // prendre 2 autres actualités
+
         setOtherNews(others);
       } catch (err) {
-        setError(err.message);
+        setError(err.message || "Erreur lors du chargement des actualités");
         console.error("Erreur:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchData();
+    if (id) fetchData();
   }, [id]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-  if (!news) return <p>News not found</p>;
+  if (loading)
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-primary-500 font-semibold text-lg">Chargement...</p>
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-red-500 font-semibold text-lg">{error}</p>
+      </div>
+    );
+
+  if (!news)
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-500 font-semibold text-lg">Actualité introuvable</p>
+      </div>
+    );
 
   return (
     <div>
       {/* Section principale */}
       <HeroSectionAct news={news} />
       <AproposActu news={news} />
-      <GalleryCarousel  />
+      <GalleryCarousel images={news.galleryImages || news.images || []} />
+
 
       {/* Deux autres news */}
-      {otherNews.length >= 2 && (
-        <AutresActu actu1={otherNews[0]} actu2={otherNews[1]} />
+      {otherNews.length > 0 && (
+        <AutresActu
+          actu1={otherNews[0]}
+          actu2={otherNews[1] || null} // safeguard if only 1 other news
+        />
       )}
     </div>
   );

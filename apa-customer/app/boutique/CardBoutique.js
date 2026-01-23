@@ -28,6 +28,9 @@ const handleCommander = () => {
   const coverSrc = article?.cover || article?.images?.[0] || "/images/placeholder.jpg";
   const title = article?.title || "Sans titre";
   const description = article?.description || "";
+  const stock = article?.stock ?? 0;
+  const isOutOfStock = stock <= 0;
+
 
   if (!article) {
     // Optional: render a placeholder card if article is undefined
@@ -47,6 +50,12 @@ const handleCommander = () => {
             Best Seller
           </span>
         )}
+        {isOutOfStock && (
+        <span className="absolute inset-0 z-10 flex items-center justify-center bg-black/60 text-white text-sm font-bold uppercase tracking-wide">
+          Rupture de stock
+        </span>
+      )}
+
 
         <Image
           src={coverSrc}
@@ -80,13 +89,20 @@ const handleCommander = () => {
 
             <Button
               size="sm"
-              className="flex-1 bg-primary-300 rounded-full text-white hover:bg-primary-500 text-sm md:text-base px-3 py-1"
-              onClick={handleCommander}
-
+              disabled={isOutOfStock}
+              className={`flex-1 rounded-full text-sm md:text-base px-3 py-1
+                ${
+                  isOutOfStock
+                    ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                    : "bg-primary-300 text-white hover:bg-primary-500"
+                }
+              `}
+              onClick={!isOutOfStock ? handleCommander : undefined}
             >
               <IoCartOutline className="w-4 h-4 mr-1" />
-              Commander
+              {isOutOfStock ? "Indisponible" : "Commander"}
             </Button>
+
           </div>
         </div>
       </div>
