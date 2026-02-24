@@ -1,7 +1,9 @@
+import Link from "next/link";
+import { Button } from "../../components/ui/button"
 import ActualiteCard from "../components/actualite";
 
-export default function AutresActu({ actu1, actu2 }) {
-  const actuList = [actu1, actu2].filter(Boolean);
+export default function AutresActu({ actu1, actu2, actu3 }) {
+  const actuList = [actu1, actu2, actu3].filter(Boolean);
 
   if (actuList.length === 0) return null;
 
@@ -17,6 +19,18 @@ export default function AutresActu({ actu1, actu2 }) {
         {actuList.map((actu) => (
           <ActualiteCard key={actu._id} actu={actu} />
         ))}
+      </div>
+
+      <div className="text-center mt-12">
+        <Link href="/actualite">
+          <Button
+            variant="outline"
+            size="lg"
+            className="border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white px-8 sm:px-12 py-6 text-lg rounded-full shadow-lg transition-all hover:shadow-xl hover:scale-105 font-bold"
+          >
+            Voir plus
+          </Button>
+        </Link>
       </div>
     </section>
   );

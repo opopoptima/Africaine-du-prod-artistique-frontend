@@ -1,10 +1,13 @@
 "use client";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import { IoCartOutline } from 'react-icons/io5';
+import { useCart } from '../context/CartContext';
 
 export default function Header() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const { cartCount, setIsCartOpen } = useCart();
 
   // Menu principal
   const menu = [
@@ -28,49 +31,48 @@ export default function Header() {
     <header className="w-full bg-white shadow-md z-50 relative">
       <div className="flex items-center justify-between h-16 w-full px-[3%]">
 
-
-    
-    {/* Logo */}
-    <div className="shrink-0">
-      <img className="h-16 w-16" src="/images/apa-logo.png" alt="Logo" />
-    </div>
+        {/* Logo */}
+        <div className="shrink-0">
+          <img className="h-16 w-16" src="/images/apa-logo.png" alt="Logo" />
+        </div>
 
         {/* Menu Desktop */}
-        <nav className="hidden md:flex space-x-6 ml-auto mr-0">
+        <nav className="hidden md:flex space-x-6 ml-auto mr-8">
           {menu.map((item) => (
             <a
               key={item.name}
               href={item.href}
               style={{
-                color: item === activeItem
+                color: isLinkActive(item.href)
                   ? "var(--color-secondary-500)" // jaune si actif
                   : "var(--color-primary-500)",  // violet sinon
               }}
-              className="hover:text-yellow-500 "
+              className="hover:text-yellow-500 font-medium transition-colors"
             >
               {item.name}
             </a>
           ))}
         </nav>
 
-        {/* Menu Mobile */}
-        <div className="md:hidden ml-auto flex items-center">
-          {/* Lien fixe visible sur mobile */}
-          <a
-            href={activeItem.href}
-            style={{
-              color: isLinkActive(activeItem.href)
-                ? "var(--color-secondary-500)"
-                : "var(--color-primary-500)",
-            }}
-            className="mr-4 font-medium "
+        {/* Cart Icon & Mobile Hamburger */}
+        <div className="flex items-center gap-4 ml-auto md:ml-0">
+          <button
+            onClick={() => setIsCartOpen(true)}
+            className="relative p-2 text-primary-500 hover:text-secondary-500 transition-colors cursor-pointer"
+            title="Panier"
           >
-          </a>
+            <IoCartOutline className="text-2xl" />
+            {cartCount > 0 && (
+              <span className="absolute top-0 right-0 bg-secondary-500 text-white text-[10px] font-bold px-1.5 py-0.5 min-w-[18px] h-[18px] flex items-center justify-center rounded-full">
+                {cartCount}
+              </span>
+            )}
+          </button>
 
-          {/* Hamburger */}
+          {/* Hamburger (Mobile only) */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="text-primary-900 focus:outline-none text-2xl   "
+            className="md:hidden text-primary-900 focus:outline-none text-2xl"
           >
             {isOpen ? "✕" : "☰"}
           </button>
@@ -79,9 +81,7 @@ export default function Header() {
 
       {/* Menu Mobile complet à droite */}
       {isOpen && (
-        <nav className="md:hidden absolute top-4 right-12 bg-white flex flex-col space-y-2 p-4 rounded">
-
-          {/* Exclut l'élément actif déjà affiché */}
+        <nav className="md:hidden absolute top-16 right-0 left-0 bg-white shadow-lg flex flex-col space-y-2 p-4 border-t">
           {menu.map((item) => (
             <a
               key={item.name}
@@ -91,7 +91,7 @@ export default function Header() {
                   ? "var(--color-secondary-500)"
                   : "var(--color-primary-500)",
               }}
-              className="block "
+              className="block py-2 px-4 hover:bg-gray-50 rounded"
               onClick={() => setIsOpen(false)}
             >
               {item.name}

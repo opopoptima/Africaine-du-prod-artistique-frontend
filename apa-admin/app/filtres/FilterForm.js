@@ -10,49 +10,58 @@ import {
   SelectTrigger,
   SelectValue
 } from "../components/ui/select";
+import { useToast } from "@/app/context/ToastContext";
 
-import FilterService from "../services/filterService";
-
+// All available filterable fields
 const FILTERABLE_FIELDS = [
   { field: "language", label: "Langue" },
   { field: "type", label: "Type" },
   { field: "schoolLevel", label: "Niveau scolaire" },
   { field: "author", label: "Auteur" },
   { field: "publisher", label: "Maison d'édition" },
+  { field: "collection", label: "Collection" },
+  { field: "category", label: "Catégorie" },
+  { field: "subCategory", label: "Sous-catégorie" },
   { field: "price", label: "Prix" }
 ];
 
 export default function FilterForm({ filter, onSuccess, onCancel }) {
   const isEdit = Boolean(filter);
+  const toast = useToast();
   const [existingFilters, setExistingFilters] = useState([]);
   const [loadingFilters, setLoadingFilters] = useState(false);
+  const [loadingOptions, setLoadingOptions] = useState(false);
 
   const [form, setForm] = useState(() =>
     filter
       ? {
-          field: filter.field,
-          label: filter.label,
-          uiType: filter.uiType ?? "checkbox",
-          order: filter.order ?? 0,
-          isActive: filter.isActive ?? true
-        }
+        field: filter.field,
+        label: filter.label,
+        uiType: filter.uiType ?? "checkbox",
+        order: filter.order ?? 0,
+        isActive: filter.isActive ?? true,
+        options: filter.options || []
+      }
       : {
-          field: "",
-          label: "",
-          uiType: "checkbox",
-          order: 0,
-          isActive: true
-        }
+        field: "",
+        label: "",
+        uiType: "checkbox",
+        order: 0,
+        isActive: true,
+        options: []
+      }
   );
 
-  // Charger les filtres existants pour exclure les champs déjà utilisés
+  // Load existing filters
   useEffect(() => {
     if (!isEdit) {
       const loadExistingFilters = async () => {
         setLoadingFilters(true);
         try {
-          const res = await FilterService.getAll();
-          setExistingFilters(res.data || []);
+          const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+          const response = await fetch(`${API_URL}/filter-configs`);
+          const result = await response.json();
+          setExistingFilters(result.data || []);
         } catch (err) {
           console.error("Erreur lors du chargement des filtres:", err);
         } finally {
@@ -63,58 +72,101 @@ export default function FilterForm({ filter, onSuccess, onCancel }) {
     }
   }, [isEdit]);
 
-  // Filtrer les champs disponibles (exclure ceux déjà utilisés)
-  const getAvailableFields = () => {
-    if (isEdit) {
-      // En mode édition, on affiche tous les champs (le champ actuel est déjà sélectionné)
-      return FILTERABLE_FIELDS;
+  // Auto-fill label when field is selected
+  useEffect(() => {
+    if (form.field && !isEdit) {
+      const selectedField = FILTERABLE_FIELDS.find(f => f.field === form.field);
+      if (selectedField && !form.label) {
+        setForm(prev => ({ ...prev, label: selectedField.label }));
+      }
+
+      // Load options from backend
+      const loadOptions = async () => {
+        setLoadingOptions(true);
+        try {
+          const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+          const response = await fetch(`${API_URL}/filter-configs/active/frontend`);
+          const result = await response.json();
+          if (result.success) {
+            const fieldData = result.data.find(f => f.field === form.field);
+            if (fieldData) {
+              setForm(prev => ({ ...prev, options: fieldData.values || [] }));
+            }
+          }
+        } catch (err) {
+          console.error("Erreur lors du chargement des options :", err);
+        } finally {
+          setLoadingOptions(false);
+        }
+      };
+      loadOptions();
     }
-    
-    // En mode création, on exclut les champs déjà utilisés
+  }, [form.field, isEdit]);
+
+  // Available fields
+  const getAvailableFields = () => {
+    if (isEdit) return FILTERABLE_FIELDS;
     const usedFields = new Set(existingFilters.map(f => f.field));
     return FILTERABLE_FIELDS.filter(f => !usedFields.has(f.field));
   };
-
   const availableFields = getAvailableFields();
 
-  const handleChange = (key, value) => {
-    setForm(prev => ({ ...prev, [key]: value }));
+  const handleChange = (key, value) => setForm(prev => ({ ...prev, [key]: value }));
+
+  const handleOptionChange = (index, value) => {
+    setForm(prev => {
+      const newOptions = [...prev.options];
+      newOptions[index] = value;
+      return { ...prev, options: newOptions };
+    });
   };
 
-  const handleSubmit = async (e) => {
+  const addOption = () => setForm(prev => ({ ...prev, options: [...prev.options, ""] }));
+  const removeOption = index => setForm(prev => {
+    const newOptions = prev.options.filter((_, i) => i !== index);
+    return { ...prev, options: newOptions };
+  });
+
+  const handleSubmit = async e => {
     e.preventDefault();
+    try {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+      const endpoint = isEdit
+        ? `${API_URL}/filter-configs/${filter._id}`
+        : `${API_URL}/filter-configs`;
 
-    if (isEdit) {
-      await FilterService.update(filter._id, form);
-    } else {
-      await FilterService.create(form);
+      const response = await fetch(endpoint, {
+        method: isEdit ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form)
+      });
+
+      if (!response.ok) {
+        const errRes = await response.json();
+        throw new Error(errRes.message || "Erreur lors de la sauvegarde du filtre");
+      }
+
+      toast.success(isEdit ? "Filtre mis à jour avec succès !" : "Filtre créé avec succès !");
+      onSuccess();
+    } catch (err) {
+      console.error("Erreur:", err);
+      toast.error("Erreur lors de la sauvegarde du filtre : " + err.message);
     }
-
-    onSuccess();
   };
 
   return (
     <div className="w-full px-12 py-10">
-
-      {/* Titre */}
       <h1 className="text-2xl font-semibold text-primary-500 mb-6">
-        Formulaire du filtre
+        {isEdit ? "Modifier le filtre" : "Créer un nouveau filtre"}
       </h1>
 
-      {/* Carte */}
-      <form
-        onSubmit={handleSubmit}
-        className="bg-[#9B59B61A] rounded-xl p-8 space-y-6"
-      >
-        {/* Champ filtrable */}
+      <form onSubmit={handleSubmit} className="bg-[#9B59B61A] rounded-xl p-8 space-y-6">
+        {/* Field */}
         <div className="space-y-1">
-          <label className="block text-sm font-medium text-gray-700">
-            Champ filtrable
-          </label>
-
+          <label className="block text-sm font-medium text-gray-700">Champ filtrable *</label>
           <Select
             value={form.field}
-            onValueChange={(v) => handleChange("field", v)}
+            onValueChange={v => handleChange("field", v)}
             disabled={isEdit || loadingFilters}
           >
             <SelectTrigger className="bg-white">
@@ -128,114 +180,92 @@ export default function FilterForm({ filter, onSuccess, onCancel }) {
                   </SelectItem>
                 ))
               ) : (
-                <SelectItem value="" disabled>
-                  Aucun champ disponible (tous les champs sont déjà utilisés)
-                </SelectItem>
+                <SelectItem value="" disabled>Aucun champ disponible</SelectItem>
               )}
             </SelectContent>
           </Select>
-
-          {isEdit && (
-            <p className="text-xs text-gray-500">
-              Le champ ne peut pas être modifié
-            </p>
-          )}
-          {!isEdit && availableFields.length === 0 && (
-            <p className="text-xs text-red-500">
-              Tous les champs filtrables sont déjà utilisés. Supprimez un filtre existant pour en créer un nouveau.
-            </p>
-          )}
         </div>
 
-        {/* Nom affiché */}
+        {/* Label */}
         <div className="space-y-1">
-          <label className="block text-sm font-medium text-gray-700">
-            Nom affiché
-          </label>
+          <label className="block text-sm font-medium text-gray-700">Nom affiché *</label>
           <Input
-            className="bg-white"
             value={form.label}
-            onChange={(e) => handleChange("label", e.target.value)}
+            onChange={e => handleChange("label", e.target.value)}
             placeholder="Ex : Langue du livre"
             required
           />
         </div>
 
-        {/* Type d’affichage */}
+        {/* UI Type */}
         <div className="space-y-1">
-          <label className="block text-sm font-medium text-gray-700">
-            Type d’affichage
-          </label>
-          <Select
-            value={form.uiType}
-            onValueChange={(v) => handleChange("uiType", v)}
-          >
-            <SelectTrigger className="bg-white">
-              <SelectValue />
-            </SelectTrigger>
+          <label className="block text-sm font-medium text-gray-700">Type d'affichage *</label>
+          <Select value={form.uiType} onValueChange={v => handleChange("uiType", v)}>
+            <SelectTrigger className="bg-white"><SelectValue /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="checkbox">Checkbox (multi)</SelectItem>
-              <SelectItem value="radio">Radio (choix unique)</SelectItem>
-              <SelectItem value="range">Intervalle (prix)</SelectItem>
+              <SelectItem value="checkbox">Cases à cocher</SelectItem>
+              <SelectItem value="radio">Boutons radio</SelectItem>
+              <SelectItem value="range">Intervalle numérique</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
-        {/* Ordre */}
+        {/* Options for checkbox/radio */}
+        {(form.uiType === "checkbox" || form.uiType === "radio") && (
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-700">Valeurs disponibles</label>
+            {loadingOptions ? (
+              <p className="text-gray-500 text-sm">Chargement des options...</p>
+            ) : (
+              form.options.map((opt, i) => (
+                <div key={i} className="flex gap-2 items-center">
+                  <Input
+                    value={opt}
+                    onChange={e => handleOptionChange(i, e.target.value)}
+                    placeholder={`Option ${i + 1}`}
+                    className="bg-white"
+                  />
+                  <Button type="button" variant="outline" onClick={() => removeOption(i)}>Supprimer</Button>
+                </div>
+              ))
+            )}
+            <Button type="button" onClick={addOption}>Ajouter une option</Button>
+          </div>
+        )}
+
+        {/* Order */}
         <div className="space-y-1">
-          <label className="block text-sm font-medium text-gray-700">
-            Ordre d’affichage
-          </label>
+          <label className="block text-sm font-medium text-gray-700">Ordre d'affichage</label>
           <Input
-            className="bg-white"
             type="number"
             min={0}
             value={form.order}
-            onChange={(e) => handleChange("order", Number(e.target.value))}
+            onChange={e => handleChange("order", Number(e.target.value))}
           />
         </div>
 
-        {/* Statut */}
+        {/* Status */}
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">
-            Statut
-          </label>
-
+          <label className="block text-sm font-medium text-gray-700">Statut *</label>
           <div className="flex items-center gap-6">
-            <label className="flex items-center gap-2 text-sm">
-              <input
-                type="radio"
-                checked={form.isActive}
-                onChange={() => handleChange("isActive", true)}
-              />
+            <label className="flex items-center gap-2 text-sm cursor-pointer">
+              <input type="radio" checked={form.isActive} onChange={() => handleChange("isActive", true)} className="accent-primary-500" />
               Actif
             </label>
-
-            <label className="flex items-center gap-2 text-sm">
-              <input
-                type="radio"
-                checked={!form.isActive}
-                onChange={() => handleChange("isActive", false)}
-              />
+            <label className="flex items-center gap-2 text-sm cursor-pointer">
+              <input type="radio" checked={!form.isActive} onChange={() => handleChange("isActive", false)} className="accent-primary-500" />
               Désactivé
             </label>
           </div>
         </div>
 
         {/* Actions */}
-        <div className="flex justify-end gap-4 pt-6">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onCancel}
-            className="px-6"
-          >
-            Annuler
-          </Button>
-
+        <div className="flex justify-end gap-4 pt-6 border-t border-gray-200">
+          <Button type="button" variant="outline" onClick={onCancel}>Annuler</Button>
           <Button
             type="submit"
-            className="bg-primary-500 hover:bg-primary-600 text-white px-6"
+            className="bg-primary-500 hover:bg-primary-600 text-white"
+            disabled={!form.field || !form.label || (availableFields.length === 0 && !isEdit)}
           >
             {isEdit ? "Enregistrer" : "Créer"}
           </Button>

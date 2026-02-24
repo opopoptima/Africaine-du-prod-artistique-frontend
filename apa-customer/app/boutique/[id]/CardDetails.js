@@ -15,8 +15,10 @@ const PdfFlipBook = dynamic(() => import("./PdfFlipBook"), {
   ssr: false,
   loading: () => <div className="text-white">Chargement du PDF...</div>,
 });
+import { useToast } from "../../context/ToastContext";
 
 export default function CardDetail({ article }) {
+  const toast = useToast();
   // Safe destructure with defaults
   const {
     author = "Unknown Author",
@@ -44,7 +46,7 @@ export default function CardDetail({ article }) {
     { label: "ISBN", value: isbn },
     { label: "Niveau scolaire", value: schoolLevel },
     { label: "Dimensions", value: dimensions },
-    { label: "N° de pages", value: pages },
+    { label: "Nombre de pages", value: pages },
   ];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -54,9 +56,35 @@ export default function CardDetail({ article }) {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  
+  const [voicesLoaded, setVoicesLoaded] = useState(false);
+
   const utteranceRef = useRef(null);
   const timerRef = useRef(null);
+
+  // Load voices on mount
+  useEffect(() => {
+    const loadVoices = () => {
+      const voices = window.speechSynthesis.getVoices();
+      if (voices.length > 0) {
+        setVoicesLoaded(true);
+        console.log("Available voices:", voices.map(v => `${v.name} (${v.lang})`));
+      }
+    };
+
+    // Load voices immediately if available
+    loadVoices();
+
+    // Also listen for voiceschanged event (some browsers need this)
+    if (window.speechSynthesis.onvoiceschanged !== undefined) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    return () => {
+      if (window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = null;
+      }
+    };
+  }, []);
 
   // Estimate duration based on word count (average speaking rate: 150 words/minute)
   useEffect(() => {
@@ -78,23 +106,57 @@ export default function CardDetail({ article }) {
       "English": "en-US",
       "Français": "fr-FR",
       "Arabe": "ar-SA",
-      "en": "en-US",
-      "fr": "fr-FR",
+      "arabe": "ar-SA",
+      "Arabic": "ar-SA",
       "ar": "ar-SA",
+      "fr": "fr-FR",
+      "en": "en-US",
     };
 
     const speechLang = languageMap[language] || "en-US";
-    console.log("langue", speechLang);
+    console.log("Selected language:", language, "-> Speech lang:", speechLang);
 
     const utterance = new window.SpeechSynthesisUtterance(description);
     utterance.lang = speechLang;
     utterance.rate = 1;
     utterance.pitch = 1;
 
+    // Get available voices
+    const voices = window.speechSynthesis.getVoices();
+    console.log("Total voices available:", voices.length);
+
+    // Try to select the best voice for the language
+    if (speechLang.startsWith("ar")) {
+      // For Arabic, try to find the best Arabic voice
+      const arabicVoices = voices.filter(v => v.lang.startsWith("ar"));
+      console.log("Arabic voices found:", arabicVoices.map(v => `${v.name} (${v.lang})`));
+
+      if (arabicVoices.length > 0) {
+        // Prefer Saudi Arabic (ar-SA) or any Arabic voice
+        const preferredVoice = arabicVoices.find(v => v.lang === "ar-SA") || arabicVoices[0];
+        utterance.voice = preferredVoice;
+        console.log("Selected Arabic voice:", preferredVoice.name, preferredVoice.lang);
+      } else {
+        console.warn("No Arabic voice found. Speech may not work correctly for Arabic text.");
+        toast.error("Aucune voix arabe n'est disponible sur votre navigateur. La lecture audio peut ne pas fonctionner correctement.");
+      }
+    } else if (speechLang.startsWith("fr")) {
+      const frenchVoices = voices.filter(v => v.lang.startsWith("fr"));
+      if (frenchVoices.length > 0) {
+        utterance.voice = frenchVoices[0];
+        console.log("Selected French voice:", frenchVoices[0].name);
+      }
+    } else if (speechLang.startsWith("en")) {
+      const englishVoices = voices.filter(v => v.lang.startsWith("en"));
+      if (englishVoices.length > 0) {
+        utterance.voice = englishVoices[0];
+        console.log("Selected English voice:", englishVoices[0].name);
+      }
+    }
+
     utterance.onstart = () => {
       setIsSpeaking(true);
       setCurrentTime(0);
-      
       // Update progress timer
       timerRef.current = setInterval(() => {
         setCurrentTime((prev) => {
@@ -177,30 +239,30 @@ export default function CardDetail({ article }) {
         <div className="grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-6 lg:gap-12 xl:gap-16 p-4 md:p-5 lg:p-8 items-center">
           {/* Cover photo */}
           <div className="flex flex-col items-center justify-center w-full h-full">
-  <div
-    className="group relative w-56 md:w-64 lg:w-72 aspect-2/3 max-h-[80vh] overflow-hidden rounded-xl shadow-md border border-primary-300/40 cursor-pointer"
-    onClick={openModal}
-  >
-    {/* Cover image */}
-    <Image
-      src={images[currentImageIndex]}
-      alt={`${title} cover`}
-      fill
-      className="object-cover transition-transform duration-300 group-hover:scale-105"
-      sizes="(max-width: 640px) 80vw, (max-width: 1024px) 20rem, 18rem"
-    />
+            <div
+              className="group relative w-56 md:w-64 lg:w-72 aspect-2/3 max-h-[80vh] overflow-hidden rounded-xl shadow-md border border-primary-300/40 cursor-pointer"
+              onClick={openModal}
+            >
+              {/* Cover image */}
+              <Image
+                src={images[currentImageIndex]}
+                alt={`${title} cover`}
+                fill
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                sizes="(max-width: 640px) 80vw, (max-width: 1024px) 20rem, 18rem"
+              />
 
-    {/* Hover overlay */}
-    <div className="absolute inset-0 bg-primary-500/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-      <div className="flex flex-col items-center gap-2 text-white">
-        <FaEye className="text-2xl" />
-        <span className="text-sm font-semibold tracking-wide uppercase">
-          Aperçus
-        </span>
-      </div>
-    </div>
-  </div>
-</div>
+              {/* Hover overlay */}
+              <div className="absolute inset-0 bg-primary-500/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                <div className="flex flex-col items-center gap-2 text-white">
+                  <FaEye className="text-2xl" />
+                  <span className="text-sm font-semibold tracking-wide uppercase">
+                    Aperçus
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
 
 
           {/* Details */}
@@ -252,9 +314,8 @@ export default function CardDetail({ article }) {
                   {[...Array(15)].map((_, i) => (
                     <div
                       key={i}
-                      className={`w-0.5 bg-gray-800 rounded-full transition-all duration-150 ${
-                        isSpeaking ? "animate-pulse" : ""
-                      }`}
+                      className={`w-0.5 bg-gray-800 rounded-full transition-all duration-150 ${isSpeaking ? "animate-pulse" : ""
+                        }`}
                       style={{
                         height: isSpeaking
                           ? `${Math.random() * 60 + 40}%`
@@ -308,11 +369,10 @@ export default function CardDetail({ article }) {
                     {specs.map((s, idx) => (
                       <th
                         key={idx}
-                        className={`px-2 md:px-3 lg:px-4 py-2 lg:py-3 text-center font-bold text-primary-500 text-xs lg:text-sm ${
-                          idx < specs.length - 1
-                            ? "border-r border-primary-300/30"
-                            : ""
-                        }`}
+                        className={`px-2 md:px-3 lg:px-4 py-2 lg:py-3 text-center font-bold text-primary-500 text-xs lg:text-sm ${idx < specs.length - 1
+                          ? "border-r border-primary-300/30"
+                          : ""
+                          }`}
                       >
                         {s.label}
                       </th>
@@ -324,11 +384,10 @@ export default function CardDetail({ article }) {
                     {specs.map((s, idx) => (
                       <td
                         key={idx}
-                        className={`px-2 md:px-3 lg:px-4 py-2 lg:py-3 text-center text-secondary-900 font-medium text-xs lg:text-sm ${
-                          idx < specs.length - 1
-                            ? "border-r border-primary-300/30"
-                            : ""
-                        }`}
+                        className={`px-2 md:px-3 lg:px-4 py-2 lg:py-3 text-center text-secondary-900 font-medium text-xs lg:text-sm ${idx < specs.length - 1
+                          ? "border-r border-primary-300/30"
+                          : ""
+                          }`}
                       >
                         {s.value}
                       </td>
@@ -343,76 +402,76 @@ export default function CardDetail({ article }) {
 
       {/* Modal - PDF Flipbook or Image Zoom */}
       {isModalOpen && (
-  <div
-    className="fixed inset-0 bg-black/95 z-9999 flex items-center justify-center "
-    onClick={closeModal}
-  >
-    {/* Close button - also high z-index */}
-    <button
-      onClick={closeModal}
-      className="absolute  top-24 sm:top-18 right-2 bg-gray-200 hover:bg-white/20 text-black rounded-full p-2 transition-all duration-200 z-999"
-    >
-      <IoClose className="size-8" />
-    </button>
-
-    {pdfExtrait ? (
-      <PdfFlipBook
-        pdfExtrait={pdfExtrait}
-        cover={cover}
-        title={title}
-        author={author}
-        onClose={closeModal}
-      />
-    ) : (
-      <>
-        {images.length > 1 && (
-          <>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                prevImage();
-              }}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white rounded-full p-4 transition-all z-9999"
-            >
-              <IoChevronBack className="size-8" />
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                nextImage();
-              }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white rounded-full p-4 transition-all z-9999"
-            >
-              <IoChevronForward className="size-8" />
-            </button>
-          </>
-        )}
-
         <div
-          className="relative w-[92vw] h-[92vh] max-w-7xl cursor-zoom-in"
-          onClick={(e) => e.stopPropagation()}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
+          className="fixed inset-0 bg-black/95 z-9999 flex items-center justify-center "
+          onClick={closeModal}
         >
-          <div className="relative w-full h-full overflow-hidden rounded-xl shadow-2xl">
-            <Image
-              src={images[currentImageIndex]}
-              alt={`${title} - Image ${currentImageIndex + 1}`}
-              fill
-              className="object-contain transition-transform duration-500 ease-out"
-              style={{
-                transform: isZoomed ? "scale(2.5)" : "scale(1)",
-                transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
-              }}
-              sizes="92vw"
-              priority
+          {/* Close button - also high z-index */}
+          <button
+            onClick={closeModal}
+            className="absolute  top-24 sm:top-18 right-2 bg-gray-200 hover:bg-white/20 text-black rounded-full p-2 transition-all duration-200 z-999"
+          >
+            <IoClose className="size-8" />
+          </button>
+
+          {pdfExtrait ? (
+            <PdfFlipBook
+              pdfExtrait={pdfExtrait}
+              cover={cover}
+              title={title}
+              author={author}
+              onClose={closeModal}
             />
-          </div>
+          ) : (
+            <>
+              {images.length > 1 && (
+                <>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      prevImage();
+                    }}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white rounded-full p-4 transition-all z-9999"
+                  >
+                    <IoChevronBack className="size-8" />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      nextImage();
+                    }}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 text-white rounded-full p-4 transition-all z-9999"
+                  >
+                    <IoChevronForward className="size-8" />
+                  </button>
+                </>
+              )}
+
+              <div
+                className="relative w-[92vw] h-[92vh] max-w-7xl cursor-zoom-in"
+                onClick={(e) => e.stopPropagation()}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+              >
+                <div className="relative w-full h-full overflow-hidden rounded-xl shadow-2xl">
+                  <Image
+                    src={images[currentImageIndex]}
+                    alt={`${title} - Image ${currentImageIndex + 1}`}
+                    fill
+                    className="object-contain transition-transform duration-500 ease-out"
+                    style={{
+                      transform: isZoomed ? "scale(2.5)" : "scale(1)",
+                      transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
+                    }}
+                    sizes="92vw"
+                    priority
+                  />
+                </div>
+              </div>
+            </>
+          )}
         </div>
-      </>
-    )}
-  </div>
-)}
+      )}
     </>
   );
 }

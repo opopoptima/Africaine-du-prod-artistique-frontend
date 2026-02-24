@@ -45,27 +45,26 @@ export default function GalleryCarousel({ images = [] }) {
 
       <div className="relative">
         <div className="flex justify-center items-center gap-6 md:gap-10 lg:gap-14">
-         {getVisibleImages().map((src, idx) => {
-          const isCenter = idx === Math.floor(visibleCount / 2);
-          return (
-            <div
-              key={idx}
-              className={`relative transition-all duration-500 ease-out ${
-                isCenter ? "z-10 scale-110 shadow-xl" : "z-0 scale-95 opacity-90 shadow-md"
-              }`}
-            >
-              <div className="relative w-40 h-56 md:w-44 md:h-64 lg:w-48 lg:h-72 overflow-hidden rounded-lg">
-                <Image
-                  src={src}
-                  alt={`Photo ${current + idx + 1}`}
-                  fill
-                  className="object-cover hover:scale-105 transition-transform duration-700"
-                  sizes="(max-width: 768px) 90vw, (max-width: 1024px) 45vw, 32vw"
-                />
+          {getVisibleImages().map((src, idx) => {
+            const isCenter = idx === Math.floor(visibleCount / 2);
+            return (
+              <div
+                key={idx}
+                className={`relative transition-all duration-500 ease-out ${isCenter ? "z-10 scale-110 shadow-xl" : "z-0 scale-95 opacity-90 shadow-md"
+                  }`}
+              >
+                <div className="relative w-40 aspect-9/16 md:w-48 lg:w-56 overflow-hidden rounded-lg shadow-md border border-gray-100">
+                  <Image
+                    src={src}
+                    alt={`Photo ${current + idx + 1}`}
+                    fill
+                    className="object-cover hover:scale-105 transition-transform duration-700"
+                    sizes="(max-width: 768px) 90vw, (max-width: 1024px) 45vw, 32vw"
+                  />
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
 
         </div>
 
@@ -89,9 +88,8 @@ export default function GalleryCarousel({ images = [] }) {
             <button
               key={i}
               onClick={() => setCurrent(i)}
-              className={`transition-all rounded-full ${
-                i === current ? "bg-primary-100 w-10 h-3" : "bg-primary-300 w-3 h-3 hover:bg-yellow-500"
-              }`}
+              className={`transition-all rounded-full ${i === current ? "bg-primary-100 w-10 h-3" : "bg-primary-300 w-3 h-3 hover:bg-yellow-500"
+                }`}
             />
           ))}
         </div>

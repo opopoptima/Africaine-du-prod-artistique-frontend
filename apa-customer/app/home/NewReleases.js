@@ -1,90 +1,119 @@
+"use client";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Button } from "../components/ui/button";
 import { Card } from "../components/ui/card";
 import { Heart, Eye } from "lucide-react";
 import { Badge } from "../components/ui/badge";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../components/ui/carousel";
+import { ArticleService } from "../services/articleService";
 
-const books = [
-  { id: 1, image: "/images/NewReleases/BOOK1.png", title: "My Dearest Darkest", author: "By Gianna Berge", price: "$120.00", isBestseller: true },
-  { id: 2, image: "/images/NewReleases/BOOK2.png", title: "House of Sky and Breath", author: "By Gilberto Mills", price: "$80.00", originalPrice: "$90.00" },
-  { id: 3, image: "/images/NewReleases/BOOK3.png", title: "My Dearest Darkest", author: "By Gianna Berge", price: "$120.00", isBestseller: true },
-  { id: 4, image: "/images/NewReleases/BOOK4.png", title: "House of Sky and Breath", author: "By Gilberto Mills", price: "$80.00", originalPrice: "$90.00" },
-  { id: 5, image: "/images/NewReleases/BOOK4.png", title: "House of Sky and Breath", author: "By Gilberto Mills", price: "$80.00", originalPrice: "$90.00" },
-  { id: 6, image: "/images/NewReleases/BOOK4.png", title: "House of Sky and Breath", author: "By Gilberto Mills", price: "$80.00", originalPrice: "$90.00" },
+const BookCard = ({ id, image, title, author, price, originalPrice, isBestSeller }) => (
+  <Link href={`/boutique/${id}`}>
+    <Card className="group relative overflow-hidden border-0 bg-transparent shadow-none transition-all duration-300 cursor-pointer">
+      <div className="relative aspect-[3/4] w-full max-w-[220px] sm:max-w-[180px] mx-auto overflow-hidden rounded-lg">
+        {isBestSeller && (
+          <div className="absolute left-0 top-0 z-10 w-24 overflow-hidden">
+            <Badge className="absolute left-[-20px] top-[10px] z-10 rotate-[-45deg] bg-primary-100 text-xs font-bold text-secondary-700 shadow-md border-0 px-4 py-1">
+              Bestseller
+            </Badge>
+          </div>
+        )}
+        <img
+          src={image}
+          alt={title}
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
 
-];
-
-const BookCard = ({ image, title, author, price, originalPrice, isBestseller }) => (
-  <Card className="group relative overflow-hidden border-0 bg-transparent shadow-none transition-all duration-300">
-    <div className="relative aspect-[3/4] w-full max-w-[220px] sm:max-w-[180px] mx-auto overflow-hidden rounded-lg">
-      {isBestseller && (
-        <div className="absolute left-0 top-0 z-10 w-24 overflow-hidden">
-          <Badge className="absolute left-[-20px] top-[10px] z-10 rotate-[-45deg] bg-primary-100 text-xs font-bold text-secondary-700 shadow-md border-0 px-4 py-1">
-            Bestseller
-          </Badge>
-        </div>
-      )}
-      <img
-        src={image}
-        alt={title}
-        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-      />
-      <div className="absolute right-3 top-1/2 flex -translate-y-1/2 flex-col gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300 z-20">
-        <button className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white shadow-lg transition-all hover:bg-primary-500 hover:text-secondary-100 hover:scale-110">
-          <Heart className="h-5 w-5" />
-        </button>
-        <button className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white shadow-lg transition-all hover:bg-primary-500 hover:text-secondary-100 hover:scale-110">
-          <Eye className="h-5 w-5" />
-        </button>
       </div>
-    </div>
-    <div className="mt-4 space-y-1 text-center px-2 sm:px-0">
-      <p className="text-sm text-secondary-900">{author}</p>
-      <h3 className="font-semibold text-secondary-900 text-sm sm:text-base line-clamp-2">{title}</h3>
-      <div className="flex justify-center items-center gap-2">
-        <span className="text-lg font-bold text-primary-500">{price}</span>
-        {originalPrice && (
-          <span className="text-sm text-secondary-700 line-through">{originalPrice}</span>
+      <div className="mt-4 space-y-1 text-center px-2 sm:px-0">
+        <p className="text-sm text-secondary-900">{author}</p>
+        <h3 className="font-semibold text-secondary-900 text-sm sm:text-base line-clamp-2 group-hover:text-primary-500 transition-colors uppercase">{title}</h3>
+        <div className="flex justify-center items-center gap-2">
+          <span className="text-lg font-bold text-primary-500">{price}</span>
+          {originalPrice && (
+            <span className="text-sm text-secondary-700 line-through">{originalPrice}</span>
+          )}
+        </div>
+      </div>
+    </Card>
+  </Link>
+);
+
+
+export const NewReleases = () => {
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchNewArticles = async () => {
+      setLoading(true);
+      try {
+        const res = await ArticleService.getAll({ limit: 20, filters: { isNew: true } });
+        // Accept both res.data (array) or res (array)
+        const data = Array.isArray(res) ? res : res.data || [];
+        setArticles(data.filter((a) => a.isNew));
+      } catch (err) {
+        setArticles([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchNewArticles();
+  }, []);
+
+  return (
+    <section className="pt-12 px-8 sm:px-8 md:px-16 lg:px-24 xl:px-32 mx-8">
+      <div className="container mx-auto">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-primary-300 mb-4 sm:mb-6">
+            Nos nouveautés
+          </h2>
+          <p className="text-secondary-700 text-base sm:text-lg max-w-2xl mx-auto">
+            Découvrez nos dernières publications conçues pour inspirer et éduquer
+          </p>
+        </div>
+
+        {loading ? (
+          <div className="text-center text-lg text-gray-500 py-12">Chargement...</div>
+        ) : articles.length === 0 ? (
+          <div className="text-center text-lg text-gray-500 py-12">Aucune nouveauté trouvée.</div>
+        ) : (
+          <>
+            <Carousel opts={{ align: "start", loop: true }} className="w-full">
+              <CarouselContent className="-ml-2 md:-ml-4">
+                {articles.map((article) => (
+                  <CarouselItem key={article.id} className="pl-2 md:pl-4 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5">
+                    <div className="p-1">
+                      <BookCard
+                        id={article.id}
+                        image={article.cover}
+                        title={article.title}
+                        author={article.author}
+                        price={article.price ? `${article.price} dt` : ""}
+                        originalPrice={article.originalPrice ? `${article.originalPrice} dt` : undefined}
+                        isBestSeller={article.isBestSeller}
+                      />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="border-2 border-gray-300 hover:bg-purple-600 hover:text-white hover:border-primary-500" />
+              <CarouselNext className="bg-primary-500 text-secondary-100 hover:bg-primary-600 border-2 border-primary-500" />
+            </Carousel>
+            <div className="text-center">
+              <Link href="/boutique?isNew=true">
+                <Button
+                  size="lg"
+                  className="bg-primary-100 hover:bg-secondary-100 hover:text-primary-100 hover:border-primary-100 hover:border-2 text-secondary-100 px-8 sm:px-12 py-4 sm:py-6 text-lg sm:text-xl rounded-full shadow-lg transition-all hover:shadow-xl hover:scale-105"
+                >
+                  Voir plus
+                </Button>
+              </Link>
+            </div>
+          </>
         )}
       </div>
-    </div>
-  </Card>
-);
-
-export const NewReleases = () => (
-  <section className="py-12 px-8 sm:px-8 md:px-16 lg:px-24 xl:px-32 mx-8">
-    <div className="container mx-auto">
-      <div className="text-center mb-8 sm:mb-12">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-primary-300 mb-4 sm:mb-6">
-          Nos nouveautés
-        </h2>
-        <p className="text-secondary-700 text-base sm:text-lg max-w-2xl mx-auto">
-          Découvrez nos dernières publications conçues pour inspirer et éduquer
-        </p>
-      </div>
-
-      <Carousel opts={{ align: "start", loop: true }} className="w-full">
-        <CarouselContent>
-          {books.map((book) => (
-            <CarouselItem key={book.id} className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5">
-              <div className="p-1">
-                <BookCard {...book} />
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        <CarouselPrevious className="border-2 border-gray-300 hover:bg-purple-600 hover:text-white hover:border-primary-500" />
-        <CarouselNext className="bg-primary-500 text-secondary-100 hover:bg-primary-600 border-2 border-primary-500" />
-      </Carousel>
-
-      <div className="text-center mt-8 sm:mt-12">
-        <Button
-          size="lg"
-          className="bg-primary-100 hover:bg-secondary-100 hover:text-primary-100 hover:border-primary-100 hover:border-2 text-secondary-100 px-8 sm:px-12 py-4 sm:py-6 text-lg sm:text-xl rounded-full shadow-lg transition-all hover:shadow-xl hover:scale-105"
-        >
-          Voir plus
-        </Button>
-      </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};

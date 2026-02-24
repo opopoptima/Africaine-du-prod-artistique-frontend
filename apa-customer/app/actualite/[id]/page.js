@@ -6,6 +6,7 @@ import HeroSectionAct from "./HeroSection";
 import AproposActu from "./Apropos-actu";
 import AutresActu from "./Autresactu";
 import GalleryCarousel from "./gallerie";
+import VideoSection from "./VideoSection";
 import { NewsService } from "../../services/newsService";
 
 export default function NewsDetail() {
@@ -45,7 +46,7 @@ export default function NewsDetail() {
 
         const others = allNews
           .filter((item) => item._id !== id) // exclure la news courante
-          .slice(0, 2); // prendre 2 autres actualités
+          .slice(0, 3); // prendre 2 autres actualités
 
         setOtherNews(others);
       } catch (err) {
@@ -85,6 +86,7 @@ export default function NewsDetail() {
       {/* Section principale */}
       <HeroSectionAct news={news} />
       <AproposActu news={news} />
+      <VideoSection videoUrl={news.videoUrl} />
       <GalleryCarousel images={news.galleryImages || news.images || []} />
 
 
@@ -92,7 +94,8 @@ export default function NewsDetail() {
       {otherNews.length > 0 && (
         <AutresActu
           actu1={otherNews[0]}
-          actu2={otherNews[1] || null} // safeguard if only 1 other news
+          actu2={otherNews[1] || null}
+          actu3={otherNews[2] || null} // safeguard if only 1 other news
         />
       )}
     </div>

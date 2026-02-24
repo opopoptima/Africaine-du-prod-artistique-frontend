@@ -45,8 +45,8 @@ export default function BookGallery({ images = [], title = "Book" }) {
       {/* Gallery - Carousel on mobile, static on desktop */}
       <div className="md:bg-white md:rounded-2xl shadow-lg md:p-4 mb-4 sm:mb-8">
         {/* Mobile Carousel */}
-        <div className="sm:hidden relative">
-          <div className="relative w-32 aspect-[2/3]">
+        <div className="sm:hidden relative w-full flex flex-col items-center">
+          <div className="relative w-48 aspect-2/3 bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
             <img
               src={images[currentIndex]}
               alt={`${title} - ${currentIndex + 1}`}
@@ -54,7 +54,7 @@ export default function BookGallery({ images = [], title = "Book" }) {
               onClick={() => openModal(currentIndex)}
             />
           </div>
-          
+
           {/* Mobile Navigation Arrows */}
           {images.length > 1 && (
             <>
@@ -72,7 +72,7 @@ export default function BookGallery({ images = [], title = "Book" }) {
               </button>
             </>
           )}
-          
+
           {/* Mobile Indicators */}
           {images.length > 1 && (
             <div className="flex justify-center gap-2 mt-4">
@@ -80,11 +80,10 @@ export default function BookGallery({ images = [], title = "Book" }) {
                 <button
                   key={index}
                   onClick={() => setCurrentIndex(index)}
-                  className={`h-2 rounded-full transition-all ${
-                    index === currentIndex
-                      ? "bg-gray-800 w-6"
-                      : "bg-gray-300 hover:bg-gray-500 w-2"
-                  }`}
+                  className={`h-2 rounded-full transition-all ${index === currentIndex
+                    ? "bg-gray-800 w-6"
+                    : "bg-gray-300 hover:bg-gray-500 w-2"
+                    }`}
                 />
               ))}
             </div>
@@ -96,7 +95,7 @@ export default function BookGallery({ images = [], title = "Book" }) {
           {images.map((src, index) => (
             <div
               key={index}
-              className="relative flex-shrink-0 w-40 md:w-48 cursor-zoom-in overflow-hidden aspect-[2/3]"
+              className="relative shrink-0 w-40 md:w-48 cursor-zoom-in overflow-hidden aspect-2/3"
               onClick={() => openModal(index)}
             >
               <img
@@ -175,11 +174,10 @@ export default function BookGallery({ images = [], title = "Book" }) {
                   e.stopPropagation();
                   setCurrentIndex(index);
                 }}
-                className={`h-2 rounded-full transition-all ${
-                  index === currentIndex
-                    ? "bg-white w-6"
-                    : "bg-white/40 hover:bg-white/75 w-2"
-                }`}
+                className={`h-2 rounded-full transition-all ${index === currentIndex
+                  ? "bg-white w-6"
+                  : "bg-white/40 hover:bg-white/75 w-2"
+                  }`}
               />
             ))}
           </div>

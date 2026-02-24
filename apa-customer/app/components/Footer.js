@@ -22,27 +22,25 @@ export default function Footer() {
         <div className="text-center mb-4">
           <h3 className="font-bold mb-3 text-primary-500">Suivez-nous</h3>
           <div className="flex justify-center gap-4 text-primary-300">
-            <Link 
-            href="https://www.facebook.com/Africaineprod" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            aria-label="Facebook"
-          >
-            <FaFacebook className="w-6 h-6 transition cursor-pointer" />
-          </Link>
-
-          <Link 
-            href="https://www.instagram.com/lafricaineprod" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            aria-label="Instagram"
-          >
-            <FaInstagram className="w-6 h-6 transition cursor-pointer" />
-          </Link>
-
-            <Link href="#" aria-label="LinkedIn">
-              <FaLinkedin className="w-6 h-6 transition cursor-pointer" />
+            <Link
+              href="https://www.facebook.com/Africaineprod"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+            >
+              <FaFacebook className="w-6 h-6 transition cursor-pointer" />
             </Link>
+
+            <Link
+              href="https://www.instagram.com/lafricaineprod"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+            >
+              <FaInstagram className="w-6 h-6 transition cursor-pointer" />
+            </Link>
+
+
           </div>
         </div>
 
@@ -101,7 +99,7 @@ export default function Footer() {
 
         {/* Bas du footer */}
         <div className="text-center text-xs text-secondary-900">
-          © 2025 L’Africaine de Prod Artistique. Tous droits réservés.
+          © 2026 L’Africaine de Prod Artistique. Tous droits réservés.
         </div>
       </div>
 

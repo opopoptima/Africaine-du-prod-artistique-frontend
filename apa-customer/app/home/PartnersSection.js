@@ -1,19 +1,17 @@
+import Image from "next/image";
+
 const partners = [
-  { name: "iTravel Fitness", logo: "iTravel", color: "text-purple-600", style: "italic font-light" },
-  { name: "Octane Fitness", logo: "Octane", color: "text-purple-700", style: "font-bold italic" },
-  { name: "LA Fitness", logo: "LA Fitness", color: "text-blue-900", style: "font-black italic" },
-  { name: "Smile", logo: "Smile", color: "text-purple-500", style: "font-bold" },
-  { name: "TRUE Fitness", logo: "TRUE", color: "text-orange-500", style: "font-black" },
-  { name: "CYBEX", logo: "CYBEX", color: "text-gray-900", style: "font-black italic" },
-  { name: "Nautilus", logo: "Nautilus", color: "text-purple-600", style: "italic font-semibold" },
-  { name: "PRECOR", logo: "PRECOR", color: "text-gray-800", style: "font-black" },
+  { name: "Librairie Aya Sofya", logo: "/images/unnamed.jpg", color: "text-purple-600", style: "italic font-light" },
+  { name: "Dima Edition et Diffusion", logo: "/images/dima.png", color: "text-purple-600", style: "italic font-light" },
+
+
 ];
 
 const PartnersSection = () => {
   return (
     <section className="py-12 px-4 sm:py-16 sm:px-6 lg:py-20 lg:px-8 bg-white">
       <div className="max-w-7xl mx-auto">
-        
+
         {/* Title */}
         <div className="text-center mb-12 sm:mb-16 space-y-3 sm:space-y-4">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-purple-600">
@@ -42,10 +40,16 @@ const PartnersSection = () => {
               "
             >
               <div className="text-center">
-                <p className={`text-xl sm:text-2xl md:text-3xl ${partner.style} ${partner.color} transition-transform duration-300 hover:scale-110`}>
-                  {partner.logo}
-                </p>
-                <p className="mt-2 text-sm sm:text-base text-gray-500">
+                <div className="relative w-40 h-40 sm:w-40 sm:h-40 mx-auto mb-3">
+                  <Image
+                    src={partner.logo}
+                    alt={partner.name}
+                    fill
+                    className="object-contain transition-transform duration-300 hover:scale-110"
+                    sizes="(max-width: 640px) 128px, 160px"
+                  />
+                </div>
+                <p className="text-sm sm:text-base text-gray-700 font-medium">
                   {partner.name}
                 </p>
               </div>

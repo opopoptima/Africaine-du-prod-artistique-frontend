@@ -6,19 +6,19 @@ export default function EngagementSection() {
       imageSrc: "/images/engagement/inspiration.png",
       alt: "Inspiration",
       title: "Inspiration",
-      description: "Des livres qui éveillent la curiosité",
+      description: "Puiser dans les histoires d’hier pour imaginer un avenir meilleur.",
     },
     {
       imageSrc: "/images/engagement/creation.png",
       alt: "Création",
       title: "Création",
-      description: "Une approche artistique et ludique",
+      description: "Concevoir des livres faits pour être lus, manipulés, aimés et transmis.",
     },
     {
       imageSrc: "/images/engagement/impact.png",
       alt: "Impact",
       title: "Impact",
-      description: "Un apprentissage durable et inclusif",
+      description: "Contribuer à une société plus cultivée, créative et consciente.",
     },
   ];
 

@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { api } from '../../services/auth';
+import { api } from '../services/auth';
 
 const ForgotPasswordForm = () => {
   const router = useRouter();

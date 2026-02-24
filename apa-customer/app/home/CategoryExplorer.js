@@ -1,82 +1,60 @@
 "use client";
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Button } from "../components/ui/button";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../components/ui/carousel";
 
 export default function CategoryExplorer() {
-  const initialCategories = [
-    { id: 1, name: "Lecture & Histoires", image: "/images/Categories/Lecture.jpeg", href: "/Categories/Lecture" },
-    { id: 2, name: "Apprentissage & Éducation", image: "/images/Categories/app.png", href: "/categories/app" },
-    { id: 3, name: "Créativité & Coloriage", image: "/images/Categories/creativite.png", href: "/categories/creativite" },
-    { id: 4, name: "Découverte du monde", image: "/images/Categories/Decouverte.png", href: "/categories/Decouverte" },
-    { id: 5, name: "Valeurs & Développement personnel", image: "/images/Categories/valeurs.png", href: "/categories/valeurs" },
-    { id: 6, name: "Pâtisserie", image: "/images/Categories/patisserie.jpg", href: "/categories/patisserie" },
-    { id: 7, name: "Épicerie", image: "/images/Categories/epicerie.jpg", href: "/categories/epicerie" },
-    { id: 8, name: "Boîtes cadeaux", image: "/images/Categories/cadeaux.jpg", href: "/categories/cadeaux" },
+  const categories = [
+    { id: 1, name: "Parascolaire", image: "/images/Categories/Lecture.jpeg", href: "/boutique?type=Parascolaire" },
+    { id: 2, name: "Préscolaire", image: "/images/Categories/app.png", href: "/boutique?type=Préscolaire" },
+    { id: 3, name: "Coloriage", image: "/images/Categories/creativite.png", href: "/boutique?type=Coloriage" },
+    { id: 4, name: "Coédition", image: "/images/Categories/Decouverte.png", href: "/boutique?type=Coédition" },
   ];
 
-  const [displayCount, setDisplayCount] = useState(5);
-  const [showMore, setShowMore] = useState(false);
-
-  // Détecter la taille de l’écran
-  useEffect(() => {
-    const updateCount = () => {
-      const width = window.innerWidth;
-      if (width >= 1024) setDisplayCount(5);
-      else if (width >= 768) setDisplayCount(4);
-      else if (width >= 640) setDisplayCount(3);
-      else setDisplayCount(2);
-    };
-
-    updateCount();
-    window.addEventListener("resize", updateCount);
-    return () => window.removeEventListener("resize", updateCount);
-  }, []);
-
-  const visibleCategories = showMore
-    ? initialCategories
-    : initialCategories.slice(0, displayCount);
-
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-20 py-8">
-      <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center text-purple-500 mb-6">
-        Explorer par catégorie
-      </h2>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-20 py-8 my-8">
+      <div className="container mx-auto">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-primary-300 mb-4 sm:mb-6">
+            Explorer par catégorie
+          </h2>
 
-      <div className="grid grid-cols-2 pb-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
-        {visibleCategories.map((cat) => (
-          <Link key={cat.id} href={cat.href}>
-            <div className="flex flex-col items-center cursor-pointer hover:scale-105 transition-transform mt-3 sm:mt-4 md:mt-5 lg:mt-6">
-              <div className="w-20 h-20 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full overflow-hidden border-2 border-purple-300 flex items-center justify-center p-4 bg-white shadow-md">
-                <Image
-                  src={cat.image}
-                  alt={cat.name}
-                  width={100}
-                  height={100}
-                  className="object-cover w-full h-full"
-                  priority
-                />
-              </div>
-              <span className="mt-1 text-center font-semibold text-[0.65rem] sm:text-xs md:text-sm lg:text-base">
-                {cat.name}
-              </span>
-            </div>
-          </Link>
-        ))}
+        </div>
       </div>
 
-      {!showMore && visibleCategories.length < initialCategories.length && (
-      <div className="text-center mt-8 sm:mt-12">
-          <Button 
-            size="lg"
-            onClick={() => setShowMore(true)}
-          className="bg-primary-100 hover:bg-secondary-100 hover:text-primary-100 hover:border-primary-100 hover:border-2 text-secondary-100 px-8 sm:px-12 py-4 sm:py-6 text-lg sm:text-xl rounded-full shadow-lg transition-all hover:shadow-xl hover:scale-105"
+
+
+      <div className="flex justify-center w-full px-8">
+        <Carousel
+          opts={{ align: "start", loop: true }} className="w-full"
         >
-            Voir plus
-          </Button>
-        </div>
-      )}
+          <CarouselContent className="ml-2 md:-ml-4">
+            {categories.map((cat) => (
+              <CarouselItem key={cat.id} className="pl-2 md:pl-4 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5">
+                <Link href={cat.href}>
+                  <div className="flex flex-col items-center group cursor-pointer transition-all duration-300">
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full overflow-hidden border-2 border-purple-200 group-hover:border-purple-400 group-hover:scale-110 flex items-center justify-center p-3 sm:p-4 bg-white shadow-md transition-all duration-300">
+                      <Image
+                        src={cat.image}
+                        alt={cat.name}
+                        width={120}
+                        height={120}
+                        className="object-cover w-full h-full"
+                        priority
+                      />
+                    </div>
+                    <span className="mt-3 text-center font-bold text-xs sm:text-sm md:text-base text-gray-700 group-hover:text-purple-600 transition-colors">
+                      {cat.name}
+                    </span>
+                  </div>
+                </Link>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="border-2 border-gray-300 hover:bg-purple-600 hover:text-white hover:border-primary-500" />
+          <CarouselNext className="bg-primary-500 text-secondary-100 hover:bg-primary-600 border-2 border-primary-500" />
+        </Carousel>
+      </div>
     </div>
   );
 }

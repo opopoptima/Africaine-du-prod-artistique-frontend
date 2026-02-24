@@ -45,12 +45,12 @@ export default function TeamSection() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 
+          <h1
             className="text-3xl sm:text-5xl font-bold mb-4 text-primary-500"
           >
             Notre équipe
           </h1>
-          <p 
+          <p
             className="text-lg sm:text-xl text-secondary-700"
           >
             Une équipe passionnée par l'éducation et la créativité.
@@ -58,9 +58,9 @@ export default function TeamSection() {
         </div>
 
         {/* Team Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
           {teamMembers.map((member, index) => (
-            <div 
+            <div
               key={index}
               className="group relative"
             >
@@ -76,41 +76,41 @@ export default function TeamSection() {
                 </div>
 
                 {/* Info Card Overlay avec bouton Voir CV */}
-                <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl p-6 text-center transition-all duration-300 group-hover:pb-20">
-                  <h3 
-                    className="text-lg sm:text-xl font-bold mb-1 text-secondary-900"
+                <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl p-3 sm:p-6 text-center transition-all duration-300 group-hover:pb-16 sm:group-hover:pb-20">
+                  <h3
+                    className="text-sm sm:text-xl font-bold mb-1 text-secondary-900"
                   >
                     {member.name}
                   </h3>
-                  <p 
-                    className="text-xs sm:text-sm mb-2 text-secondary-700"
+                  <p
+                    className="text-[10px] sm:text-sm mb-2 text-secondary-700"
                   >
                     {member.role}
                   </p>
-                  
+
                   {/* Bouton Voir CV qui apparaît au survol */}
                   <button
                     onClick={() => handleCvClick(member.cvUrl, member.name)}
-                    className="absolute bottom-0 left-0 right-0 flex items-center justify-center gap-2 transform text-white px-4 py-2 sm:px-6 rounded-full font-semibold transition-all duration-300 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-4 text-sm sm:text-base bg-primary-300"
+                    className="absolute bottom-0 left-0 right-0 flex items-center justify-center gap-1 sm:gap-2 transform text-white px-2 py-1.5 sm:px-6 sm:py-2 rounded-full font-semibold transition-all duration-300 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-4 text-[10px] sm:text-base bg-primary-300"
                   >
-                  {/* File Icon */}
-                  <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.8}
-                  stroke="currentColor"
-                  className="w-5 h-5"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M7 3h6l5 5v11a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z"
-                  />
-                </svg>
+                    {/* File Icon */}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.8}
+                      stroke="currentColor"
+                      className="w-5 h-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M7 3h6l5 5v11a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z"
+                      />
+                    </svg>
 
-  Voir CV
-</button>
+                    Voir CV
+                  </button>
 
                 </div>
               </div>

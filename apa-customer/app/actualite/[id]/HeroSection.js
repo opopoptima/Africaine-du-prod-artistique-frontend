@@ -5,12 +5,26 @@ import Image from "next/image";
 export default function HeroSectionAct({ news }) {
   if (!news) return null;
 
-  const formatDate = (dateString) => {
+  const formatShortDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const optionsDate = { day: "2-digit", month: "long", year: "numeric" };
+    return date.toLocaleDateString("fr-FR", optionsDate);
+  };
+
+  const formatFullDate = (dateString) => {
     if (!dateString) return "";
     const date = new Date(dateString);
     const optionsDate = { day: "2-digit", month: "long", year: "numeric" };
     const optionsTime = { hour: "2-digit", minute: "2-digit" };
     return `${date.toLocaleDateString("fr-FR", optionsDate)} à ${date.toLocaleTimeString("fr-FR", optionsTime)}`;
+  };
+
+  const renderDate = () => {
+    if (news.startDate && news.endDate) {
+      return `Du ${formatShortDate(news.startDate)} au ${formatShortDate(news.endDate)}`;
+    }
+    return formatFullDate(news.eventDate || news.publicationDate || news.createdAt);
   };
 
   return (
@@ -28,7 +42,7 @@ export default function HeroSectionAct({ news }) {
       </div>
 
       {/* Overlay */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-l from-primary-500/60 via-primary-500/30 to-transparent" />
+      <div className="absolute inset-0 z-10 bg-linear-to-l from-primary-500/60 via-primary-500/30 to-transparent" />
 
       {/* Content */}
       <div className="relative z-20 h-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-12 flex items-center ">
@@ -49,10 +63,10 @@ export default function HeroSectionAct({ news }) {
             )}
 
             <div className="grid grid-cols-2 gap-4 mt-4">
-              {news.eventDate && (
+              {(news.startDate || news.eventDate) && (
                 <div>
                   <p className="font-semibold text-primary-500 text-xs uppercase tracking-wider">Date et heure</p>
-                  <p className="text-gray-500 text-lg mt-1 font-medium">{formatDate(news.eventDate)}</p>
+                  <p className="text-gray-500 text-lg mt-1 font-medium">{renderDate()}</p>
                 </div>
               )}
               {news.publicCible && (

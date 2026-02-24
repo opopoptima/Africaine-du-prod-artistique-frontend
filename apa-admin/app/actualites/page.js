@@ -26,9 +26,11 @@ import ConfirmDeleteModal from "./form/delete";
 
 // Adjust the import path according to your project structure
 import { NewsService } from "../services/newsService";
+import { useToast } from "@/app/context/ToastContext";
 
 export default function ActualitesPage() {
   const router = useRouter();
+  const toast = useToast();
 
   const [actualites, setActualites] = useState([]);
   const [filteredActualites, setFilteredActualites] = useState([]);
@@ -69,8 +71,8 @@ export default function ActualitesPage() {
       const newsItems = Array.isArray(result?.data?.items)
         ? result.data.items
         : Array.isArray(result?.data)
-        ? result.data
-        : [];
+          ? result.data
+          : [];
 
       setActualites(newsItems);
       setFilteredActualites(newsItems);
@@ -139,10 +141,10 @@ export default function ActualitesPage() {
       fetchActualites();
       setIsModalOpen(false);
       setSelectedId(null);
-      alert("Actualité supprimée avec succès !");
+      toast.success("Actualité supprimée avec succès !");
     } catch (err) {
       console.error("Erreur lors de la suppression:", err);
-      alert(`Erreur lors de la suppression : ${err.message || "Erreur inconnue"}`);
+      toast.error(`Erreur lors de la suppression : ${err.message || "Erreur inconnue"}`);
     } finally {
       setLoadingDelete(false);
     }
@@ -321,15 +323,14 @@ export default function ActualitesPage() {
                     <TableCell>{item.category || item.program || "Blog"}</TableCell>
                     <TableCell>
                       <Badge
-                        className={`px-3 py-1 rounded-full ${
-                          item.status === "Publié"
+                        className={`px-3 py-1 rounded-full ${item.status === "Publié"
                             ? "bg-green-500 text-white"
                             : item.status === "Archivé"
-                            ? "bg-gray-500 text-white"
-                            : item.status === "Brouillon"
-                            ? "bg-orange-400 text-white"
-                            : "bg-blue-500 text-white"
-                        }`}
+                              ? "bg-gray-500 text-white"
+                              : item.status === "Brouillon"
+                                ? "bg-orange-400 text-white"
+                                : "bg-blue-500 text-white"
+                          }`}
                         variant="default"
                       >
                         {item.status || "Brouillon"}
@@ -338,17 +339,17 @@ export default function ActualitesPage() {
                     <TableCell>
                       {item.publicationDate
                         ? new Date(item.publicationDate).toLocaleDateString("fr-FR", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })
                         : item.createdAt
-                        ? new Date(item.createdAt).toLocaleDateString("fr-FR", {
+                          ? new Date(item.createdAt).toLocaleDateString("fr-FR", {
                             year: "numeric",
                             month: "long",
                             day: "numeric",
                           })
-                        : "N/A"}
+                          : "N/A"}
                     </TableCell>
                     <TableCell>{item.author || "Admin, Librairie"}</TableCell>
                     <TableCell>

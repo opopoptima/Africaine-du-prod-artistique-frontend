@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import orderService from "../../services/orderService";
+import { useToast } from "@/app/context/ToastContext";
 
 // --- Composants réutilisables ---- //
 
@@ -26,27 +27,30 @@ const FormInput = ({ name, value, onChange, placeholder, type = "text", readOnly
   />
 );
 
-const FormTextArea = ({ name, value, onChange, placeholder, rows = 3 }) => (
+const FormTextArea = ({ name, value, onChange, placeholder, rows = 3, readOnly = false }) => (
   <textarea
     rows={rows}
     name={name}
     value={value}
     onChange={onChange}
     placeholder={placeholder}
-    className="w-full px-3 py-2 border border-border rounded bg-background text-foreground text-sm resize-none focus:outline-none focus:ring-1 focus:ring-primary"
+    readOnly={readOnly}
+    className={`w-full px-3 py-2 border border-border rounded text-sm resize-none focus:outline-none focus:ring-1 focus:ring-primary
+      ${readOnly ? "bg-gray-100 cursor-not-allowed opacity-80" : "bg-background text-foreground"}`}
   />
 );
 
-const RadioGroup = ({ name, options, value, onChange }) => (
+const RadioGroup = ({ name, options, value, onChange, disabled = false }) => (
   <div className="flex items-center gap-4">
     {options.map((option) => (
-      <label key={option.value} className="flex items-center gap-2 cursor-pointer">
+      <label key={option.value} className={`flex items-center gap-2 ${disabled ? 'cursor-not-allowed opacity-70' : 'cursor-pointer'}`}>
         <input
           type="radio"
           name={name}
           value={option.value}
           checked={value === option.value}
           onChange={onChange}
+          disabled={disabled}
           className="w-4 h-4 text-primary-500"
         />
         <span className="text-sm">{option.label}</span>
@@ -71,11 +75,10 @@ const Tabs = ({ tabs, activeTab, onTabChange }) => (
         key={tab.id}
         type="button"
         onClick={() => onTabChange(tab.id)}
-        className={`px-6 py-3 text-sm font-medium transition-colors ${
-          activeTab === tab.id
-            ? "text-orange-500 border-b-2 border-orange-500"
-            : "text-gray-500 hover:text-gray-700"
-        }`}
+        className={`px-6 py-3 text-sm font-medium transition-colors ${activeTab === tab.id
+          ? "text-orange-500 border-b-2 border-orange-500"
+          : "text-gray-500 hover:text-gray-700"
+          }`}
       >
         {tab.label}
       </button>
@@ -87,6 +90,7 @@ const Tabs = ({ tabs, activeTab, onTabChange }) => (
 
 const FicheCommande = ({ commandeId }) => {
   const router = useRouter();
+  const toast = useToast();
   const [activeTab, setActiveTab] = useState("info");
   const isNewOrder = commandeId === "new";
 
@@ -114,7 +118,6 @@ const FicheCommande = ({ commandeId }) => {
   const [form, setForm] = useState(initialForm);
   const [loading, setLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(!isNewOrder);
-  const [message, setMessage] = useState("");
 
   // Charger les données de la commande si modification
   useEffect(() => {
@@ -127,7 +130,7 @@ const FicheCommande = ({ commandeId }) => {
     try {
       setLoadingData(true);
       const data = await orderService.getOrderById(commandeId);
-      
+
       // Mapper les données du backend vers le formulaire
       setForm({
         statusCommande: data.statusCommande || "En attente",
@@ -150,10 +153,11 @@ const FicheCommande = ({ commandeId }) => {
         ValidateDate: data.ValidateDate ? new Date(data.ValidateDate).toISOString().split('T')[0] : "",
         commandeId: data.commandeId,
         createdAt: data.createdAt,
+        totalPrice: data.totalPrice, // New: capture the grand total from DB
       });
     } catch (error) {
       console.error("Erreur lors du chargement de la commande:", error);
-      setMessage("❌ Erreur lors du chargement de la commande");
+      toast.error("❌ Erreur lors du chargement de la commande");
     } finally {
       setLoadingData(false);
     }
@@ -167,11 +171,10 @@ const FicheCommande = ({ commandeId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage("");
 
     // Validation
     if (!form.name || !form.lastName || !form.email || !form.address || !form.phone) {
-      setMessage("❌ Veuillez remplir tous les champs obligatoires du client");
+      toast.error("Veuillez remplir tous les champs obligatoires du client");
       setLoading(false);
       return;
     }
@@ -201,16 +204,16 @@ const FicheCommande = ({ commandeId }) => {
 
       if (isNewOrder) {
         await orderService.createOrder(orderData);
-        setMessage("✅ Commande créée avec succès !");
+        toast.success("Commande créée avec succès !");
       } else {
         await orderService.updateOrder(commandeId, orderData);
-        setMessage("✅ Commande mise à jour avec succès !");
+        toast.success("Commande mise à jour avec succès !");
       }
 
       setTimeout(() => router.push("/commandes"), 1500);
     } catch (error) {
       console.error("Erreur lors de l'enregistrement:", error);
-      setMessage("❌ Erreur lors de l'enregistrement de la commande");
+      toast.error("Erreur lors de l'enregistrement de la commande");
     } finally {
       setLoading(false);
     }
@@ -253,7 +256,7 @@ const FicheCommande = ({ commandeId }) => {
           <Section title="Info Commande">
             {!isNewOrder && (
               <FormField label="Référence commande :">
-                <FormInput value={form.commandeId || "Génération automatique"} readOnly />
+                <FormInput value={form.commandeId} readOnly />
               </FormField>
             )}
 
@@ -269,6 +272,10 @@ const FicheCommande = ({ commandeId }) => {
                 ]}
               />
             </FormField>
+            <FormField label="Mode de livraision">
+              <FormInput value={form.livraisonMethod} readOnly />
+
+            </FormField>
 
             {!isNewOrder && form.createdAt && (
               <FormField label="Date commande :">
@@ -278,6 +285,18 @@ const FicheCommande = ({ commandeId }) => {
                 />
               </FormField>
             )}
+
+            <FormField label="Total à payer :">
+              <div className="text-lg font-bold text-primary-500">
+                {(form.totalPrice || (
+                  (form.articles ? form.articles.reduce((acc, item) => {
+                    const price = item.priceAtOrder || (item.article?.promo && item.article.promo > 0 ? item.article.promo : item.article?.price || 0);
+                    return acc + (price * item.quantity);
+                  }, 0) : 0) +
+                  (parseFloat(form.livraisonPrice) || 0)
+                )).toFixed(2)} dt
+              </div>
+            </FormField>
           </Section>
         )}
 
@@ -285,19 +304,21 @@ const FicheCommande = ({ commandeId }) => {
         {activeTab === "client" && (
           <Section title="Client">
             <FormField label="Prénom * :">
-              <FormInput 
-                name="name" 
-                value={form.name} 
+              <FormInput
+                name="name"
+                value={form.name}
                 onChange={handleChange}
                 placeholder="Entrez le prénom"
+                readOnly
               />
             </FormField>
             <FormField label="Nom * :">
-              <FormInput 
-                name="lastName" 
-                value={form.lastName} 
+              <FormInput
+                name="lastName"
+                value={form.lastName}
                 onChange={handleChange}
                 placeholder="Entrez le nom"
+                readOnly
               />
             </FormField>
             <FormField label="Role :">
@@ -305,6 +326,7 @@ const FicheCommande = ({ commandeId }) => {
                 name="role"
                 value={form.role}
                 onChange={handleChange}
+                disabled
                 options={[
                   { value: "Enfant", label: "Enfant" },
                   { value: "Parent", label: "Parent" },
@@ -314,36 +336,40 @@ const FicheCommande = ({ commandeId }) => {
               />
             </FormField>
             <FormField label="E-mail * :">
-              <FormInput 
-                type="email" 
-                name="email" 
-                value={form.email} 
+              <FormInput
+                type="email"
+                name="email"
+                value={form.email}
                 onChange={handleChange}
                 placeholder="exemple@email.com"
+                readOnly
               />
             </FormField>
             <FormField label="Téléphone * :">
-              <FormInput 
-                name="phone" 
-                value={form.phone} 
+              <FormInput
+                name="phone"
+                value={form.phone}
                 onChange={handleChange}
                 placeholder="+216 12 345 678"
+                readOnly
               />
             </FormField>
             <FormField label="Adresse * :">
-              <FormInput 
-                name="address" 
-                value={form.address} 
+              <FormInput
+                name="address"
+                value={form.address}
                 onChange={handleChange}
                 placeholder="Entrez l'adresse complète"
+                readOnly
               />
             </FormField>
             <FormField label="Informations :">
-              <FormTextArea 
-                name="informationDetails" 
-                value={form.informationDetails} 
+              <FormTextArea
+                name="informationDetails"
+                value={form.informationDetails}
                 onChange={handleChange}
                 placeholder="Informations supplémentaires"
+                readOnly
               />
             </FormField>
           </Section>
@@ -352,20 +378,89 @@ const FicheCommande = ({ commandeId }) => {
         {/* ------------- ARTICLES -------------- */}
         {activeTab === "articles" && (
           <Section title="Détail des articles">
-            <div className="text-sm text-gray-500 mb-4">
-              Note: La gestion des articles se fait via l'interface de sélection des produits
+            <div className="overflow-x-auto mb-6 border rounded-lg">
+              <table className="w-full text-sm text-left">
+                <thead className="bg-[#9B59B622] text-primary-500 font-bold uppercase text-[10px] tracking-wider">
+                  <tr>
+                    <th className="px-4 py-2 border-b">Article</th>
+                    <th className="px-4 py-2 border-b">ISBN</th>
+                    <th className="px-4 py-2 border-b text-center">Qté</th>
+                    <th className="px-4 py-2 border-b text-right">Prix Unit.</th>
+                    <th className="px-4 py-2 border-b text-right">Total</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {form.articles && form.articles.length > 0 ? (
+                    form.articles.map((item, idx) => {
+                      const article = item.article;
+                      const price = (article?.promo && article.promo > 0) ? article.promo : (article?.price || 0);
+
+                      return (
+                        <tr key={idx} className="hover:bg-gray-50/50">
+                          <td className="px-4 py-3 font-medium text-gray-800">
+                            <div>{item.titleAtOrder || article?.title || "Article inconnu"}</div>
+                            {article?.collection && (
+                              <div className="text-[10px] text-[#5B1E8C] font-semibold uppercase mt-0.5">
+                                Collection: {article.collection}
+                              </div>
+                            )}
+                          </td>
+                          <td className="px-4 py-3 text-gray-500 text-xs">
+                            {article?.isbn || "N/A"}
+                          </td>
+                          <td className="px-4 py-3 text-center font-semibold">
+                            {item.quantity}
+                          </td>
+                          <td className="px-4 py-3 text-right">
+                            {(item.priceAtOrder || price).toFixed(2)} dt
+                          </td>
+                          <td className="px-4 py-3 text-right font-bold text-gray-900">
+                            {((item.priceAtOrder || price) * item.quantity).toFixed(2)} dt
+                          </td>
+                        </tr>
+                      );
+                    })
+                  ) : (
+                    <tr>
+                      <td colSpan="5" className="px-4 py-8 text-center text-gray-400 italic">
+                        Aucun article dans cette commande
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+                <tfoot className="bg-gray-50 font-semibold text-gray-700">
+                  <tr>
+                    <td colSpan="4" className="px-4 py-2 text-right">Total Articles :</td>
+                    <td className="px-4 py-2 text-right">
+                      {form.articles ? form.articles.reduce((acc, item) => {
+                        const price = (item.article?.promo && item.article.promo > 0) ? item.article.promo : (item.article?.price || 0);
+                        return acc + (price * item.quantity);
+                      }, 0).toFixed(2) : "0.00"} dt
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colSpan="4" className="px-4 py-2 text-right">Frais de livraison :</td>
+                    <td className="px-4 py-2 text-right">
+                      {(parseFloat(form.livraisonPrice) || 0).toFixed(2)} dt
+                    </td>
+                  </tr>
+                  <tr className="bg-primary-500 text-white">
+                    <td colSpan="4" className="px-4 py-3 text-right text-base uppercase tracking-wide">Total à payer :</td>
+                    <td className="px-4 py-3 text-right text-lg font-black">
+                      {(form.totalPrice || (
+                        (form.articles ? form.articles.reduce((acc, item) => {
+                          const price = item.priceAtOrder || (item.article?.promo && item.article.promo > 0 ? item.article.promo : item.article?.price || 0);
+                          return acc + (price * item.quantity);
+                        }, 0) : 0) +
+                        (parseFloat(form.livraisonPrice) || 0)
+                      )).toFixed(2)} dt
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
             </div>
-            
-            <FormField label="Frais de livraison :">
-              <FormInput 
-                type="number" 
-                name="livraisonPrice" 
-                value={form.livraisonPrice} 
-                onChange={handleChange}
-                placeholder="0.00"
-                step="0.01"
-              />
-            </FormField>
+
+
           </Section>
         )}
 
@@ -388,9 +483,9 @@ const FicheCommande = ({ commandeId }) => {
               </FormField>
 
               <FormField label="Numéro de suivi :">
-                <FormInput 
-                  name="livraisonNumero" 
-                  value={form.livraisonNumero} 
+                <FormInput
+                  name="livraisonNumero"
+                  value={form.livraisonNumero}
                   onChange={handleChange}
                   placeholder="Ex: TN1234567890"
                 />
@@ -439,30 +534,30 @@ const FicheCommande = ({ commandeId }) => {
             {/* Notes */}
             <Section title="Notes">
               <FormField label="Notes / Observations :">
-                <FormTextArea 
-                  name="notes" 
-                  value={form.notes} 
-                  onChange={handleChange} 
+                <FormTextArea
+                  name="notes"
+                  value={form.notes}
+                  onChange={handleChange}
                   rows={4}
                   placeholder="Notes ou observations sur la commande"
                 />
               </FormField>
 
               <FormField label="Préparé par :">
-                <FormInput 
-                  name="preparedBy" 
-                  value={form.preparedBy} 
+                <FormInput
+                  name="preparedBy"
+                  value={form.preparedBy}
                   onChange={handleChange}
                   placeholder="Nom de la personne"
                 />
               </FormField>
 
               <FormField label="Validé le :">
-                <FormInput 
-                  type="date" 
-                  name="ValidateDate" 
-                  value={form.ValidateDate} 
-                  onChange={handleChange} 
+                <FormInput
+                  type="date"
+                  name="ValidateDate"
+                  value={form.ValidateDate}
+                  onChange={handleChange}
                 />
               </FormField>
             </Section>
@@ -488,17 +583,6 @@ const FicheCommande = ({ commandeId }) => {
           </button>
         </div>
 
-        {message && (
-          <div
-            className={`mt-4 p-3 rounded ${
-              message.includes("✅")
-                ? "bg-green-50 text-green-700 border border-green-200"
-                : "bg-red-50 text-red-700 border border-red-200"
-            }`}
-          >
-            <p className="text-sm">{message}</p>
-          </div>
-        )}
       </div>
     </form>
   );

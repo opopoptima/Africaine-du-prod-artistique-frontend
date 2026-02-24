@@ -5,14 +5,23 @@ export default function ActualiteCard({ actu }) {
   const formatDate = (dateString) => {
     if (!dateString) return "";
     const date = new Date(dateString);
+    const optionsDate = { day: "2-digit", month: "long", year: "numeric" };
+    return date.toLocaleDateString("fr-FR", optionsDate);
+  };
 
+  const formatFullDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
     const optionsDate = { day: "2-digit", month: "long", year: "numeric" };
     const optionsTime = { hour: "2-digit", minute: "2-digit" };
+    return `${date.toLocaleDateString("fr-FR", optionsDate)} à ${date.toLocaleTimeString("fr-FR", optionsTime)}`;
+  };
 
-    const formattedDate = date.toLocaleDateString("fr-FR", optionsDate);
-    const formattedTime = date.toLocaleTimeString("fr-FR", optionsTime);
-
-    return `${formattedDate} à ${formattedTime}`;
+  const renderDate = () => {
+    if (actu.startDate && actu.endDate) {
+      return `Du ${formatDate(actu.startDate)} au ${formatDate(actu.endDate)}`;
+    }
+    return formatFullDate(actu.eventDate || actu.publicationDate || actu.createdAt);
   };
   return (
     <Link href={`/actualite/${actu._id}`} className="group block">
@@ -28,7 +37,7 @@ export default function ActualiteCard({ actu }) {
         {/* IMAGE : on utilise flex + grow pour qu’elle prenne le maximum possible */}
         <div className="relative flex-1 min-h-0 bg-gray-50">
           <img
-            src={ actu.mainImage }
+            src={actu.mainImage}
             alt={actu.title}
             className="w-full h-full object-cover"
             style={{ borderRadius: 0 }}
@@ -51,11 +60,11 @@ export default function ActualiteCard({ actu }) {
           <div className="flex items-center justify-between">
             <span className="flex items-center gap-2 text-primary-100 text-xs font-medium">
               <Calendar size={14} />
-              <span className="truncate">{formatDate(actu.eventDate)}</span>
+              <span className="truncate">{renderDate()}</span>
             </span>
 
             {/* Cercle parfait */}
-            <div className="w-11 h-11 bg-primary-300 rounded-full flex items-center justify-center group-hover:bg-primary-500 hover:scale-110 transition-all duration-300 shadow-lg flex-shrink-0">
+            <div className="w-11 h-11 bg-primary-300 rounded-full flex items-center justify-center group-hover:bg-primary-500 hover:scale-110 transition-all duration-300 shadow-lg shrink-0">
               <ArrowRight size={20} strokeWidth={3} className="text-white" />
             </div>
           </div>

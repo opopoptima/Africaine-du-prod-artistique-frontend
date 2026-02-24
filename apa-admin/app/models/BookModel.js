@@ -14,13 +14,13 @@ export function BookModel(data) {
     pages: data.pages || "N/A",
     language: data.language || "N/A",
     type: data.type || "N/A",
-    price: data.promo || "0.00",
-    originalPrice: data.price || null,
+    price: (data.promo && Number(data.promo) > 0) ? data.promo : (data.price || "0.00"),
+    originalPrice: (data.promo && Number(data.promo) > 0) ? data.price : null,
     stock: data.stock || 0,
-    isNew : data.isNew || false,
-    isBestSeller : data.isBestSeller || false,
+    isNew: data.isNew || false,
+    isBestSeller: data.isBestSeller || false,
     publisher: data.publisher || "Unknown Publisher",
     category: data.category || "Uncategorized",
-    collection : data.collection || null,
+    collection: data.collection || null,
   };
 }

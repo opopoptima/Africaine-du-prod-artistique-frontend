@@ -7,11 +7,13 @@ import FilterForm from "./FilterForm";
 import { useRouter } from "next/navigation";
 import { Edit2, Trash2 } from "lucide-react";
 import FilterService from "../services/filterService";
+import { useToast } from "@/app/context/ToastContext";
 
 
 export default function FiltersPage() {
   const { filters, loading, load } = useFilters();
   const router = useRouter();
+  const toast = useToast();
 
   const [isOpen, setIsOpen] = useState(false);
   const [editingFilter, setEditingFilter] = useState(null);
@@ -45,9 +47,11 @@ export default function FiltersPage() {
     setLoadingDelete(true);
     try {
       await FilterService.delete(selectedFilterId);
+      toast.success("Filtre supprimé avec succès !");
       load(); // recharge la liste
     } catch (err) {
       console.error("Erreur suppression:", err);
+      toast.error("Erreur lors de la suppression du filtre.");
     } finally {
       setLoadingDelete(false);
       setIsDeleteModalOpen(false);
@@ -60,33 +64,33 @@ export default function FiltersPage() {
   return (
     <div className="p-8">
       <div className="flex items-center justify-between pb-6">
-                        <div className="text-sm text-gray-600">
-                                      <a href="/dashboard" className="hover:text-[#5B1E8C]">
-                                          Dashboard
-                                      </a>{" "}
-                                      {"> "}
-                                      <span className="text-[#5B1E8C] font-semibold">Filtres</span>
-                                  </div>
-                
-
-                        
-       </div>
-       <div className="flex items-center justify-between pb-6">
-                        <div className="text-sm text-primary-300">
-                                      
-                                      <span className="text-[#9B59B6]  text-2xl">Tableau des filtres</span>
-                                  </div>
-                                  {/* AJOUT */}
-                <Button
-            className="bg-primary-300 hover:bg-primary-500 text-white rounded-full px-6 py-2"
-            onClick={() => router.push("/filtres/nouveau")}
-          >
-            + Ajouter un filtre
-          </Button>
+        <div className="text-sm text-gray-600">
+          <a href="/dashboard" className="hover:text-[#5B1E8C]">
+            Dashboard
+          </a>{" "}
+          {"> "}
+          <span className="text-[#5B1E8C] font-semibold">Filtres</span>
+        </div>
 
 
-                        
-       </div>
+
+      </div>
+      <div className="flex items-center justify-between pb-6">
+        <div className="text-sm text-primary-300">
+
+          <span className="text-primary-300 text-2xl">Tableau des filtres</span>
+        </div>
+        {/* AJOUT */}
+        <Button
+          className="bg-primary-300 hover:bg-primary-500 text-white rounded-full px-6 py-2"
+          onClick={() => router.push("/filtres/nouveau")}
+        >
+          + Ajouter un filtre
+        </Button>
+
+
+
+      </div>
 
       {/* TABLE */}
       <table className="w-full border">
@@ -104,21 +108,21 @@ export default function FiltersPage() {
             <tr key={f._id} className="border-t">
               <td className="p-2">{f.label}</td>
               <td className="p-2">{f.field}</td>
-              <td className="p-2">{f.itemsCount}</td>
+              <td className="p-2">{f.options?.length || 0}</td>
               <td className="p-2">
                 {f.isActive ? "Actif" : "Désactivé"}
               </td>
               <td className="p-2">
                 <div className="flex items-center gap-3">
-                  <button 
-                    onClick={() => router.push(`/filtres/${f._id}`)} 
+                  <button
+                    onClick={() => router.push(`/filtres/${f._id}`)}
                     className="p-2 hover:bg-secondary-100/10 rounded transition-colors"
                     title="Modifier"
                   >
                     <Edit2 className="w-4 h-4 text-secondary-700" />
                   </button>
-                  <button 
-                    onClick={() => handleOpenDeleteModal(f._id)} 
+                  <button
+                    onClick={() => handleOpenDeleteModal(f._id)}
                     className="p-2 hover:bg-red-100/20 rounded transition-colors"
                     title="Supprimer"
                   >
@@ -131,7 +135,7 @@ export default function FiltersPage() {
         </tbody>
       </table>
 
-      
+
 
       {/* MODAL */}
       {isOpen && (
@@ -198,11 +202,11 @@ export default function FiltersPage() {
       )}
 
       <footer className="bg-[#9B59B680] mt-30 py-3 text-right  ">
-          <p className="text-primary-500 font-semibold text-lg pr-15">
-            Optimisez l'organisation de votre catalogue en gérant les filtres disponibles !
-          </p>
-        </footer>
+        <p className="text-primary-500 font-semibold text-lg pr-15">
+          Optimisez l'organisation de votre catalogue en gérant les filtres disponibles !
+        </p>
+      </footer>
     </div>
-    
+
   );
 }

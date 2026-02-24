@@ -1,69 +1,50 @@
-'use client';;
+'use client';
 import ContactSection from '../../components/ContactSection';
 import CardDetail from './CardDetails';
 import QuantityOrder from './QuantityOrder';
 import Image from "next/image";
 import CardBoutique from '../CardBoutique';
 import BookGallery from './BookGalery';
-import { useParams } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ArticleService } from '../../services/articleService';
+import { useCart } from '../../context/CartContext';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../../components/ui/carousel";
+
 export default function BookPage() {
   const params = useParams();
   const router = useRouter();
+  const { addToCart, setIsCartOpen } = useCart();
   const [article, setArticle] = useState(null);
   const [relatedByLanguage, setRelatedByLanguage] = useState([]);
   const [relatedByCollection, setRelatedByCollection] = useState([]);
 
-
   useEffect(() => {
-  async function fetchArticle() {
-    if (!params.id) return;
-
-    const data = await ArticleService.getById(params.id);
-
-    setArticle(data.data.article);
-    setRelatedByLanguage(data.data.relatedByLanguageOrType || []);
-    setRelatedByCollection(data.data.relatedByCollection || []);
-  }
-
-  fetchArticle();
-}, [params.id]);
-
-
-  const products = [
-    {
-      id: "book-1",
-      title: "The Secret Garden",
-      description: "Un classique intemporel pour petits et grands.",
-      imageSrc: "/images/learningBanner/Image threefor LearningBanner.jpg",
-    },
-    {
-      id: "book-2",
-      title: "Les Contes de l'Afrique",
-      description: "Découvrez la richesse des contes africains.",
-      imageSrc: "/images/learningBanner/Imageone for two LearningBanner.jpg",
-    },
-  ];
+    async function fetchArticle() {
+      if (!params.id) return;
+      try {
+        const data = await ArticleService.getById(params.id);
+        setArticle(data.data.article);
+        setRelatedByLanguage(data.data.relatedByLanguageOrType || []);
+        setRelatedByCollection(data.data.relatedByCollection || []);
+      } catch (error) {
+        console.error("Failed to fetch article:", error);
+      }
+    }
+    fetchArticle();
+  }, [params.id]);
 
   if (!article) {
     return <p className="text-center py-20 text-primary-500">Article non disponible...</p>;
   }
-    const handleCommander = (quantity) => {
-  if (!article) return;
 
-  // Encode values safely
-  const cover = encodeURIComponent(article.cover || "");
-  const isbn = encodeURIComponent(article.isbn || "");
-  const qty = encodeURIComponent(quantity);
-  const prixUnitaire = encodeURIComponent(article.price || 0);
-
-  router.push(`/commande?cover=${cover}&isbn=${isbn}&quantity=${qty}&prixUnitaire=${prixUnitaire}`);
-};
+  const handleCommander = (quantity) => {
+    if (!article) return;
+    addToCart(article, quantity);
+    setIsCartOpen(true);
+  };
 
   return (
-    
     <>
       <section className="relative h-auto overflow-hidden">
         {/* Background Image */}
@@ -100,51 +81,49 @@ export default function BookPage() {
 
       {/* Similar articles */}
       {relatedByCollection.length > 0 && (
-      <div className="space-y-10 my-8">
-        <h2 className="text-lg sm:text-xl md:text-4xl font-bold text-primary-500 leading-snug text-center">
-          Articles similaires
-        </h2>
+        <div className="space-y-10 my-8 px-4 sm:px-8 md:px-16 lg:px-24">
+          <h2 className="text-lg sm:text-xl md:text-4xl font-bold text-primary-500 leading-snug text-center">
+            Articles similaires
+          </h2>
 
-        {Array.from({ length: Math.ceil(relatedByCollection.length / 2) }).map(
-          (_, rowIndex) => (
-            <div className="flex gap-6" key={rowIndex}>
-              {relatedByCollection
-                .slice(rowIndex * 2, rowIndex * 2 + 2)
-                .map((item) => (
-                  <CardBoutique
-                    key={item.id}
-                    article={item}
-                  />
-                ))}
+          <Carousel opts={{ align: "start", loop: true }} className="w-full">
+            <CarouselContent>
+              {relatedByCollection.map((item) => (
+                <CarouselItem key={item._id || item.id} className="p-2 basis-full sm:basis-1/2 ">
+                  <CardBoutique article={item} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="flex justify-center gap-4 mt-8">
+              <CarouselPrevious className="static translate-y-0 border-2 border-primary-100 hover:bg-primary-500 hover:text-white" />
+              <CarouselNext className="static translate-y-0 bg-primary-500 text-white hover:bg-primary-600" />
             </div>
-          )
-        )}
-      </div>)}
+          </Carousel>
+        </div>
+      )}
 
       {/* Other language */}
-{relatedByLanguage.length > 0 && (
-  <div className="space-y-10 my-8">
-    <h2 className="text-lg sm:text-xl md:text-4xl font-bold text-primary-500 leading-snug text-center">
-      Disponible dans une autre langue
-    </h2>
+      {relatedByLanguage.length > 0 && (
+        <div className="space-y-10 my-8 px-4 sm:px-8 md:px-16 lg:px-24">
+          <h2 className="text-lg sm:text-xl md:text-4xl font-bold text-primary-500 leading-snug text-center">
+            Disponible dans une autre langue
+          </h2>
 
-    {Array.from({ length: Math.ceil(relatedByLanguage.length / 2) }).map(
-      (_, rowIndex) => (
-        <div className="flex gap-6" key={rowIndex}>
-          {relatedByLanguage
-            .slice(rowIndex * 2, rowIndex * 2 + 2)
-            .map((item) => (
-              <CardBoutique
-                key={item.id}
-                article={item}
-              />
-            ))}
+          <Carousel opts={{ align: "start", loop: true }} className="w-full">
+            <CarouselContent>
+              {relatedByLanguage.map((item) => (
+                <CarouselItem key={item._id || item.id} className="p-2 basis-full sm:basis-1/2 ">
+                  <CardBoutique article={item} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="flex justify-center gap-4 mt-8">
+              <CarouselPrevious className="static translate-y-0 border-2 border-primary-100 hover:bg-primary-500 hover:text-white" />
+              <CarouselNext className="static translate-y-0 bg-primary-500 text-white hover:bg-primary-600" />
+            </div>
+          </Carousel>
         </div>
-      )
-    )}
-  </div>
-)}
-
+      )}
 
       <ContactSection />
     </>

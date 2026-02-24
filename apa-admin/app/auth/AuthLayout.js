@@ -7,14 +7,16 @@ const AuthLayout = ({ children, title }) => {
       <div className="w-[30%] bg-[var(--color-primary-300)] p-12 flex flex-col justify-between relative">
         <div className="mt-8">
           <h1 className="text-[var(--color-secondary-100)] text-[2.2rem] font-bold leading-[1.2] tracking-normal">
-            Parce que<br />
-            chaque<br />
+            Éditeur jeunesse engagé<br />
             <span className="text-[var(--color-primary-100)]">enfant</span><br />
             mérite un<br />
             monde<br />
             <span className="text-[var(--color-primary-100)]">magique</span>
           </h1>
         </div>
+        {/*
+        Éditeur jeunesse engagé, au service de la lecture, de la culture et de l’avenir des enfants.
+         */}
 
         <div className="flex justify-center items-end mb-8">
           <img 

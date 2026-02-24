@@ -24,9 +24,11 @@ import { Search, Plus, Edit2, Trash2 } from "lucide-react";
 import { FiAward, FiCalendar, FiTruck } from "react-icons/fi";
 import ConfirmDeleteModal from "./delete";
 import orderService from "../../services/orderService";
+import { useToast } from "@/app/context/ToastContext";
 
 export default function CommandesTable() {
     const router = useRouter();
+    const toast = useToast();
 
     const [commandes, setCommandes] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -65,18 +67,18 @@ export default function CommandesTable() {
         if (!order.articles || order.articles.length === 0) {
             return order.livraisonPrice || 0;
         }
-     
+
         const articlesTotal = order.articles.reduce((sum, item) => {
             if (!item.article) return sum;
-            
+
             // Use promotional price if available, otherwise use regular price
-            const price = item.article.promo && item.article.promo > 0 
-                ? item.article.promo 
+            const price = item.article.promo && item.article.promo > 0
+                ? item.article.promo
                 : item.article.price || 0;
-            
+
             return sum + (price * item.quantity);
         }, 0);
-        
+
         return articlesTotal + (order.livraisonPrice || 0);
     };
 
@@ -87,6 +89,7 @@ export default function CommandesTable() {
                 !searchTerm ||
                 cmd.commandeId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 cmd.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                cmd.lastName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 cmd.email?.toLowerCase().includes(searchTerm.toLowerCase());
             const matchStatutCmd =
                 filterStatutCommande === "all" ||
@@ -122,9 +125,10 @@ export default function CommandesTable() {
             setCommandes(commandes.filter((cmd) => cmd._id !== selectedId));
             setIsModalOpen(false);
             setSelectedId(null);
+            toast.success("Commande supprimée avec succès !");
         } catch (error) {
             console.error("Erreur lors de la suppression:", error);
-            alert("Erreur lors de la suppression de la commande");
+            toast.error("Erreur lors de la suppression de la commande");
         } finally {
             setLoadingDelete(false);
         }
@@ -169,9 +173,8 @@ export default function CommandesTable() {
     return (
         <div>
             <div
-                className={`min-h-screen bg-white transition-all duration-300 ${
-                    isModalOpen ? "blur-sm" : ""
-                }`}
+                className={`min-h-screen bg-white transition-all duration-300 ${isModalOpen ? "blur-sm" : ""
+                    }`}
             >
                 {/* HEADER */}
                 <div className="px-8 pt-4 pb-2 flex flex-col gap-4">
@@ -190,11 +193,12 @@ export default function CommandesTable() {
                                 type="text"
                                 placeholder="Recherche"
                                 value={searchTerm}
+                                disabled={loading}
                                 onChange={(e) => {
                                     setSearchTerm(e.target.value);
                                     setCurrentPage(1);
                                 }}
-                                className="pl-10 pr-4 py-2 h-9 w-full border-[#E0D5F5] rounded-full text-sm text-[#5B1E8C] placeholder:text-[#B58AD9]"
+                                className="pl-10 pr-4 py-2 h-9 w-full border-[#E0D5F5] rounded-full text-sm text-[#5B1E8C] placeholder:text-[#B58AD9] disabled:opacity-50"
                             />
                         </div>
                     </div>
@@ -204,6 +208,7 @@ export default function CommandesTable() {
                         <div className="w-[150px]">
                             <Select
                                 value={filterStatutCommande}
+                                disabled={loading}
                                 onValueChange={(v) => {
                                     setFilterStatutCommande(v);
                                     setCurrentPage(1);
@@ -229,6 +234,7 @@ export default function CommandesTable() {
                         <div className="w-[150px]">
                             <Select
                                 value={filterStatutPaiement}
+                                disabled={loading}
                                 onValueChange={(v) => {
                                     setFilterStatutPaiement(v);
                                     setCurrentPage(1);
@@ -255,6 +261,7 @@ export default function CommandesTable() {
                         <div className="w-[150px]">
                             <Select
                                 value={sortOrder}
+                                disabled={loading}
                                 onValueChange={(v) => {
                                     setSortOrder(v);
                                     setCurrentPage(1);
@@ -290,11 +297,15 @@ export default function CommandesTable() {
                                         Client
                                     </TableHead>
                                     <TableHead className="text-white font-semibold">
+                                        Email
+                                    </TableHead>
+                                    <TableHead className="text-white font-semibold">
                                         Statut commande
                                     </TableHead>
                                     <TableHead className="text-white font-semibold">
                                         Statut paiement
                                     </TableHead>
+
                                     <TableHead className="text-white font-semibold">
                                         Total
                                     </TableHead>
@@ -309,7 +320,7 @@ export default function CommandesTable() {
                             <TableBody>
                                 {loading ? (
                                     <TableRow>
-                                        <TableCell colSpan={7} className="text-center py-12">
+                                        <TableCell colSpan={8} className="text-center py-12">
                                             <div className="flex flex-col items-center justify-center gap-4">
                                                 <div className="w-12 h-12 border-4 border-primary-300 border-t-primary-500 rounded-full animate-spin"></div>
                                                 <p className="text-primary-500 font-semibold">
@@ -320,7 +331,7 @@ export default function CommandesTable() {
                                     </TableRow>
                                 ) : paginatedCommandes.length === 0 ? (
                                     <TableRow>
-                                        <TableCell colSpan={7} className="text-center py-12">
+                                        <TableCell colSpan={8} className="text-center py-12">
                                             <div className="flex flex-col items-center justify-center gap-4">
                                                 <p className="text-gray-500 font-semibold">
                                                     Aucune commande trouvée
@@ -338,15 +349,17 @@ export default function CommandesTable() {
                                     paginatedCommandes.map((item, index) => (
                                         <TableRow
                                             key={item._id}
-                                            className={`${
-                                                index % 2 === 0 ? "bg-white" : "bg-primary-300/10"
-                                            } hover:bg-primary-300/20`}
+                                            className={`${index % 2 === 0 ? "bg-white" : "bg-primary-300/10"
+                                                } hover:bg-primary-300/20`}
                                         >
                                             <TableCell className="font-medium">
                                                 {item.commandeId || "N/A"}
                                             </TableCell>
                                             <TableCell>
                                                 {item.name} {item.lastName}
+                                            </TableCell>
+                                            <TableCell>
+                                                {item.email}
                                             </TableCell>
                                             <TableCell>
                                                 <Badge
@@ -366,8 +379,9 @@ export default function CommandesTable() {
                                                     {item.paimentStatus}
                                                 </Badge>
                                             </TableCell>
-                                            <TableCell>
-                                                {calculateTotal(item).toFixed(2)} TND
+
+                                            <TableCell className="font-bold text-gray-900">
+                                                {(item.totalPrice || calculateTotal(item)).toFixed(2)} dt
                                             </TableCell>
                                             <TableCell>
                                                 {new Date(item.createdAt).toLocaleDateString(
@@ -383,13 +397,15 @@ export default function CommandesTable() {
                                                 <div className="flex items-center justify-center gap-3">
                                                     <button
                                                         onClick={() => handleEdit(item)}
-                                                        className="p-2 hover:bg-secondary-100/10 rounded transition-colors"
+                                                        disabled={loading}
+                                                        className="p-2 hover:bg-secondary-100/10 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                                     >
                                                         <Edit2 className="w-4 h-4 text-secondary-700" />
                                                     </button>
                                                     <button
                                                         onClick={() => handleOpenModal(item._id)}
-                                                        className="p-2 hover:bg-red-100/20 rounded transition-colors"
+                                                        disabled={loading}
+                                                        className="p-2 hover:bg-red-100/20 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                                     >
                                                         <Trash2 className="w-4 h-4 text-red-500" />
                                                     </button>
@@ -436,7 +452,7 @@ export default function CommandesTable() {
                                     variant="outline"
                                     size="sm"
                                     onClick={() => setCurrentPage(1)}
-                                    disabled={currentPage === 1}
+                                    disabled={currentPage === 1 || loading}
                                 >
                                     «
                                 </Button>
@@ -444,7 +460,7 @@ export default function CommandesTable() {
                                     variant="outline"
                                     size="sm"
                                     onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                                    disabled={currentPage === 1}
+                                    disabled={currentPage === 1 || loading}
                                 >
                                     ‹
                                 </Button>
@@ -453,8 +469,8 @@ export default function CommandesTable() {
                                         currentPage <= 3
                                             ? i + 1
                                             : currentPage > totalPages - 3
-                                            ? totalPages - 4 + i
-                                            : currentPage - 2 + i;
+                                                ? totalPages - 4 + i
+                                                : currentPage - 2 + i;
                                     if (pageNum < 1 || pageNum > totalPages) return null;
                                     return (
                                         <Button
@@ -476,7 +492,7 @@ export default function CommandesTable() {
                                     variant="outline"
                                     size="sm"
                                     onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                                    disabled={currentPage === totalPages}
+                                    disabled={currentPage === totalPages || loading}
                                 >
                                     ›
                                 </Button>
@@ -484,7 +500,7 @@ export default function CommandesTable() {
                                     variant="outline"
                                     size="sm"
                                     onClick={() => setCurrentPage(totalPages)}
-                                    disabled={currentPage === totalPages}
+                                    disabled={currentPage === totalPages || loading}
                                 >
                                     »
                                 </Button>

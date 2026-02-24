@@ -1,31 +1,29 @@
+
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "../components/ui/button";
 import { IoEyeOutline, IoCartOutline } from "react-icons/io5";
+import { useCart } from "../context/CartContext";
 
 export default function CardBoutique({ article }) {
   const router = useRouter();
-  console.log("Article dans CardBoutique :", article);
+  const { addToCart, setIsCartOpen } = useCart();
 
   const handleVoirPlus = () => {
-  if (!article) return;
-  router.push(`/boutique/${article.id}`);
-};
-const handleCommander = () => {
-  if (!article) return;
+    if (!article) return;
+    router.push(`/boutique/${article.id}`);
+  };
 
-  // Encode values to safely pass in URL
-  const cover = encodeURIComponent(article.cover || "");
-  const isbn = encodeURIComponent(article.isbn || "");
-  const prixUnitaire = encodeURIComponent(article.price || 0);
-
-  router.push(`/commande?cover=${cover}&isbn=${isbn}&quantity=1&prixUnitaire=${prixUnitaire}`);
-};
+  const handleCommander = () => {
+    if (!article) return;
+    addToCart(article, 1);
+    setIsCartOpen(true);
+  };
 
 
   // Fallbacks if article is undefined
-  const coverSrc = article?.cover || article?.images?.[0] || "/images/placeholder.jpg";
+  const coverSrc = article.cover;
   const title = article?.title || "Sans titre";
   const description = article?.description || "";
   const stock = article?.stock ?? 0;
@@ -43,27 +41,27 @@ const handleCommander = () => {
 
   return (
     <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 w-full max-w-xl mx-auto">
-      <div className="flex flex-col sm:flex-row gap-3 p-4 md:p-5">
-        <div className="relative h-48 w-full sm:w-36 md:w-40 rounded-lg overflow-hidden">
-        {article?.isBestSeller && (
-        <span className="absolute -left-10 top-4 z-10 w-40 -rotate-45 bg-primary-300 py-1 text-center text-xs font-semibold text-white shadow-md">
-            Best Seller
-          </span>
-        )}
-        {isOutOfStock && (
-        <span className="absolute inset-0 z-10 flex items-center justify-center bg-black/60 text-white text-sm font-bold uppercase tracking-wide">
-          Rupture de stock
-        </span>
-      )}
+      <div className="flex flex-col sm:flex-row gap-5 p-4 md:p-5 items-center sm:items-stretch">
+        <div className="relative aspect-2/3 w-48 sm:w-36 md:w-40 rounded-lg overflow-hidden shrink-0 shadow-sm">
+          {article?.isBestSeller && (
+            <span className="absolute -left-10 top-4 z-10 w-40 -rotate-45 bg-primary-300 py-1 text-center text-xs font-semibold text-white shadow-md">
+              Best Seller
+            </span>
+          )}
+          {isOutOfStock && (
+            <span className="absolute inset-0 z-10 flex items-center justify-center bg-black/60 text-white text-sm font-bold uppercase tracking-wide">
+              Rupture de stock
+            </span>
+          )}
 
 
-        <Image
-          src={coverSrc}
-          alt={title}
-          fill
-          className="object-cover transition-transform duration-500 hover:scale-105"
-          sizes="(max-width: 640px) 100vw, 180px"
-        />
+          <Image
+            src={coverSrc}
+            alt={title}
+            fill
+            className="object-cover transition-transform duration-500 hover:scale-105"
+            sizes="(max-width: 640px) 192px, 180px"
+          />
         </div>
 
 
@@ -84,17 +82,16 @@ const handleCommander = () => {
               onClick={handleVoirPlus}
             >
               <IoEyeOutline className="w-4 h-4 mr-1" />
-              Voir plus
+              Voir Plus
             </Button>
 
             <Button
               size="sm"
               disabled={isOutOfStock}
               className={`flex-1 rounded-full text-sm md:text-base px-3 py-1
-                ${
-                  isOutOfStock
-                    ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-                    : "bg-primary-300 text-white hover:bg-primary-500"
+                ${isOutOfStock
+                  ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                  : "bg-primary-300 text-white hover:bg-primary-500"
                 }
               `}
               onClick={!isOutOfStock ? handleCommander : undefined}

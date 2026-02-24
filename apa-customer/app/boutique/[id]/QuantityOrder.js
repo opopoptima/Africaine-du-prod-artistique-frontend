@@ -23,26 +23,26 @@ export default function QuantityOrder({ handleCommander, article }) {
     handleCommander(quantity);
   };
   const handleDownload = async (url, name) => {
-  try {
-    const response = await fetch(url);
-    const blob = await response.blob();
-    
-    // Create a blob URL
-    const blobUrl = window.URL.createObjectURL(blob);
-    
-    const a = document.createElement("a");
-    a.href = blobUrl;
-    a.download = name;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    
-    // Clean up the blob URL
-    window.URL.revokeObjectURL(blobUrl);
-  } catch (error) {
-    console.error("Download failed:", error);
-  }
-};
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+
+      // Create a blob URL
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      // Clean up the blob URL
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error("Download failed:", error);
+    }
+  };
 
   return (
     <div className="flex justify-center lg:justify-end w-full px-4 sm:px-6 md:px-10">
@@ -85,23 +85,23 @@ export default function QuantityOrder({ handleCommander, article }) {
           onClick={handleOrder}
           className="w-full bg-primary-300 hover:bg-primary-500 text-white font-semibold py-2.5 sm:py-3 rounded-lg transition-colors text-sm sm:text-base"
         >
-          Passer Commande
+          Ajouter au Panier
         </button>
 
         {/* Download Buttons */}
         <div className="flex gap-2 sm:gap-3">
-          <button className="flex-1 flex items-center justify-center gap-1 sm:gap-2 px-3 py-2 border-2 border-primary-300 text-primary-300 rounded-full hover:bg-primary-50 transition-colors text-xs sm:text-sm font-medium"  
+          <button className="flex-1 flex items-center justify-center gap-1 sm:gap-2 px-3 py-2 border-2 border-primary-300 text-primary-300 rounded-full hover:bg-primary-50 transition-colors text-xs sm:text-sm font-medium"
 
-          onClick={() => handleDownload(article.technicalFile, "fiche-technique.pdf")}>
-            <IoDownloadOutline className="text-sm sm:text-base"/>
+            onClick={() => handleDownload(article.technicalFile, "fiche-technique.pdf")}>
+            <IoDownloadOutline className="text-sm sm:text-base" />
             Fiche technique
           </button>
 
           <button className="flex-1 flex items-center justify-center gap-1 sm:gap-2 px-3 py-2 border-2 border-primary-300 text-primary-300 rounded-full hover:bg-primary-50 transition-colors text-xs sm:text-sm font-medium"
-          onClick={() => handleDownload(article.printedFile, "fiche-imprimee.pdf")}
+            onClick={() => handleDownload(article.printedFile, "fiche-de-lecture.pdf")}
           >
             <IoDownloadOutline className="text-sm sm:text-base" />
-            Fiche imprimée
+            Fiche de lecture
           </button>
         </div>
       </div>

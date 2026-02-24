@@ -6,19 +6,19 @@ export default function MissionSection() {
       alt: "Mission",
       title: "Mission",
       description:
-        "Créer et diffuser des ouvrages éducatifs et artistiques pour éveiller la curiosité des enfants.",
+        "Créer et diffuser des livres jeunesse accessibles, vivants et porteurs de sens.",
     },
     {
       imageSrc: "/images/MissionSection/Vision.png",
       alt: "Vision",
       title: "Vision",
-      description: "Devenir une référence de l'édition éducative moderne et inclusive.",
+      description: "Bâtir une édition jeunesse enracinée dans notre culture et ouverte sur le monde.",
     },
     {
       imageSrc: "/images/MissionSection/Mission.png",
       alt: "Valeurs",
       title: "Valeurs",
-      description: "Éducation, créativité, ouverture, excellence, passion.",
+      description: "Transmission, créativité et engagement au service de l’enfant.",
     },
   ];
 

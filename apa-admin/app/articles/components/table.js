@@ -24,9 +24,11 @@ import { FiCalendar, FiBook } from "react-icons/fi";
 import { ArticleService } from "../../services/articleService";
 import ConfirmDeleteModal from "./delete";
 import { BookModel } from "../../models/BookModel";
+import { useToast } from "@/app/context/ToastContext";
 
 export default function ArticlesPage() {
   const router = useRouter();
+  const toast = useToast();
 
   const [articles, setArticles] = useState([]);
   const [meta, setMeta] = useState({ total: 0, page: 1, pages: 1, limit: 10 });
@@ -84,9 +86,11 @@ export default function ArticlesPage() {
     setLoadingDelete(true);
     try {
       await ArticleService.delete(selectedId);
+      toast.success("Article supprimé avec succès !");
       fetchArticles();
     } catch (err) {
       console.error("Erreur suppression:", err);
+      toast.error("Erreur lors de la suppression de l'article");
     } finally {
       setLoadingDelete(false);
       setIsModalOpen(false);
@@ -214,29 +218,29 @@ export default function ArticlesPage() {
                 ) : (
                   articles.map((item, index) => (
                     <TableRow
-                      key={item._id || `article-${index}`}
+                      key={item.id || `article-${index}`}
                       className={`${index % 2 === 0 ? "bg-white" : "bg-primary-300/10"} hover:bg-primary-300/20`}
                     >
                       <TableCell className="font-medium">{item.isbn || "N/A"}</TableCell>
                       <TableCell className="max-w-xs truncate">{item.title || "Sans titre"}</TableCell>
                       <TableCell>{item.type || "Non défini"}</TableCell>
                       <TableCell>
-                        {item.price && item.price !== "0.00" 
-                          ? `${parseFloat(item.price).toFixed(2)} TND` 
+                        {item.price && item.price !== "0.00"
+                          ? `${parseFloat(item.price).toFixed(2)} TND`
                           : item.originalPrice ? `${parseFloat(item.originalPrice).toFixed(2)} TND` : "N/A"}
                       </TableCell>
                       <TableCell>{item.stock || 0}</TableCell>
-                      
+
                       <TableCell>
                         <div className="flex items-center justify-center gap-3">
-                          <button 
-                            onClick={() => handleEdit(item)} 
+                          <button
+                            onClick={() => handleEdit(item)}
                             className="p-2 hover:bg-secondary-100/10 rounded transition-colors"
                           >
                             <Edit2 className="w-4 h-4 text-secondary-700" />
                           </button>
-                          <button 
-                            onClick={() => handleOpenModal(item._id)} 
+                          <button
+                            onClick={() => handleOpenModal(item.id)}
                             className="p-2 hover:bg-red-100/20 rounded transition-colors"
                           >
                             <Trash2 className="w-4 h-4 text-red-500" />
@@ -277,11 +281,11 @@ export default function ArticlesPage() {
                   const pageNum = currentPage <= 3 ? i + 1 : currentPage > meta.pages - 3 ? meta.pages - 4 + i : currentPage - 2 + i;
                   if (pageNum < 1 || pageNum > meta.pages) return null;
                   return (
-                    <Button 
-                      key={pageNum} 
-                      variant={currentPage === pageNum ? "default" : "outline"} 
-                      size="sm" 
-                      onClick={() => setCurrentPage(pageNum)} 
+                    <Button
+                      key={pageNum}
+                      variant={currentPage === pageNum ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setCurrentPage(pageNum)}
                       className={currentPage === pageNum ? "bg-primary-500 text-white rounded-full" : "rounded-full"}
                     >
                       {pageNum}

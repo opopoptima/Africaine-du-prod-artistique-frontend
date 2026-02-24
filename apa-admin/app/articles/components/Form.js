@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Upload, X } from "lucide-react";
 import { ArticleService } from "../../services/articleService";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/app/context/ToastContext";
 
 // ────────────────────────────────────────────────
 // Reusable form components
@@ -155,10 +156,10 @@ const MultiUploadBox = ({ files, setFiles, label, subtitle, previews, setPreview
                 alert("Vous ne pouvez pas ajouter plus de 3 images.");
                 return;
               }
-              
+
               // Add new files
               setFiles(prev => [...prev, ...selected]);
-              
+
               // Create previews
               selected.forEach(file => {
                 const reader = new FileReader();
@@ -201,6 +202,7 @@ const Section = ({ title, children }) => (
 
 export default function AjoutArticle({ articleId }) {
   const router = useRouter();
+  const toast = useToast();
 
   const initialForm = {
     title: "", author: "", publisher: "", isbn: "", category: "",
@@ -211,7 +213,7 @@ export default function AjoutArticle({ articleId }) {
   };
 
   const [form, setForm] = useState(initialForm);
-  
+
   // File states
   const [cover, setCover] = useState(null);
   const [images, setImages] = useState([]);
@@ -236,7 +238,6 @@ export default function AjoutArticle({ articleId }) {
 
   const [loading, setLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(false);
-  const [message, setMessage] = useState("");
 
   useEffect(() => {
     if (!articleId || articleId === "new") {
@@ -253,7 +254,7 @@ export default function AjoutArticle({ articleId }) {
         console.log("Fetched article:", article);
 
         if (!article) {
-          setMessage("❌ Article non trouvé.");
+          toast.error("❌ Article non trouvé.");
           return;
         }
 
@@ -280,7 +281,7 @@ export default function AjoutArticle({ articleId }) {
           description: article.description || "",
           summary: article.summary || "",
           objectives: article.objectives || "",
-          code : article.code || ""
+          code: article.code || ""
         });
 
         setExistingFiles({
@@ -292,7 +293,7 @@ export default function AjoutArticle({ articleId }) {
         });
       } catch (err) {
         console.error("Erreur récupération article :", err);
-        setMessage("❌ Erreur lors de la récupération de l'article.");
+        toast.error("Erreur lors de la récupération de l'article.");
       } finally {
         setLoadingData(false);
       }
@@ -312,7 +313,6 @@ export default function AjoutArticle({ articleId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage("");
 
     const requiredFields = [
       { field: "title", label: "Titre" },
@@ -328,7 +328,6 @@ export default function AjoutArticle({ articleId }) {
       { field: "collection", label: "Collection" },
       { field: "schoolLevel", label: "Niveau scolaire" },
       { field: "price", label: "Prix" },
-      { field: "promo", label: "Promo" },
       { field: "stock", label: "Quantité" },
       { field: "description", label: "Description" },
       { field: "summary", label: "Résumé" },
@@ -337,14 +336,14 @@ export default function AjoutArticle({ articleId }) {
 
     for (const { field, label } of requiredFields) {
       if (!form[field] || form[field].toString().trim() === "") {
-        setMessage(`❌ Le champ "${label}" est requis.`);
+        toast.error(`Le champ "${label}" est requis.`);
         setLoading(false);
         return;
       }
     }
 
     if (Number(form.stock) < 1) {
-      setMessage("❌ La quantité minimale est de 1.");
+      toast.error("La quantité minimale est de 1.");
       setLoading(false);
       return;
     }
@@ -352,27 +351,27 @@ export default function AjoutArticle({ articleId }) {
     // Check existing files when editing
     const isEditing = articleId && articleId !== "new";
     if (!cover && (!isEditing || !existingFiles.cover)) {
-      setMessage("❌ La couverture est requise.");
+      toast.error("La couverture est requise.");
       setLoading(false);
       return;
     }
     if (!pdfExtrait && (!isEditing || !existingFiles.pdfExtrait)) {
-      setMessage("❌ Le PDF extrait est requis.");
+      toast.error("Le PDF extrait est requis.");
       setLoading(false);
       return;
     }
     if (!technicalFile && (!isEditing || !existingFiles.technicalFile)) {
-      setMessage("❌ La fiche technique est requise.");
+      toast.error("La fiche technique est requise.");
       setLoading(false);
       return;
     }
     if (!printedFile && (!isEditing || !existingFiles.printedFile)) {
-      setMessage("❌ La fiche imprimée est requise.");
+      toast.error("La fiche de lecture est requise.");
       setLoading(false);
       return;
     }
     if (images.length === 0 && (!isEditing || existingFiles.images.length === 0)) {
-      setMessage("❌ Au moins une image est requise.");
+      toast.error("Au moins une image est requise.");
       setLoading(false);
       return;
     }
@@ -398,27 +397,37 @@ export default function AjoutArticle({ articleId }) {
       if (printedFile) data.append("printedFile", printedFile);
 
       if (isEditing) {
-        await ArticleService.update(articleId, data);
-        setMessage("✅ Article mis à jour !");
-        setTimeout(() => router.push("/articles"), 1500);
+        toast.success("Mise à jour de l'article lancée en arrière-plan...");
+        router.push("/articles");
+
+        ArticleService.update(articleId, data)
+          .then(() => {
+            toast.success("✅ Article mis à jour avec succès !");
+            router.refresh(); // Refresh list if needed
+          })
+          .catch(err => {
+            console.error("Erreur background update:", err);
+            const errorMsg = err.response?.data?.error || err.response?.data?.message || "Erreur lors de la mise à jour.";
+            toast.error(`❌ ${errorMsg}`);
+          });
       } else {
-        await ArticleService.create(data);
-        setMessage("✅ Article ajouté !");
-        setForm(initialForm);
-        setCover(null);
-        setImages([]);
-        setPdfExtrait(null);
-        setTechnicalFile(null);
-        setPrintedFile(null);
-        setCoverPreview("");
-        setImagesPreviews([]);
-        setPdfExtraitPreview("");
-        setTechnicalFilePreview("");
-        setPrintedFilePreview("");
+        toast.success("Création de l'article lancée en arrière-plan...");
+        router.push("/articles");
+
+        ArticleService.create(data)
+          .then(() => {
+            toast.success("✅ Article créé avec succès !");
+            router.refresh(); // Refresh list if needed
+          })
+          .catch(err => {
+            console.error("Erreur background create:", err);
+            const errorMsg = err.response?.data?.error || err.response?.data?.message || "Erreur lors de la création.";
+            toast.error(`❌ ${errorMsg}`);
+          });
       }
     } catch (err) {
-      console.error("Erreur lors de l'enregistrement :", err);
-      setMessage("❌ Erreur lors de l'enregistrement.");
+      console.error("Erreur lors de la préparation de l'envoi :", err);
+      toast.error("❌ Erreur lors de la préparation de l'envoi.");
     } finally {
       setLoading(false);
     }
@@ -450,8 +459,9 @@ export default function AjoutArticle({ articleId }) {
           <FormField label="ISBN :"><FormInput name="isbn" value={form.isbn} onChange={handleChange} /></FormField>
           <FormField label="Catégorie :"><FormInput name="category" value={form.category} onChange={handleChange} /></FormField>
           <FormField label="Sous-catégorie :"><FormInput name="subCategory" value={form.subCategory} onChange={handleChange} /></FormField>
+          <FormField label="Âge recommandé :"><FormInput name="recommendedAge" value={form.recommendedAge} onChange={handleChange} /></FormField>
           <FormField label="Langue :"><FormInput name="language" value={form.language} onChange={handleChange} /></FormField>
-          <FormField label="N° de pages :"><FormInput name="pages" value={form.pages} onChange={handleChange} type="number" /></FormField>
+          <FormField label="Nombre de pages :"><FormInput name="pages" value={form.pages} onChange={handleChange} type="number" /></FormField>
           <FormField label="Dimensions :"><FormInput name="dimensions" value={form.dimensions} onChange={handleChange} /></FormField>
           <FormField label="Type :"><FormInput name="type" value={form.type} onChange={handleChange} /></FormField>
           <FormField label="Collection :"><FormInput name="collection" value={form.collection} onChange={handleChange} /></FormField>
@@ -465,9 +475,9 @@ export default function AjoutArticle({ articleId }) {
 
         <Section title="Images & fichiers">
           <FormField label="Couverture :">
-            <UploadBox 
-              file={cover} 
-              setFile={setCover} 
+            <UploadBox
+              file={cover}
+              setFile={setCover}
               label="Upload Image"
               preview={coverPreview}
               setPreview={setCoverPreview}
@@ -476,10 +486,10 @@ export default function AjoutArticle({ articleId }) {
           </FormField>
 
           <FormField label="Images (3 max) :">
-            <MultiUploadBox 
-              files={images} 
-              setFiles={setImages} 
-              label="Upload Images" 
+            <MultiUploadBox
+              files={images}
+              setFiles={setImages}
+              label="Upload Images"
               subtitle="Gallery"
               previews={imagesPreviews}
               setPreviews={setImagesPreviews}
@@ -488,9 +498,9 @@ export default function AjoutArticle({ articleId }) {
           </FormField>
 
           <FormField label="PDF extrait :">
-            <UploadBox 
-              file={pdfExtrait} 
-              setFile={setPdfExtrait} 
+            <UploadBox
+              file={pdfExtrait}
+              setFile={setPdfExtrait}
               label="Upload PDF"
               preview={pdfExtraitPreview}
               setPreview={setPdfExtraitPreview}
@@ -499,9 +509,9 @@ export default function AjoutArticle({ articleId }) {
           </FormField>
 
           <FormField label="Fiche technique (PDF) :">
-            <UploadBox 
-              file={technicalFile} 
-              setFile={setTechnicalFile} 
+            <UploadBox
+              file={technicalFile}
+              setFile={setTechnicalFile}
               label="Upload PDF"
               preview={technicalFilePreview}
               setPreview={setTechnicalFilePreview}
@@ -509,10 +519,10 @@ export default function AjoutArticle({ articleId }) {
             />
           </FormField>
 
-          <FormField label="Fiche imprimée (PDF) :">
-            <UploadBox 
-              file={printedFile} 
-              setFile={setPrintedFile} 
+          <FormField label="Fiche de lecture (PDF) :">
+            <UploadBox
+              file={printedFile}
+              setFile={setPrintedFile}
               label="Upload PDF"
               preview={printedFilePreview}
               setPreview={setPrintedFilePreview}
@@ -581,14 +591,6 @@ export default function AjoutArticle({ articleId }) {
             Annuler
           </button>
         </div>
-
-        {message && (
-          <div className={`mt-4 p-3 rounded ${
-            message.includes("✅") ? "bg-green-50 text-green-700 border border-green-200" : "bg-red-50 text-red-700 border border-red-200"
-          }`}>
-            <p className="text-sm">{message}</p>
-          </div>
-        )}
       </div>
     </form>
   );

@@ -5,9 +5,11 @@ import { Input } from "@/app/components/input";
 import { Label } from "@/app/components/label";
 import { Textarea } from "@/app/components/textarea";
 import { Upload } from "lucide-react";
+import { useToast } from "@/app/context/ToastContext";
 
 export default function ActualiteFormPage() {
   const router = useRouter();
+  const toast = useToast();
   const searchParams = useSearchParams();
   const editId = searchParams.get("id");
   const isEditMode = !!editId;
@@ -17,6 +19,8 @@ export default function ActualiteFormPage() {
     subtitle: "",
     category: "Blog",
     eventDate: "", // ← string for datetime-local
+    startDate: "",
+    endDate: "",
     publicCible: "",
     lieu: "",
     theme: "",
@@ -28,6 +32,7 @@ export default function ActualiteFormPage() {
     galleryImages: [],
     status: "Publié",
     featured: false,
+    videoUrl: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -64,11 +69,29 @@ export default function ActualiteFormPage() {
         }
       }
 
+      let startDateStr = "";
+      if (actualData.startDate) {
+        const d = new Date(actualData.startDate);
+        if (!isNaN(d.getTime())) {
+          startDateStr = d.toISOString().slice(0, 16);
+        }
+      }
+
+      let endDateStr = "";
+      if (actualData.endDate) {
+        const d = new Date(actualData.endDate);
+        if (!isNaN(d.getTime())) {
+          endDateStr = d.toISOString().slice(0, 16);
+        }
+      }
+
       setFormData({
         title: actualData.title || "",
         subtitle: actualData.subtitle || "",
         category: actualData.category || "Blog",
         eventDate: eventDateStr,
+        startDate: startDateStr,
+        endDate: endDateStr,
         publicCible: actualData.publicCible || "",
         lieu: actualData.lieu || "",
         theme: actualData.theme || "",
@@ -80,6 +103,7 @@ export default function ActualiteFormPage() {
         galleryImages: actualData.galleryImages || [],
         status: actualData.status || "Publié",
         featured: !!actualData.featured,
+        videoUrl: actualData.videoUrl || "",
       });
 
       if (actualData.mainImage) {
@@ -95,7 +119,7 @@ export default function ActualiteFormPage() {
       console.log("Formulaire rempli avec succès!");
     } catch (error) {
       console.error("Erreur détaillée lors du chargement:", error);
-      alert(`Erreur lors du chargement de l'actualité: ${error.message}`);
+      toast.error(`Erreur lors du chargement de l'actualité: ${error.message}`);
     } finally {
       setLoadingForm(false);
     }
@@ -111,6 +135,8 @@ export default function ActualiteFormPage() {
         subtitle: formData.subtitle,
         category: formData.category,
         eventDate: formData.eventDate || undefined, // ← will default in schema
+        startDate: formData.startDate || undefined,
+        endDate: formData.endDate || undefined,
         lieu: formData.lieu,
         publicCible: formData.publicCible,
         theme: formData.theme,
@@ -122,6 +148,7 @@ export default function ActualiteFormPage() {
         galleryImages: formData.galleryImages,
         status: formData.status,
         featured: formData.featured,
+        videoUrl: formData.videoUrl,
       };
 
       const url = isEditMode
@@ -164,12 +191,12 @@ export default function ActualiteFormPage() {
 
       console.log("Succès! Résultat:", result);
 
-      alert(isEditMode ? "Actualité mise à jour avec succès!" : "Actualité créée avec succès!");
+      toast.success(isEditMode ? "Actualité mise à jour avec succès!" : "Actualité créée avec succès!");
       router.push("/actualites");
       router.refresh();
     } catch (err) {
       console.error("Erreur lors de l'enregistrement:", err);
-      alert(`Erreur lors de l'enregistrement: ${err.message}`);
+      toast.error(`Erreur lors de l'enregistrement: ${err.message}`);
     } finally {
       setLoading(false);
     }
@@ -257,7 +284,7 @@ export default function ActualiteFormPage() {
               {/* Titre */}
               <div className="flex items-center gap-4">
                 <Label className="text-black w-48 text-left" style={{ fontFamily: 'Poppins', fontWeight: 500, fontSize: '14px', lineHeight: '100%' }}>
-                  Titre :
+                  Événement :
                 </Label>
                 <Input
                   value={formData.title}
@@ -272,7 +299,7 @@ export default function ActualiteFormPage() {
               {/* Sous-titre */}
               <div className="flex items-center gap-4">
                 <Label className="text-black w-48 text-left" style={{ fontFamily: 'Poppins', fontWeight: 500, fontSize: '14px', lineHeight: '100%' }}>
-                  Sous-titre :
+                  Slogan :
                 </Label>
                 <Input
                   value={formData.subtitle}
@@ -283,13 +310,27 @@ export default function ActualiteFormPage() {
                 />
               </div>
 
+              {/* Lien Vidéo YouTube */}
+              <div className="flex items-center gap-4">
+                <Label className="text-black w-48 text-left" style={{ fontFamily: 'Poppins', fontWeight: 500, fontSize: '14px', lineHeight: '100%' }}>
+                  Lien Vidéo YouTube :
+                </Label>
+                <Input
+                  value={formData.videoUrl}
+                  onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+                  className="flex-1 h-[36px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)]"
+                  disabled={loading}
+                  placeholder="Ex: https://www.youtube.com/watch?v=..."
+                />
+              </div>
+
               {/* Catégorie */}
               <div className="flex items-center gap-4">
                 <Label className="text-black w-48 text-left" style={{ fontFamily: 'Poppins', fontWeight: 500, fontSize: '14px', lineHeight: '100%' }}>
                   Catégorie :
                 </Label>
                 <div className="flex-1 flex gap-4 items-center">
-                  {["Livre", "Événement", "Promotion", "Blog"].map((cat) => (
+                  {["Foire du livre", "Événement culturel", "Promotion / Lancement de livre", "Blog"].map((cat) => (
                     <label key={cat} className="flex items-center gap-1 cursor-pointer">
                       <input
                         type="radio"
@@ -353,12 +394,25 @@ export default function ActualiteFormPage() {
               {/* Date de l'événement */}
               <div className="flex items-center gap-4">
                 <Label className="text-black w-48 text-left" style={{ fontFamily: 'Poppins', fontWeight: 500, fontSize: '14px', lineHeight: '100%' }}>
-                  Date de l'événement :
+                  Date de début :
                 </Label>
                 <Input
                   type="datetime-local"
-                  value={formData.eventDate}
-                  onChange={(e) => setFormData({ ...formData, eventDate: e.target.value })}
+                  value={formData.startDate}
+                  onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+                  className="flex-1 h-[36px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)]"
+                  disabled={loading}
+                />
+              </div>
+
+              <div className="flex items-center gap-4">
+                <Label className="text-black w-48 text-left" style={{ fontFamily: 'Poppins', fontWeight: 500, fontSize: '14px', lineHeight: '100%' }}>
+                  Date de fin :
+                </Label>
+                <Input
+                  type="datetime-local"
+                  value={formData.endDate}
+                  onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
                   className="flex-1 h-[36px] bg-white border border-[#DEDEDE] rounded-lg shadow-[inset_0px_1px_2px_1px_rgba(10,10,10,0.1)]"
                   disabled={loading}
                 />
@@ -416,9 +470,9 @@ export default function ActualiteFormPage() {
                 />
               </div>
 
-              
 
-              
+
+
             </div>
 
             {/* Médias et affichage */}
