@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { api } from '../../services/auth';
 
 const ResetPasswordForm = () => {
   const router = useRouter();
@@ -150,7 +149,7 @@ const ResetPasswordForm = () => {
       </form>
 
       <div className="text-center mt-6">
-        <Link 
+        <Link
           href="/auth/login"
           className="text-[#4B0082] text-sm underline"
         >
