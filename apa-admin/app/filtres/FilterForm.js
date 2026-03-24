@@ -58,7 +58,7 @@ export default function FilterForm({ filter, onSuccess, onCancel }) {
       const loadExistingFilters = async () => {
         setLoadingFilters(true);
         try {
-          const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+          const API_URL = process.env.NEXT_PUBLIC_API_URL;
           const response = await fetch(`${API_URL}/filter-configs`);
           const result = await response.json();
           setExistingFilters(result.data || []);
@@ -84,7 +84,7 @@ export default function FilterForm({ filter, onSuccess, onCancel }) {
       const loadOptions = async () => {
         setLoadingOptions(true);
         try {
-          const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+          const API_URL = process.env.NEXT_PUBLIC_API_URL;
           const response = await fetch(`${API_URL}/filter-configs/active/frontend`);
           const result = await response.json();
           if (result.success) {
@@ -130,7 +130,7 @@ export default function FilterForm({ filter, onSuccess, onCancel }) {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
       const endpoint = isEdit
         ? `${API_URL}/filter-configs/${filter._id}`
         : `${API_URL}/filter-configs`;

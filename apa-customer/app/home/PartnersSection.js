@@ -1,10 +1,22 @@
 import Image from "next/image";
 
 const partners = [
-  { name: "Librairie Aya Sofya", logo: "/images/unnamed.jpg", color: "text-purple-600", style: "italic font-light" },
-  { name: "Dima Edition et Diffusion", logo: "/images/dima.png", color: "text-purple-600", style: "italic font-light" },
-
-
+  {
+    name: "Librairie Aya Sofya",
+    phone: "53.190.140 – 70.039.426",
+    adresse: "37 Avenue Hedi Nouira Cité Ennasr2 – Ariana Tunisie",
+    logo: "/images/unnamed.jpg",
+    color: "text-purple-600",
+    style: "italic font-light",
+  },
+  {
+    name: "Dima Edition et Diffusion",
+    phone: "53.190.140 – 70.039.426",
+    adresse: "37 Avenue Hedi Nouira Cité Ennasr2 – Ariana Tunisie",
+    logo: "/images/dima.png",
+    color: "text-purple-600",
+    style: "italic font-light",
+  },
 ];
 
 const PartnersSection = () => {
@@ -40,7 +52,7 @@ const PartnersSection = () => {
               "
             >
               <div className="text-center">
-                <div className="relative w-40 h-40 sm:w-40 sm:h-40 mx-auto mb-3">
+                <div className="relative w-40 h-40 mx-auto mb-3">
                   <Image
                     src={partner.logo}
                     alt={partner.name}
@@ -49,8 +61,17 @@ const PartnersSection = () => {
                     sizes="(max-width: 640px) 128px, 160px"
                   />
                 </div>
+
                 <p className="text-sm sm:text-base text-gray-700 font-medium">
                   {partner.name}
+                </p>
+
+                <p className="text-sm text-gray-500">
+                  {partner.phone}
+                </p>
+
+                <p className="text-xs text-gray-400">
+                  {partner.adresse}
                 </p>
               </div>
             </div>

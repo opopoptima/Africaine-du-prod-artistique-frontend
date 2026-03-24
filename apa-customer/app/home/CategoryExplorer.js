@@ -1,15 +1,47 @@
 "use client";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../components/ui/carousel";
+import { CategoryService } from "../services/categoryService";
 
 export default function CategoryExplorer() {
-  const categories = [
-    { id: 1, name: "Parascolaire", image: "/images/Categories/Lecture.jpeg", href: "/boutique?type=Parascolaire" },
-    { id: 2, name: "Préscolaire", image: "/images/Categories/app.png", href: "/boutique?type=Préscolaire" },
-    { id: 3, name: "Coloriage", image: "/images/Categories/creativite.png", href: "/boutique?type=Coloriage" },
-    { id: 4, name: "Coédition", image: "/images/Categories/Decouverte.png", href: "/boutique?type=Coédition" },
-  ];
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await CategoryService.getActiveCategories();
+        const mappedCategories = data.map((cat) => ({
+          id: cat._id || cat.id,
+          name: cat.name,
+          image: cat.image || null,
+          href: `/boutique?category=${cat.slug || cat.name}`,
+        }));
+        
+        setCategories(mappedCategories.length > 0 ? mappedCategories : []);
+      } catch (error) {
+        console.error("Failed to load categories:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchCategories();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-8 my-8 text-center text-gray-500">
+        Chargement des catégories...
+      </div>
+    );
+  }
+
+  if (categories.length === 0) {
+    return null;
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-20 py-8 my-8">
@@ -34,14 +66,20 @@ export default function CategoryExplorer() {
                 <Link href={cat.href}>
                   <div className="flex flex-col items-center group cursor-pointer transition-all duration-300">
                     <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full overflow-hidden border-2 border-purple-200 group-hover:border-purple-400 group-hover:scale-110 flex items-center justify-center p-3 sm:p-4 bg-white shadow-md transition-all duration-300">
-                      <Image
-                        src={cat.image}
-                        alt={cat.name}
-                        width={120}
-                        height={120}
-                        className="object-cover w-full h-full"
-                        priority
-                      />
+                      {cat.image ? (
+                        <Image
+                          src={cat.image}
+                          alt={cat.name}
+                          width={120}
+                          height={120}
+                          className="object-cover w-full h-full"
+                          priority
+                        />
+                      ) : (
+                        <span className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-300">
+                          {cat.name.charAt(0).toUpperCase()}
+                        </span>
+                      )}
                     </div>
                     <span className="mt-3 text-center font-bold text-xs sm:text-sm md:text-base text-gray-700 group-hover:text-purple-600 transition-colors">
                       {cat.name}

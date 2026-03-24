@@ -7,6 +7,9 @@ import { Textarea } from "@/app/components/textarea";
 import { Upload } from "lucide-react";
 import { useToast } from "@/app/context/ToastContext";
 
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export default function ActualiteFormPage() {
   const router = useRouter();
   const toast = useToast();
@@ -50,7 +53,8 @@ export default function ActualiteFormPage() {
   const fetchActualite = async () => {
     setLoadingForm(true);
     try {
-      const response = await fetch(`http://localhost:5000/api/news/${editId}`);
+      const response = await fetch(`${API_URL}/news/${editId}`);
+
       console.log("Response status:", response.status);
 
       if (!response.ok) {
@@ -152,8 +156,8 @@ export default function ActualiteFormPage() {
       };
 
       const url = isEditMode
-        ? `http://localhost:5000/api/news/${editId}`
-        : "http://localhost:5000/api/news";
+        ? `${API_URL}/news/${editId}`
+        : `${API_URL}/news`;
 
       const method = isEditMode ? "PUT" : "POST";
 

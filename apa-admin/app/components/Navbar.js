@@ -9,6 +9,7 @@ export default function Navbar() {
     { href: "/commandes", label: "Commandes" },
     { href: "/actualites", label: "Actualités" },
     { href: "/filtres", label: "Filtres" },
+    { href: "/categories", label: "Catégories" },
   ];
 
   // Logout function
