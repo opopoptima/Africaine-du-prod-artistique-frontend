@@ -1,7 +1,6 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { api, authStorage } from '../services/auth';
 
 const LoginForm = () => {
@@ -93,14 +92,6 @@ const LoginForm = () => {
         </button>
       </form>
 
-      <div className="text-center mt-6">
-        <Link 
-          href="/auth/forgot-password"
-          className="text-[#000000] text-sm"
-        >
-          Mot de passe oublié ? <span className="text-[#4B0082] underline">Cliquez ici</span>
-        </Link>
-      </div>
     </div>
   );
 };
