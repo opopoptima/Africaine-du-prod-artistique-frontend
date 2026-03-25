@@ -14,6 +14,8 @@ export default function HeroSection() {
           src="/images/heroSection/heroSectionImageBackground.jpg"
           alt="Hero Background"
           fill
+          sizes="100vw"
+          unoptimized
           className="object-cover opacity-30 "
           priority
           quality={90}
@@ -68,6 +70,7 @@ export default function HeroSection() {
                 src="/images/heroSection/heroSectionImage.jpg"
                 alt="L'Africaine de Prod Artistique"
                 fill
+                sizes="(max-width: 768px) 300px, (max-width: 1024px) 468px, 468px"
                 className="object-cover"
                 priority
                 quality={95}
@@ -80,6 +83,7 @@ export default function HeroSection() {
                 src="/images/heroSection/image.png"
                 alt="Decorative"
                 fill
+                sizes="(max-width: 768px) 64px, (max-width: 1024px) 80px, 96px"
                 className="object-cover"
                 quality={90}
               />

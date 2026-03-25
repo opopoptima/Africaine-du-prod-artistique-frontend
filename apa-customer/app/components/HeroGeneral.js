@@ -10,6 +10,8 @@ export default function HeroGeneral({ title, showLogo = true }) {
           src="/images/heroSection/heroSectionImageBackground.jpg"
           alt="Hero Background"
           fill
+          sizes="100vw"
+          unoptimized
           className="object-cover opacity-30"
           priority
           quality={90}
@@ -34,6 +36,7 @@ export default function HeroGeneral({ title, showLogo = true }) {
               src="/images/apa-logo.png"
               alt="Logo"
               fill
+              sizes="(max-width: 768px) 128px, (max-width: 1024px) 160px, 192px"
               className="object-contain"
               priority
             />
