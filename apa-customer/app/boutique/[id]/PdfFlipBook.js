@@ -5,6 +5,9 @@ import { useState, useRef, useEffect } from "react";
 import { pdfjs } from "react-pdf";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 
+pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
+
+
 const HTMLFlipBook = dynamic(() => import("react-pageflip"), {
   ssr: false,
   loading: () => <div className="text-white">Chargement...</div>,
@@ -19,9 +22,10 @@ export default function PdfFlipBook({ cover, title, author, pdfExtrait, onClose 
   const [currentPage, setCurrentPage] = useState(0);
   const flipBookRef = useRef(null);
 
-  useEffect(() => {
-    pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
+  /*useEffect(() => {
+    pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
   }, []);
+  */
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
