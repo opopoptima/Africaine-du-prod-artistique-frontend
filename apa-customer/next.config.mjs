@@ -29,23 +29,6 @@ const nextConfig = {
       },
     ];
   },
-  webpack: (config) => {
-    config.resolve.alias.canvas = false;
-    config.resolve.alias.encoding = false;
-
-    config.plugins.push(
-      new CopyWebpackPlugin({
-        patterns: [
-          {
-            from: require.resolve('pdfjs-dist/build/pdf.worker.min.mjs'),
-            to: '../public/pdf.worker.min.mjs',
-          },
-        ],
-      })
-    );
-
-    return config;
-  },
 }
 
 export default nextConfig;
