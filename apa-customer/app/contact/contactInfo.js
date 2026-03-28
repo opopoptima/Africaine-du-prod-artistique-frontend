@@ -12,6 +12,9 @@ export default function ContactInfos() {
         <p className="text-primary-300 font-medium text-center ">
           52, av Bab Djedid Tunis - Tunisie
         </p>
+        <p className="text-primary-300 font-medium text-center ">
+          37, Avenue Hedi Nouira Cité Ennasr 2 Arianna Tunisie
+        </p>
       </div>
 
       {/* Téléphone */}

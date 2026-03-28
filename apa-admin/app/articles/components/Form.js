@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Upload, X } from "lucide-react";
 import { ArticleService } from "../../services/articleService";
+import CategoryService from "../../services/categoryService";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/app/context/ToastContext";
 
@@ -10,9 +11,11 @@ import { useToast } from "@/app/context/ToastContext";
 // Reusable form components
 // ────────────────────────────────────────────────
 
-const FormField = ({ label, children }) => (
+const FormField = ({ label, children, required }) => (
   <div className="flex items-center gap-4 py-1.5">
-    <label className="w-40 text-sm text-label shrink-0">{label}</label>
+    <label className="w-40 text-sm text-label shrink-0">
+      {label} {required && <span className="text-red-500">*</span>}
+    </label>
     <div className="flex-1">{children}</div>
   </div>
 );
@@ -29,6 +32,26 @@ const FormInput = ({ name, value, onChange, placeholder, type = "text", required
       className={`w-full max-w-md h-8 px-3 border rounded bg-background text-foreground text-sm focus:outline-none focus:ring-1 focus:ring-primary
         ${isInvalid ? "border-red-500" : "border-border"}`}
     />
+  );
+};
+
+const FormSelect = ({ name, value, onChange, options, placeholder, required = false }) => {
+  const isInvalid = required && (!value || value.toString().trim() === "");
+  return (
+    <select
+      name={name}
+      value={value ?? ""}
+      onChange={onChange}
+      className={`w-full max-w-md h-8 px-3 border rounded bg-background text-foreground text-sm focus:outline-none focus:ring-1 focus:ring-primary
+        ${isInvalid ? "border-red-500" : "border-border"}`}
+    >
+      <option value="" disabled>{placeholder || "Sélectionnez..."}</option>
+      {options.map((opt) => (
+        <option key={opt._id} value={opt._id}>
+          {opt.name}
+        </option>
+      ))}
+    </select>
   );
 };
 
@@ -238,6 +261,21 @@ export default function AjoutArticle({ articleId }) {
 
   const [loading, setLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(false);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await CategoryService.getActive();
+        if (response.success) {
+          setCategories(response.data);
+        }
+      } catch (err) {
+        console.error("Erreur récupération catégories :", err);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     if (!articleId || articleId === "new") {
@@ -264,7 +302,7 @@ export default function AjoutArticle({ articleId }) {
           author: article.author || "",
           publisher: article.publisher || "",
           isbn: article.isbn || "",
-          category: article.category || "",
+          category: article.category?._id || article.category || "",
           subCategory: article.subCategory || "",
           recommendedAge: article.recommendedAge || "",
           language: article.language || "",
@@ -396,34 +434,25 @@ export default function AjoutArticle({ articleId }) {
       if (technicalFile) data.append("technicalFile", technicalFile);
       if (printedFile) data.append("printedFile", printedFile);
 
-      if (isEditing) {
-        toast.success("Mise à jour de l'article lancée en arrière-plan...");
-        router.push("/articles");
+      try {
+        if (isEditing) {
+          await ArticleService.update(articleId, data);
+          toast.success("✅ Article mis à jour avec succès !");
+        } else {
+          await ArticleService.create(data);
+          toast.success("✅ Article créé avec succès !");
+        }
 
-        ArticleService.update(articleId, data)
-          .then(() => {
-            toast.success("✅ Article mis à jour avec succès !");
-            router.refresh(); // Refresh list if needed
-          })
-          .catch(err => {
-            console.error("Erreur background update:", err);
-            const errorMsg = err.response?.data?.error || err.response?.data?.message || "Erreur lors de la mise à jour.";
-            toast.error(`❌ ${errorMsg}`);
-          });
-      } else {
-        toast.success("Création de l'article lancée en arrière-plan...");
         router.push("/articles");
+        router.refresh();
+      } catch (err) {
+        console.error(err);
+        const errorMsg =
+          err.response?.data?.error ||
+          err.response?.data?.message ||
+          "Erreur lors de l'opération.";
 
-        ArticleService.create(data)
-          .then(() => {
-            toast.success("✅ Article créé avec succès !");
-            router.refresh(); // Refresh list if needed
-          })
-          .catch(err => {
-            console.error("Erreur background create:", err);
-            const errorMsg = err.response?.data?.error || err.response?.data?.message || "Erreur lors de la création.";
-            toast.error(`❌ ${errorMsg}`);
-          });
+        toast.error(`❌ ${errorMsg}`);
       }
     } catch (err) {
       console.error("Erreur lors de la préparation de l'envoi :", err);
@@ -452,29 +481,29 @@ export default function AjoutArticle({ articleId }) {
         </h1>
 
         <Section title="Informations générales">
-          <FormField label="Titre :"><FormInput name="title" value={form.title} onChange={handleChange} /></FormField>
-          <FormField label="Code :"><FormInput name="code" value={form.code} onChange={handleChange} /></FormField>
-          <FormField label="Auteur :"><FormInput name="author" value={form.author} onChange={handleChange} /></FormField>
-          <FormField label="Maison d'édition :"><FormInput name="publisher" value={form.publisher} onChange={handleChange} /></FormField>
-          <FormField label="ISBN :"><FormInput name="isbn" value={form.isbn} onChange={handleChange} /></FormField>
-          <FormField label="Catégorie :"><FormInput name="category" value={form.category} onChange={handleChange} /></FormField>
-          <FormField label="Sous-catégorie :"><FormInput name="subCategory" value={form.subCategory} onChange={handleChange} /></FormField>
+          <FormField label="Titre :" required><FormInput name="title" value={form.title} onChange={handleChange} required /></FormField>
+          <FormField label="Code langue:"><FormInput name="code" value={form.code} onChange={handleChange} /></FormField>
+          <FormField label="Auteur :" required><FormInput name="author" value={form.author} onChange={handleChange} required /></FormField>
+          <FormField label="Maison d'édition :" required><FormInput name="publisher" value={form.publisher} onChange={handleChange} required /></FormField>
+          <FormField label="ISBN :" required><FormInput name="isbn" value={form.isbn} onChange={handleChange} required /></FormField>
+          <FormField label="Catégorie :" required><FormSelect name="category" value={form.category} onChange={handleChange} options={categories} placeholder="Sélectionnez une catégorie" required /></FormField>
+          <FormField label="Sous-catégorie :" required><FormInput name="subCategory" value={form.subCategory} onChange={handleChange} required /></FormField>
           <FormField label="Âge recommandé :"><FormInput name="recommendedAge" value={form.recommendedAge} onChange={handleChange} /></FormField>
-          <FormField label="Langue :"><FormInput name="language" value={form.language} onChange={handleChange} /></FormField>
-          <FormField label="Nombre de pages :"><FormInput name="pages" value={form.pages} onChange={handleChange} type="number" /></FormField>
-          <FormField label="Dimensions :"><FormInput name="dimensions" value={form.dimensions} onChange={handleChange} /></FormField>
-          <FormField label="Type :"><FormInput name="type" value={form.type} onChange={handleChange} /></FormField>
-          <FormField label="Collection :"><FormInput name="collection" value={form.collection} onChange={handleChange} /></FormField>
-          <FormField label="Niveau scolaire :"><FormInput name="schoolLevel" value={form.schoolLevel} onChange={handleChange} /></FormField>
+          <FormField label="Langue :" required><FormInput name="language" value={form.language} onChange={handleChange} required /></FormField>
+          <FormField label="Nombre de pages :" required><FormInput name="pages" value={form.pages} onChange={handleChange} type="number" required /></FormField>
+          <FormField label="Dimensions :" required><FormInput name="dimensions" value={form.dimensions} onChange={handleChange} required /></FormField>
+          <FormField label="Type :" required><FormInput name="type" value={form.type} onChange={handleChange} required /></FormField>
+          <FormField label="Collection :" required><FormInput name="collection" value={form.collection} onChange={handleChange} required /></FormField>
+          <FormField label="Niveau scolaire :" required><FormInput name="schoolLevel" value={form.schoolLevel} onChange={handleChange} required /></FormField>
         </Section>
 
         <Section title="Tarification">
-          <FormField label="Prix :"><FormInput name="price" value={form.price} onChange={handleChange} type="number" /></FormField>
+          <FormField label="Prix :" required><FormInput name="price" value={form.price} onChange={handleChange} type="number" required /></FormField>
           <FormField label="Promo :"><FormInput name="promo" value={form.promo} onChange={handleChange} type="number" /></FormField>
         </Section>
 
         <Section title="Images & fichiers">
-          <FormField label="Couverture :">
+          <FormField label="Couverture :" required>
             <UploadBox
               file={cover}
               setFile={setCover}
@@ -485,7 +514,7 @@ export default function AjoutArticle({ articleId }) {
             />
           </FormField>
 
-          <FormField label="Images (3 max) :">
+          <FormField label="Images (3 max) :" required>
             <MultiUploadBox
               files={images}
               setFiles={setImages}
@@ -497,7 +526,7 @@ export default function AjoutArticle({ articleId }) {
             />
           </FormField>
 
-          <FormField label="PDF extrait :">
+          <FormField label="PDF extrait :" required>
             <UploadBox
               file={pdfExtrait}
               setFile={setPdfExtrait}
@@ -508,7 +537,7 @@ export default function AjoutArticle({ articleId }) {
             />
           </FormField>
 
-          <FormField label="Fiche technique (PDF) :">
+          <FormField label="Fiche technique (PDF) :" required>
             <UploadBox
               file={technicalFile}
               setFile={setTechnicalFile}
@@ -519,7 +548,7 @@ export default function AjoutArticle({ articleId }) {
             />
           </FormField>
 
-          <FormField label="Fiche de lecture (PDF) :">
+          <FormField label="Fiche de lecture (PDF) :" required>
             <UploadBox
               file={printedFile}
               setFile={setPrintedFile}
@@ -561,9 +590,9 @@ export default function AjoutArticle({ articleId }) {
         </Section>
 
         <Section title="Description">
-          <FormField label="Description :"><FormTextArea name="description" value={form.description} onChange={handleChange} rows={5} /></FormField>
-          <FormField label="Résumé :"><FormTextArea name="summary" value={form.summary} onChange={handleChange} rows={4} /></FormField>
-          <FormField label="Objectifs pédagogiques :"><FormTextArea name="objectives" value={form.objectives} onChange={handleChange} rows={4} /></FormField>
+          <FormField label="Description :" required><FormTextArea name="description" value={form.description} onChange={handleChange} rows={5} required /></FormField>
+          <FormField label="Résumé :" required><FormTextArea name="summary" value={form.summary} onChange={handleChange} rows={4} required /></FormField>
+          <FormField label="Objectifs pédagogiques :" required><FormTextArea name="objectives" value={form.objectives} onChange={handleChange} rows={4} required /></FormField>
         </Section>
 
         <div className="flex justify-end gap-4 pt-4 pr-2">
