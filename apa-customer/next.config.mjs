@@ -1,5 +1,4 @@
 /** @type {import('next').NextConfig} */
-import CopyWebpackPlugin from 'copy-webpack-plugin';
 import { createRequire } from 'module';
 
 const require = createRequire(import.meta.url);
