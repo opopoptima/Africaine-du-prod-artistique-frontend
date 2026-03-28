@@ -20,7 +20,7 @@ export default function PdfFlipBook({ cover, title, author, pdfExtrait, onClose 
   const flipBookRef = useRef(null);
 
   useEffect(() => {
-    pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+    pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
   }, []);
 
   const onDocumentLoadSuccess = ({ numPages }) => {
@@ -51,7 +51,7 @@ export default function PdfFlipBook({ cover, title, author, pdfExtrait, onClose 
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center p-4" onClick={e => e.stopPropagation()}>
-    
+
 
       {pdfLoading && (
         <div className="text-white text-xl">
@@ -67,16 +67,16 @@ export default function PdfFlipBook({ cover, title, author, pdfExtrait, onClose 
         </div>
       )}
 
-            {!pdfLoading && !pdfError && numPages && (
-        <div className="flex flex-col items-center gap-2 max-w-2xl sm:mt-20 mb-10 px-4"> 
+      {!pdfLoading && !pdfError && numPages && (
+        <div className="flex flex-col items-center gap-2 max-w-2xl sm:mt-20 mb-10 px-4">
           {/* Flipbook */}
           <PDFDocument file={pdfExtrait} loading="">
             <div className="flipbook-container">
               <HTMLFlipBook
                 ref={flipBookRef}
-                width={380}        
-                height={540}       
-                size="fixed"       
+                width={380}
+                height={540}
+                size="fixed"
                 minWidth={300}
                 maxWidth={400}
                 minHeight={400}
@@ -85,7 +85,7 @@ export default function PdfFlipBook({ cover, title, author, pdfExtrait, onClose 
                 flippingTime={1000}
                 usePortrait={true}
                 startZIndex={0}
-                autoSize={false}   
+                autoSize={false}
                 maxShadowOpacity={0.5}
                 showCover={true}
                 mobileScrollSupport={true}
@@ -102,7 +102,7 @@ export default function PdfFlipBook({ cover, title, author, pdfExtrait, onClose 
                   <div key={`page_${index + 1}`} className="page bg-white shadow-2xl">
                     <PDFPage
                       pageNumber={index + 1}
-                      width={360}  
+                      width={360}
                       renderTextLayer={true}
                       renderAnnotationLayer={true}
                       className="mx-auto"
@@ -127,7 +127,7 @@ export default function PdfFlipBook({ cover, title, author, pdfExtrait, onClose 
             </span>
             <button
               onClick={goToNextPage}
-              disabled={currentPage >= numPages - 1} 
+              disabled={currentPage >= numPages - 1}
               className="p-2.5 rounded-full bg-purple-600 hover:bg-purple-700 disabled:bg-white/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               <IoChevronForward className="size-5 text-white" />

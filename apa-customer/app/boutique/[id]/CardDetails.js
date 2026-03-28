@@ -56,35 +56,30 @@ export default function CardDetail({ article }) {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [voicesLoaded, setVoicesLoaded] = useState(false);
+  // Replace the voicesLoaded state + useEffect with this:
+  const [voices, setVoices] = useState([]);
 
+  useEffect(() => {
+    const loadVoices = () => {
+      const available = window.speechSynthesis.getVoices();
+      if (available.length > 0) setVoices(available);
+    };
+
+    loadVoices();
+    window.speechSynthesis.addEventListener("voiceschanged", loadVoices);
+    // Retry after 1s for slow browsers (common on mobile / certain VPS setups)
+    const retry = setTimeout(loadVoices, 1000);
+
+    return () => {
+      window.speechSynthesis.removeEventListener("voiceschanged", loadVoices);
+      clearTimeout(retry);
+    };
+  }, []);
   const utteranceRef = useRef(null);
   const timerRef = useRef(null);
 
   // Load voices on mount
-  useEffect(() => {
-    const loadVoices = () => {
-      const voices = window.speechSynthesis.getVoices();
-      if (voices.length > 0) {
-        setVoicesLoaded(true);
-        console.log("Available voices:", voices.map(v => `${v.name} (${v.lang})`));
-      }
-    };
 
-    // Load voices immediately if available
-    loadVoices();
-
-    // Also listen for voiceschanged event (some browsers need this)
-    if (window.speechSynthesis.onvoiceschanged !== undefined) {
-      window.speechSynthesis.onvoiceschanged = loadVoices;
-    }
-
-    return () => {
-      if (window.speechSynthesis.onvoiceschanged !== undefined) {
-        window.speechSynthesis.onvoiceschanged = null;
-      }
-    };
-  }, []);
 
   // Estimate duration based on word count (average speaking rate: 150 words/minute)
   useEffect(() => {
@@ -97,73 +92,44 @@ export default function CardDetail({ article }) {
 
   const speakText = () => {
     if (!description) return;
-
-    // Stop any ongoing speech
     window.speechSynthesis.cancel();
 
-    // Map language to speech synthesis language code
     const languageMap = {
-      "English": "en-US",
-      "Français": "fr-FR",
-      "Arabe": "ar-SA",
-      "arabe": "ar-SA",
-      "Arabic": "ar-SA",
-      "ar": "ar-SA",
-      "fr": "fr-FR",
-      "en": "en-US",
+      "English": "en-US", "Français": "fr-FR", "French": "fr-FR",
+      "Arabe": "ar-SA", "arabe": "ar-SA", "Arabic": "ar-SA",
+      "Deutsch": "de-DE", "German": "de-DE",
+      "Español": "es-ES", "Spanish": "es-ES",
+      "Italiano": "it-IT", "Italian": "it-IT",
+      "ar": "ar-SA", "fr": "fr-FR", "en": "en-US",
+      "de": "de-DE", "es": "es-ES", "it": "it-IT",
     };
 
-    const speechLang = languageMap[language] || "en-US";
-    console.log("Selected language:", language, "-> Speech lang:", speechLang);
+    const speechLang = languageMap[language] || "fr-FR"; // default to French since your app is French
 
     const utterance = new window.SpeechSynthesisUtterance(description);
     utterance.lang = speechLang;
     utterance.rate = 1;
     utterance.pitch = 1;
 
-    // Get available voices
-    const voices = window.speechSynthesis.getVoices();
-    console.log("Total voices available:", voices.length);
+    // Find best matching voice from already-loaded list
+    const langPrefix = speechLang.split("-")[0];
+    const match =
+      voices.find(v => v.lang === speechLang) ||
+      voices.find(v => v.lang.startsWith(langPrefix)) ||
+      null; // let browser pick if nothing matches
 
-    // Try to select the best voice for the language
+    if (match) utterance.voice = match;
+
     if (speechLang.startsWith("ar")) {
-      // For Arabic, try to find the best Arabic voice
-      const arabicVoices = voices.filter(v => v.lang.startsWith("ar"));
-      console.log("Arabic voices found:", arabicVoices.map(v => `${v.name} (${v.lang})`));
-
-      if (arabicVoices.length > 0) {
-        // Prefer Saudi Arabic (ar-SA) or any Arabic voice
-        const preferredVoice = arabicVoices.find(v => v.lang === "ar-SA") || arabicVoices[0];
-        utterance.voice = preferredVoice;
-        console.log("Selected Arabic voice:", preferredVoice.name, preferredVoice.lang);
-      } else {
-        console.warn("No Arabic voice found. Speech may not work correctly for Arabic text.");
-        toast.error("Aucune voix arabe n'est disponible sur votre navigateur. La lecture audio peut ne pas fonctionner correctement.");
-      }
-    } else if (speechLang.startsWith("fr")) {
-      const frenchVoices = voices.filter(v => v.lang.startsWith("fr"));
-      if (frenchVoices.length > 0) {
-        utterance.voice = frenchVoices[0];
-        console.log("Selected French voice:", frenchVoices[0].name);
-      }
-    } else if (speechLang.startsWith("en")) {
-      const englishVoices = voices.filter(v => v.lang.startsWith("en"));
-      if (englishVoices.length > 0) {
-        utterance.voice = englishVoices[0];
-        console.log("Selected English voice:", englishVoices[0].name);
-      }
+      utterance.rate = 0.9; // Arabic sounds better slightly slower
     }
 
     utterance.onstart = () => {
       setIsSpeaking(true);
       setCurrentTime(0);
-      // Update progress timer
       timerRef.current = setInterval(() => {
-        setCurrentTime((prev) => {
-          if (prev >= duration) {
-            clearInterval(timerRef.current);
-            return duration;
-          }
+        setCurrentTime(prev => {
+          if (prev >= duration) { clearInterval(timerRef.current); return duration; }
           return prev + 0.1;
         });
       }, 100);
@@ -175,10 +141,11 @@ export default function CardDetail({ article }) {
       if (timerRef.current) clearInterval(timerRef.current);
     };
 
-    utterance.onerror = () => {
+    utterance.onerror = (e) => {
       setIsSpeaking(false);
       setCurrentTime(0);
       if (timerRef.current) clearInterval(timerRef.current);
+      console.error("Speech error:", e.error);
     };
 
     utteranceRef.current = utterance;
