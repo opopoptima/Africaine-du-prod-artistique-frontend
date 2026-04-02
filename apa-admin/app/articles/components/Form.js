@@ -6,6 +6,7 @@ import { ArticleService } from "../../services/articleService";
 import CategoryService from "../../services/categoryService";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/app/context/ToastContext";
+import ProgressBar from "../../components/ProgressBar";
 
 // ────────────────────────────────────────────────
 // Reusable form components
@@ -262,6 +263,7 @@ export default function AjoutArticle({ articleId }) {
   const [loading, setLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -435,11 +437,18 @@ export default function AjoutArticle({ articleId }) {
       if (printedFile) data.append("printedFile", printedFile);
 
       try {
+        const uploadOptions = {
+          onUploadProgress: (progressEvent) => {
+            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            setUploadProgress(percentCompleted);
+          }
+        };
+
         if (isEditing) {
-          await ArticleService.update(articleId, data);
+          await ArticleService.update(articleId, data, uploadOptions);
           toast.success("✅ Article mis à jour avec succès !");
         } else {
-          await ArticleService.create(data);
+          await ArticleService.create(data, uploadOptions);
           toast.success("✅ Article créé avec succès !");
         }
 
@@ -621,6 +630,7 @@ export default function AjoutArticle({ articleId }) {
           </button>
         </div>
       </div>
+      <ProgressBar progress={uploadProgress} label="Publication de l'article..." />
     </form>
   );
 }

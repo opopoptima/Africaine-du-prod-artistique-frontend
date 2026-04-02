@@ -6,6 +6,8 @@ import { Label } from "@/app/components/label";
 import { Textarea } from "@/app/components/textarea";
 import { Upload } from "lucide-react";
 import { useToast } from "@/app/context/ToastContext";
+import { NewsService } from "@/app/services/newsService";
+import ProgressBar from "@/app/components/ProgressBar";
 
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -42,6 +44,7 @@ export default function ActualiteFormPage() {
   const [loadingForm, setLoadingForm] = useState(false);
   const [mainImagePreview, setMainImagePreview] = useState("");
   const [galleryPreviews, setGalleryPreviews] = useState([]);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   useEffect(() => {
     if (isEditMode && editId) {
@@ -155,47 +158,21 @@ export default function ActualiteFormPage() {
         videoUrl: formData.videoUrl,
       };
 
-      const url = isEditMode
-        ? `${API_URL}/news/${editId}`
-        : `${API_URL}/news`;
-
-      const method = isEditMode ? "PUT" : "POST";
-
-      console.log(`Envoi ${method} à ${url}`);
-      console.log("Payload envoyé:", payload);
-
-      const res = await fetch(url, {
-        method: method,
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      const responseText = await res.text();
-      console.log("Réponse brute:", responseText);
-
-      if (!res.ok) {
-        let errorData;
-        try {
-          errorData = JSON.parse(responseText);
-        } catch {
-          errorData = { message: responseText };
+      const options = {
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setUploadProgress(percentCompleted);
         }
-        throw new Error(`Erreur ${res.status}: ${errorData.message || "Save failed"}`);
+      };
+
+      if (isEditMode) {
+        await NewsService.update(editId, payload, options);
+        toast.success("Actualité mise à jour avec succès!");
+      } else {
+        await NewsService.create(payload, options);
+        toast.success("Actualité créée avec succès!");
       }
 
-      let result;
-      try {
-        result = JSON.parse(responseText);
-      } catch {
-        result = { success: true, message: "Opération réussie" };
-      }
-
-      console.log("Succès! Résultat:", result);
-
-      toast.success(isEditMode ? "Actualité mise à jour avec succès!" : "Actualité créée avec succès!");
       router.push("/actualites");
       router.refresh();
     } catch (err) {
@@ -677,6 +654,7 @@ export default function ActualiteFormPage() {
           </form>
         </div>
       </main>
+      <ProgressBar progress={uploadProgress} label="Publication de l'actualité..." />
 
       {/* Footer */}
       <footer className="bg-[rgba(155,89,182,0.5)] mt-8 py-3 text-center">

@@ -3,19 +3,19 @@ import IconCard from "../components/IconCard";
 export default function EngagementSection() {
   const cards = [
     {
-      imageSrc: "/images/engagement/inspiration.png",
+      imageSrc: "/images/engagement/Inspiration.png",
       alt: "Inspiration",
       title: "Inspiration",
       description: "Puiser dans les histoires d’hier pour imaginer un avenir meilleur.",
     },
     {
-      imageSrc: "/images/engagement/creation.png",
+      imageSrc: "/images/engagement/Creation.png",
       alt: "Création",
       title: "Création",
       description: "Concevoir des livres faits pour être lus, manipulés, aimés et transmis.",
     },
     {
-      imageSrc: "/images/engagement/impact.png",
+      imageSrc: "/images/engagement/Impact.png",
       alt: "Impact",
       title: "Impact",
       description: "Contribuer à une société plus cultivée, créative et consciente.",

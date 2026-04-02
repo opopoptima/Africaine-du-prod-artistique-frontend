@@ -19,7 +19,11 @@ export default function ActualiteCard({ actu }) {
 
   const renderDate = () => {
     if (actu.startDate && actu.endDate) {
-      return `Du ${formatDate(actu.startDate)} au ${formatDate(actu.endDate)}`;
+      return (
+        <span className="block leading-tight">
+          Du {formatFullDate(actu.startDate)} <br /> au {formatFullDate(actu.endDate)}
+        </span>
+      );
     }
     return formatFullDate(actu.eventDate || actu.publicationDate || actu.createdAt);
   };

@@ -22,33 +22,15 @@ export default function NewsDetail() {
       setError(null);
 
       try {
-        // ✅ Récupérer la news principale
+        // ✅ Récupérer la news principale et les news liées en une seule fois (Backend optimisé)
         const response = await NewsService.getById(id);
+        
         if (!response?.data?.success) {
           throw new Error(response?.data?.error || "News not found");
         }
+
         setNews(response.data.data);
-
-        // ✅ Récupérer toutes les news (publiées)
-        const allResponse = await NewsService.getAll({
-          page: 1,
-          limit: 20,
-          sort: "createdAt:desc",
-        });
-
-        if (!allResponse?.data?.success) {
-          throw new Error(allResponse?.data?.error || "Failed to fetch news");
-        }
-
-        const allNews = Array.isArray(allResponse.data.data.items)
-          ? allResponse.data.data.items
-          : [];
-
-        const others = allNews
-          .filter((item) => item._id !== id) // exclure la news courante
-          .slice(0, 3); // prendre 2 autres actualités
-
-        setOtherNews(others);
+        setOtherNews(response.data.related || []);
       } catch (err) {
         setError(err.message || "Erreur lors du chargement des actualités");
         console.error("Erreur:", err);

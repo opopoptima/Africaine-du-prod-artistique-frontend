@@ -1,11 +1,13 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { pdfjs } from "react-pdf";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 
-pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
+if (typeof window !== "undefined") {
+  pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+}
 
 
 const HTMLFlipBook = dynamic(() => import("react-pageflip"), {
@@ -22,10 +24,13 @@ export default function PdfFlipBook({ cover, title, author, pdfExtrait, onClose 
   const [currentPage, setCurrentPage] = useState(0);
   const flipBookRef = useRef(null);
 
-  /*useEffect(() => {
-    pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+  const options = useMemo(() => ({
+    workerSrc: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`,
+  }), []);
+
+  useEffect(() => {
+    pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
   }, []);
-  */
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
@@ -74,7 +79,11 @@ export default function PdfFlipBook({ cover, title, author, pdfExtrait, onClose 
       {!pdfLoading && !pdfError && numPages && (
         <div className="flex flex-col items-center gap-2 max-w-2xl sm:mt-20 mb-10 px-4">
           {/* Flipbook */}
-          <PDFDocument file={pdfExtrait} loading="">
+          <PDFDocument 
+            file={pdfExtrait} 
+            loading=""
+            options={options}
+          >
             <div className="flipbook-container">
               <HTMLFlipBook
                 ref={flipBookRef}
@@ -147,6 +156,7 @@ export default function PdfFlipBook({ cover, title, author, pdfExtrait, onClose 
           onLoadSuccess={onDocumentLoadSuccess}
           onLoadError={onDocumentLoadError}
           loading=""
+          options={options}
         >
           <PDFPage pageNumber={1} width={380} />
         </PDFDocument>

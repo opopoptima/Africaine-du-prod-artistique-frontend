@@ -22,7 +22,11 @@ export default function HeroSectionAct({ news }) {
 
   const renderDate = () => {
     if (news.startDate && news.endDate) {
-      return `Du ${formatShortDate(news.startDate)} au ${formatShortDate(news.endDate)}`;
+      return (
+        <span className="block leading-relaxed">
+          Du {formatFullDate(news.startDate)} <br /> Au {formatFullDate(news.endDate)}
+        </span>
+      );
     }
     return formatFullDate(news.eventDate || news.publicationDate || news.createdAt);
   };
@@ -66,7 +70,7 @@ export default function HeroSectionAct({ news }) {
               {(news.startDate || news.eventDate) && (
                 <div>
                   <p className="font-semibold text-primary-500 text-xs uppercase tracking-wider">Date et heure</p>
-                  <p className="text-gray-500 text-lg mt-1 font-medium">{renderDate()}</p>
+                  <p className="text-gray-500 text-sm mt-1 font-medium">{renderDate()}</p>
                 </div>
               )}
               {news.publicCible && (

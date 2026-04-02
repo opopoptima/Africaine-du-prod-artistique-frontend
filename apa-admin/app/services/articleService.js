@@ -48,7 +48,7 @@ export const ArticleService = {
     // Extract data from nested structure
     const responseData = response.data?.data || response.data;
     const articleData = responseData?.article || responseData;
-    
+
     const relatedByCollection = Array.isArray(responseData?.relatedByCollection)
       ? responseData.relatedByCollection
       : [];
@@ -71,9 +71,10 @@ export const ArticleService = {
    * CREATE ARTICLE
    * POST /articles
    ---------------------------------------- */
-  create: async (formData) => {
+  create: async (formData, options = {}) => {
     const response = await adminApiClient.post("/articles", formData, {
       headers: { "Content-Type": "multipart/form-data" },
+      ...options,
     });
 
     const articleData = response.data?.data || response.data;
@@ -85,9 +86,10 @@ export const ArticleService = {
    * UPDATE ARTICLE
    * PUT /articles/:id
    ---------------------------------------- */
-  update: async (id, formData) => {
+  update: async (id, formData, options = {}) => {
     const response = await adminApiClient.put(`/articles/${id}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
+      ...options,
     });
 
     const articleData = response.data?.data || response.data;

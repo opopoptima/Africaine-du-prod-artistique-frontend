@@ -16,10 +16,10 @@ export const NewsService = {
   getById: (id) => adminApiClient.get(`/news/${id}`),
 
   // POST /news
-  create: (newsData) => adminApiClient.post("/news", newsData),
+  create: (newsData, options = {}) => adminApiClient.post("/news", newsData, options),
 
   // PUT /news/:id
-  update: (id, newsData) => adminApiClient.put(`/news/${id}`, newsData),
+  update: (id, newsData, options = {}) => adminApiClient.put(`/news/${id}`, newsData, options),
 
   // DELETE /news/:id
   delete: (id) => adminApiClient.delete(`/news/${id}`),
