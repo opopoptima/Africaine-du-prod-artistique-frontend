@@ -69,7 +69,8 @@ export default function Footer() {
           {/* Colonne 2 */}
           <div className="md:w-1/3">
             <h3 className="font-semibold mb-3 text-primary-500">Contact</h3>
-            <p>52, av Bab Djedid Tunis-Tunisie Tunis, Tunisia</p>
+            <p>52, Avenue Bab Djedid Tunis Tunisie</p>
+            <p>37, Avenue Hedi Nouira Cité Ennasr 2 Arianna Tunisie</p>
             <p>+216 70 039 426</p>
             <p>lafricaine-de-production-artistique@hotmail.com</p>
           </div>
