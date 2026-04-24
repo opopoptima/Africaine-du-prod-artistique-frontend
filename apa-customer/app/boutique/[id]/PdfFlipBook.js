@@ -1,18 +1,22 @@
 "use client";
 
-import { pdfjs } from "react-pdf";
-
-// Set worker IMMEDIATELY before anything else
-pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.4.296/pdf.worker.min.mjs`;
 import dynamic from "next/dynamic";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 
 const HTMLFlipBook = dynamic(() => import("react-pageflip"), { ssr: false });
-const PDFDocument = dynamic(() => import("react-pdf").then(mod => mod.Document), { ssr: false });
-const PDFPage = dynamic(() => import("react-pdf").then(mod => mod.Page), { ssr: false });
+
+const PDFDocument = dynamic(() =>
+  import("react-pdf").then((mod) => {
+    // Set worker HERE, after react-pdf loads, so it doesn't get overridden
+    mod.pdfjs.GlobalWorkerOptions.workerSrc = "https://unpkg.com/pdfjs-dist@5.4.296/build/pdf.worker.min.mjs";
+    return mod.Document;
+  }), { ssr: false }
+);
+
+const PDFPage = dynamic(() => import("react-pdf").then((mod) => mod.Page), { ssr: false });
 
 export default function PdfFlipBook({ pdfExtrait, onClose }) {
   const [numPages, setNumPages] = useState(null);
