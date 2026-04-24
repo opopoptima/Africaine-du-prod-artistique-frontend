@@ -4,9 +4,8 @@ import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer
-      className="relative w-full py-6 text-sm bg-[linear-gradient(to_top,var(--color-secondary-100),var(--color-primary-100))]"
-    >
+    <footer className="relative w-full py-6 text-sm bg-[linear-gradient(to_top,var(--color-secondary-100),var(--color-primary-100))]">
+      
       {/* Top-right image */}
       <Image
         src="/images/vector-footer-top.png"
@@ -14,7 +13,7 @@ export default function Footer() {
         width={120}
         height={120}
         quality={75}
-        className="absolute -top-2 right-20"
+        className="absolute -top-2 right-2 sm:right-6 md:right-12 lg:right-20"
       />
 
       <div className="max-w-7xl mx-auto px-12">
@@ -39,13 +38,12 @@ export default function Footer() {
             >
               <FaInstagram className="w-6 h-6 transition cursor-pointer" />
             </Link>
-
-
           </div>
         </div>
 
         {/* Ligne principale */}
         <div className="flex flex-col md:flex-row md:justify-between gap-8 md:items-start">
+          
           {/* Colonne 1 */}
           <div className="flex flex-col items-start md:w-1/3">
             <div className="flex items-center gap-2 mb-3">
