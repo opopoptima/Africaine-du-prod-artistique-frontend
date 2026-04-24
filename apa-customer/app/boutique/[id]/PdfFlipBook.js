@@ -3,8 +3,7 @@
 import { pdfjs } from "react-pdf";
 
 // Set worker IMMEDIATELY before anything else
-pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
-
+pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.4.296/pdf.worker.min.mjs`;
 import dynamic from "next/dynamic";
 import { useState, useRef } from "react";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
