@@ -1,14 +1,15 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef } from "react";
 import { pdfjs } from "react-pdf";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
+import "react-pdf/dist/Page/AnnotationLayer.css";
+import "react-pdf/dist/Page/TextLayer.css";
 
 if (typeof window !== "undefined") {
-  pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+  pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
 }
-
 
 const HTMLFlipBook = dynamic(() => import("react-pageflip"), {
   ssr: false,
@@ -17,20 +18,12 @@ const HTMLFlipBook = dynamic(() => import("react-pageflip"), {
 const PDFDocument = dynamic(() => import("react-pdf").then(mod => mod.Document), { ssr: false });
 const PDFPage = dynamic(() => import("react-pdf").then(mod => mod.Page), { ssr: false });
 
-export default function PdfFlipBook({ cover, title, author, pdfExtrait, onClose }) {
+export default function PdfFlipBook({ pdfExtrait, onClose }) {
   const [numPages, setNumPages] = useState(null);
   const [pdfLoading, setPdfLoading] = useState(true);
   const [pdfError, setPdfError] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const flipBookRef = useRef(null);
-
-  const options = useMemo(() => ({
-    workerSrc: `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`,
-  }), []);
-
-  useEffect(() => {
-    pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
-  }, []);
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
@@ -49,22 +42,19 @@ export default function PdfFlipBook({ cover, title, author, pdfExtrait, onClose 
   };
 
   const goToNextPage = () => {
-    if (flipBookRef.current && numPages && currentPage < numPages + 1) {
+    if (flipBookRef.current && numPages && currentPage < numPages - 1) {
       flipBookRef.current.pageFlip().flipNext();
     }
   };
 
-  const onFlip = (e) => {
-    setCurrentPage(e.data);
-  };
+  const onFlip = (e) => setCurrentPage(e.data);
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center p-4" onClick={e => e.stopPropagation()}>
 
-
       {pdfLoading && (
-        <div className="text-white text-xl">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-white mx-auto mb-4"></div>
+        <div className="text-white text-xl flex flex-col items-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-white mb-4" />
           Chargement du livre...
         </div>
       )}
@@ -76,57 +66,62 @@ export default function PdfFlipBook({ cover, title, author, pdfExtrait, onClose 
         </div>
       )}
 
+      {/* Hidden loader — triggers onLoadSuccess/onLoadError */}
+      <div className="hidden">
+        <PDFDocument
+          file={pdfExtrait}
+          onLoadSuccess={onDocumentLoadSuccess}
+          onLoadError={onDocumentLoadError}
+          loading=""
+        >
+          <PDFPage pageNumber={1} width={380} />
+        </PDFDocument>
+      </div>
+
       {!pdfLoading && !pdfError && numPages && (
-        <div className="flex flex-col items-center gap-2 max-w-2xl sm:mt-20 mb-10 px-4">
-          {/* Flipbook */}
-          <PDFDocument 
-            file={pdfExtrait} 
-            loading=""
-            options={options}
-          >
-            <div className="flipbook-container">
-              <HTMLFlipBook
-                ref={flipBookRef}
-                width={380}
-                height={540}
-                size="fixed"
-                minWidth={300}
-                maxWidth={400}
-                minHeight={400}
-                maxHeight={600}
-                drawShadow={true}
-                flippingTime={1000}
-                usePortrait={true}
-                startZIndex={0}
-                autoSize={false}
-                maxShadowOpacity={0.5}
-                showCover={true}
-                mobileScrollSupport={true}
-                onFlip={onFlip}
-                className="mx-auto drop-shadow-2xl"
-                startPage={0}
-                clickEventForward={true}
-                useMouseEvents={true}
-                swipeDistance={30}
-                showPageCorners={true}
-                disableFlipByClick={false}
-              >
-                {Array.from(new Array(numPages), (el, index) => (
-                  <div key={`page_${index + 1}`} className="page bg-white shadow-2xl">
-                    <PDFPage
-                      pageNumber={index + 1}
-                      width={360}
-                      renderTextLayer={true}
-                      renderAnnotationLayer={true}
-                      className="mx-auto"
-                    />
-                  </div>
-                ))}
-              </HTMLFlipBook>
-            </div>
+        <div className="flex flex-col items-center gap-4 max-w-2xl sm:mt-20 mb-10 px-4">
+          <PDFDocument file={pdfExtrait} loading="">
+            <HTMLFlipBook
+              ref={flipBookRef}
+              width={380}
+              height={540}
+              size="fixed"
+              minWidth={300}
+              maxWidth={400}
+              minHeight={400}
+              maxHeight={600}
+              drawShadow={true}
+              flippingTime={1000}
+              usePortrait={true}
+              startZIndex={0}
+              autoSize={false}
+              maxShadowOpacity={0.5}
+              showCover={true}
+              mobileScrollSupport={true}
+              onFlip={onFlip}
+              className="mx-auto drop-shadow-2xl"
+              startPage={0}
+              clickEventForward={true}
+              useMouseEvents={true}
+              swipeDistance={30}
+              showPageCorners={true}
+              disableFlipByClick={false}
+            >
+              {Array.from({ length: numPages }, (_, index) => (
+                <div key={`page_${index + 1}`} className="page bg-white shadow-2xl">
+                  <PDFPage
+                    pageNumber={index + 1}
+                    width={360}
+                    renderTextLayer={true}
+                    renderAnnotationLayer={true}
+                    className="mx-auto"
+                  />
+                </div>
+              ))}
+            </HTMLFlipBook>
           </PDFDocument>
 
-          {/* Navigation Controls - Below the book */}
+          {/* Navigation */}
           <div className="flex items-center gap-6 bg-white/10 backdrop-blur-sm rounded-full p-4 z-10">
             <button
               onClick={goToPreviousPage}
@@ -148,19 +143,6 @@ export default function PdfFlipBook({ cover, title, author, pdfExtrait, onClose 
           </div>
         </div>
       )}
-
-      {/* Hidden loader */}
-      <div className="hidden">
-        <PDFDocument
-          file={pdfExtrait}
-          onLoadSuccess={onDocumentLoadSuccess}
-          onLoadError={onDocumentLoadError}
-          loading=""
-          options={options}
-        >
-          <PDFPage pageNumber={1} width={380} />
-        </PDFDocument>
-      </div>
     </div>
   );
 }
