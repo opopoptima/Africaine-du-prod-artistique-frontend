@@ -16,20 +16,26 @@ export default function SearchBar({
   };
 
   return (
-    <div className="flex space-x-2 w-full mt-4">
-      {/* Search input */}
-      <input
-        type="text"
-        value={query}
-        onChange={handleInputChange}
-        placeholder={placeholder}
-        className="flex-1 border border-secondary-700 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 shadow-sm hover:shadow transition"
-      />
+    /* 1. Changed 'flex' to 'flex-col sm:flex-row' (stack on mobile)
+       2. Changed 'space-x-2' to 'gap-3' for better spacing control
+    */
+    <div className="flex flex-col sm:flex-row items-center gap-3 w-full mt-4">
+      
+      {/* Search input - takes full width on mobile */}
+      <div className="relative w-full flex-1">
+        <input
+          type="text"
+          value={query}
+          onChange={handleInputChange}
+          placeholder={placeholder}
+          className="w-full border border-secondary-700 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 shadow-sm hover:shadow transition"
+        />
+      </div>
 
-      {/* Nouveauté toggle */}
+      {/* Nouveauté toggle - full width on mobile, auto-width on desktop */}
       <button
         onClick={onToggleNew}
-        className={`flex items-center justify-center px-4 py-2 rounded-full text-sm font-medium border transition focus:outline-none focus:ring-2 focus:ring-primary-500
+        className={`w-full sm:w-auto flex items-center justify-center px-6 py-2 rounded-full text-sm font-medium border transition focus:outline-none focus:ring-2 focus:ring-primary-500 whitespace-nowrap
           ${
             isNewActive
               ? "bg-primary-500 text-white border-primary-500"
@@ -37,9 +43,9 @@ export default function SearchBar({
           }
         `}
       >
-        {isNewActive ? "Tous les articles" : "Nouveauté"}
+        <span>{isNewActive ? "Tous les articles" : "Nouveauté"}</span>
         <svg
-          className={`w-4 h-4 ml-1 transition-transform ${
+          className={`w-4 h-4 ml-2 transition-transform duration-300 ${
             isNewActive ? "rotate-180" : ""
           }`}
           fill="none"
