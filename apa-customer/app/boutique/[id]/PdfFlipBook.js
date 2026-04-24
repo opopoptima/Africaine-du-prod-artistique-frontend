@@ -1,20 +1,17 @@
 "use client";
 
+import { pdfjs } from "react-pdf";
+
+// Set worker IMMEDIATELY before anything else
+pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+
 import dynamic from "next/dynamic";
 import { useState, useRef } from "react";
-import { pdfjs } from "react-pdf";
 import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 
-if (typeof window !== "undefined") {
-  pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
-}
-
-const HTMLFlipBook = dynamic(() => import("react-pageflip"), {
-  ssr: false,
-  loading: () => <div className="text-white">Chargement...</div>,
-});
+const HTMLFlipBook = dynamic(() => import("react-pageflip"), { ssr: false });
 const PDFDocument = dynamic(() => import("react-pdf").then(mod => mod.Document), { ssr: false });
 const PDFPage = dynamic(() => import("react-pdf").then(mod => mod.Page), { ssr: false });
 
